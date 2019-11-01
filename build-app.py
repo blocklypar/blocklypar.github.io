@@ -44,7 +44,7 @@ def main(name, lang):
   else:
     # Extract the list of supported languages from boot.js.
     # This is a bit fragile.
-    boot = open('appengine/common/boot.js', 'r')
+    boot = open('common/boot.js', 'r')
     js = ' '.join(boot.readlines())
     boot.close()
     m = re.search('\[\'BlocklyGamesLanguages\'\] = (\[[-,\'\\s\\w]+\])', js)
@@ -59,12 +59,12 @@ def main(name, lang):
 
 
 def language(name, lang):
-  if os.path.exists('appengine/third-party/blockly/msg/js/%s.js' % lang):
+  if os.path.exists('third-party/blockly/msg/js/%s.js' % lang):
     # Convert 'pt-br' to 'pt.br'.
     core_language = 'Blockly.Msg.' + lang.replace('-', '.')
   else:
     core_language = 'Blockly.Msg.en'
-  f = open('appengine/%s/generated/%s/msg.js' % (name, lang), 'w')
+  f = open('%s/generated/%s/msg.js' % (name, lang), 'w')
   f.write(WARNING)
   f.write("goog.provide('BlocklyGames.Msg');\n")
   f.write("goog.require('%s');\n" % core_language)
@@ -88,15 +88,15 @@ class Gen_uncompressed(threading.Thread):
 
   def run(self):
     cmd = ['third-party/build/closurebuilder.py',
-        '--root=appengine/third-party/',
-        '--root=appengine/generated/%s/' % self.lang,
-        '--root=appengine/js/',
+        '--root=third-party/',
+        '--root=generated/%s/' % self.lang,
+        '--root=js/',
         '--namespace=%s' % self.name.replace('/', '.').title(),
         '--output_mode=list']
     directory = self.name
     while directory:
-      cmd.append('--root=appengine/%s/generated/%s/' % (directory, self.lang))
-      cmd.append('--root=appengine/%s/js/' % directory)
+      cmd.append('--root=%s/generated/%s/' % (directory, self.lang))
+      cmd.append('--root=%s/js/' % directory)
       (directory, sep, fragment) = directory.rpartition(os.path.sep)
     try:
       proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
@@ -109,7 +109,7 @@ class Gen_uncompressed(threading.Thread):
       path = '../'
     else:
       path = ''
-    prefix = 'appengine/'
+    prefix = ''
     srcs = []
     for file in files:
       file = file.strip()
@@ -118,7 +118,7 @@ class Gen_uncompressed(threading.Thread):
       else:
         raise(Exception('"%s" is not in "%s".' % (file, prefix)))
       srcs.append('"%s%s"' % (path, file))
-    f = open('appengine/%s/generated/%s/uncompressed.js' %
+    f = open('%s/generated/%s/uncompressed.js' %
         (self.name, self.lang), 'w')
     f.write("""%s
 (function() {
@@ -160,23 +160,23 @@ class Gen_compressed(threading.Thread):
       '--externs', 'externs/prettify-externs.js',
       '--externs', 'externs/soundJS-externs.js',
       '--externs', 'externs/storage-externs.js',
-      '--externs', 'appengine/third-party/blockly/externs/svg-externs.js',
+      '--externs', 'third-party/blockly/externs/svg-externs.js',
       '--language_out', 'ECMASCRIPT5_STRICT',
       '--entry_point=%s' % self.name.replace('/', '.').title(),
-      "--js='appengine/third-party/**.js'",
-      "--js='!appengine/third-party/blockly/*.js'",
-      "--js='!appengine/third-party/blockly/tests/**.js'",
-      "--js='!appengine/third-party/blockly/externs/**.js'",
-      "--js='!appengine/third-party/blockly/demos/**.js'",
-      "--js='appengine/generated/%s/*.js'" % self.lang,
-      "--js='appengine/js/*.js'",
+      "--js='third-party/**.js'",
+      "--js='!third-party/blockly/*.js'",
+      "--js='!third-party/blockly/tests/**.js'",
+      "--js='!third-party/blockly/externs/**.js'",
+      "--js='!third-party/blockly/demos/**.js'",
+      "--js='generated/%s/*.js'" % self.lang,
+      "--js='js/*.js'",
       '--warning_level', 'QUIET',
     ]
     directory = self.name
     while directory:
-      cmd.append("--js='appengine/%s/generated/%s/*.js'" %
+      cmd.append("--js='%s/generated/%s/*.js'" %
           (directory, self.lang))
-      cmd.append("--js='appengine/%s/js/*.js'" % directory)
+      cmd.append("--js='%s/js/*.js'" % directory)
       (directory, sep, fragment) = directory.rpartition(os.path.sep)
     try:
       proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
@@ -188,7 +188,7 @@ class Gen_compressed(threading.Thread):
     script = self.trim_licence(script)
     print('Compressed to %d KB.' % (len(script) / 1024))
 
-    f = open('appengine/%s/generated/%s/compressed.js' %
+    f = open('%s/generated/%s/compressed.js' %
         (self.name, self.lang), 'w')
     f.write(WARNING)
     f.write(script)
