@@ -172,6 +172,7 @@ html[dir="RTL"] #pegmanButton>span {
   display: none;
   position: absolute;
 }
+
 #pegmanMenu>div {
   background-color: #fff;
 }
@@ -182,4 +183,83 @@ html[dir="RTL"] #pegmanButton>span {
   height: 38px;
   width: 49px;
   background-position: -980px 0px;
+}
+
+
+#banner {
+  padding: 0.2em;
+}
+
+/*NEW*/
+.nav-spacer {
+  padding:25px 1px;
+}
+
+.header {
+  overflow: hidden;
+  background-color: #ffffff;
+  padding: 1px 1px;
+  border-collapse: separate;
+  border-spacing: 2px;
+  border-color: grey;
+}
+
+.header a {
+  font-family: "Source Sans Pro", sans-serif;
+  float: left;
+  color: black;
+  text-align: center;
+  padding: 5px 5px;
+  text-decoration: none;
+}
+
+.header a.language {
+  float: left;
+  padding: 0px 10px;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  font-size: 0px; 
+  line-height: 0px;
+  border-radius: 0px;
+}
+
+.header a:hover {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+}
+
+.header a:hover.color-one {
+  background-color: #1efc1e;
+}
+
+.header a:hover.color-two {
+  background-color: #ff1053;
+}
+
+.header a:hover.color-three {
+  background-color: #00f2f2;
+}
+
+
+.header a.active {
+  background-color: rgb(52, 113, 175);
+  color: rgb(255, 255, 255);
+}
+
+.header-right {
+  float: right;
+}
+
+.header-center {
+  float: center;
+}
+
+@media screen and (max-width: 500px) {
+  .header a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+
 }

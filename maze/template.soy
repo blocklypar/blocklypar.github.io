@@ -63,34 +63,38 @@
  */
 {template .start}
   {call .messages /}
-  <table width="100%">
-    <tr>
-      <td>
-        <h1>
+
+
+
+<div class="header">
+
+    <a href="https://blocklypar.github.io/" class="logo"><img id="banner" src="index/blocklypar.png" width="70" alt="Blockly Games"></a>
+    
+    <td>
+    <a>
+      <h1>
+
           {call BlocklyGames.soy.titleSpan}
             {param appName}
               {msg meaning="Games.maze" desc="IBID"}Parallel Maze{/msg}
             {/param}
           {/call}
+
           {call BlocklyGames.soy.levelLinks}
             {param level: $ij.level /}
             {param maxLevel: $ij.maxLevel /}
             {param lang: $ij.lang /}
             {param suffix}&skin={$ij.skin}{/param}
           {/call}
-        </h1>
-      </td>
 
-      <td class="farSide">
-        <select id="languageMenu"></select>
-        &nbsp;
-        <button id="linkButton" title="{msg meaning="Games.linkTooltip" desc="IBID"}Save and link to blocks.{/msg}">
-          <img src="common/1x1.gif" class="link icon21">
-        </button>
-        &nbsp;
+          </h1>
+      </a>
       </td>
-    </tr>
-  </table>
+      
+    <div class="header-right">
+          <a class="language"><select id="languageMenu"></select></a>
+  </div>
+</div>
 
   <div id="visualization">
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="svgMaze" width="400px" height="400px">
@@ -100,13 +104,6 @@
         <path d="M 0,-55 a 55 55 0 0 1 55 55" />
       </g>
     </svg>
-          // Itens below animation screen
-      // <div class='parent'>
-      //   <div align='left' class='child inline-block-child' id="counter"></div>
-      //   <div align='center' class='child inline-block-child' id="number"></div>
-      //   <div align='center' class='child inline-block-child' id="timeBubble"> <div id="time"></div> </div>
-      //   <div align='right' class='child inline-block-child' id="capacityBubble"> <div id="capacity"></div> </div>
-      // </div>
   </div>
 
   <table width="400">
@@ -129,11 +126,14 @@
           </button>
         // </td>
       </tr>
-    
+        
   </table>
 
+
   {call .toolbox /}
-  <div id="blockly"></div>
+  
+  <div id="blockly" style="top: 92px; left: 420px; width: 859px;"></div>
+
 
   <div id="pegmanMenu"></div>
 

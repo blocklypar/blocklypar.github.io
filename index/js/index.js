@@ -32,13 +32,13 @@ goog.require('Index.soy');
 /**
  * Array of application names.
  */
-Index.APPS = ['puzzle', 'maze', 'bird', 'turtle', 'movie', 'music',
-              'pond-tutor', 'pond-duck'];
+Index.APPS = ['maze'];
 
 /**
  * Initialize Blockly and the maze.  Called on page load.
  */
 Index.init = function() {
+  
   // Render the Soy template.
   document.body.innerHTML = Index.soy.start({}, null,
     {lang: BlocklyGames.LANG,
@@ -51,16 +51,16 @@ Index.init = function() {
   languageMenu.addEventListener('change', BlocklyGames.changeLanguage, true);
 
   var storedData = false;
-  var levelsDone = [];
-  for (var i = 0; i < Index.APPS.length; i++) {
-    levelsDone[i] = 0;
-    for (var j = 1; j <= BlocklyGames.MAX_LEVEL; j++) {
-      if (BlocklyGames.loadFromLocalStorage(Index.APPS[i], j)) {
-        storedData = true;
-        levelsDone[i]++;
-      }
+  var levelsDone;
+  
+  levelsDone = 0;
+  for (var j = 1; j <= BlocklyGames.MAX_LEVEL; j++) {
+    if (BlocklyGames.loadFromLocalStorage(Index.APPS[0], j)) {
+      storedData = true;
+      levelsDone++;
     }
   }
+
   if (storedData) {
     var clearButtonPara = document.getElementById('clearDataPara');
     clearButtonPara.style.visibility = 'visible';
@@ -72,15 +72,16 @@ Index.init = function() {
       Index.animateGauge(app, 0, angle);
     };
   }
-  for (var i = 0; i < levelsDone.length; i++) {
-    var app = Index.APPS[i];
+  
+  //Number of levels done
+  for (var i = 0; i < levelsDone; i++) {
     var denominator = i == 0 ? 1 : BlocklyGames.MAX_LEVEL;
-    var angle = levelsDone[i] / denominator * 270;
+    var angle = i / denominator * 270;
     if (angle) {
-      setTimeout(animateFactory(app, angle), 1500);
+      setTimeout(animateFactory(Index.APPS[0], angle), 1500);
     } else {
       // Remove gauge if zero, since IE renders a stub.
-      var path = document.getElementById('gauge-' + app);
+      var path = document.getElementById('gauge-' + Index.APPS[0]);
       path.parentNode.removeChild(path);
     }
   }
@@ -135,10 +136,8 @@ Index.clearData_ = function() {
   if (!confirm(BlocklyGames.getMsg('Index_clear'))) {
     return;
   }
-  for (var i = 0; i < Index.APPS.length; i++) {
-    for (var j = 1; j <= BlocklyGames.MAX_LEVEL; j++) {
-      delete window.localStorage[Index.APPS[i] + j];
-    }
+  for (var j = 1; j <= BlocklyGames.MAX_LEVEL; j++) {
+    delete window.localStorage[Index.APPS[0] + j];
   }
   location.reload();
 };
