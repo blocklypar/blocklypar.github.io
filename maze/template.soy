@@ -54,7 +54,6 @@
     <span id="Maze_whileAct2Tooltip">{msg meaning="Maze.whileAct2Tooltip" desc="tooltip - Repeat the enclosed commands until the student complete all the 2 activities to attend the class."}Repeat the enclosed commands until the student complete all the 2 activities to attend the class{/msg}</span>
     <span id="Maze_ifStdTooltip">{msg meaning="Maze.ifStdTooltip" desc="tooltip - 'student' refers to the student available to complete the task by walking through the maze."}Do the actions related with the student selected.{/msg}</span>
  
-  
   </div>
 {/template}
 
@@ -62,14 +61,13 @@
  * Web page structure.
  */
 {template .start}
-  {call .messages /}
 
-
+{call .messages /}
 
 <div class="header">
 
-    <a href="https://blocklypar.github.io/" class="logo"><img id="banner" src="index/blocklypar.png" width="70" alt="Blockly Games"></a>
-    
+    <a id="back" href="index.html" class="logo"><img id="banner" src="index/blocklypar.png" width="70" alt="Blockly Games"></a>
+    &nbsp
     <td>
     <a>
       <h1>
@@ -93,8 +91,12 @@
       
     <div class="header-right">
           <a class="language"><select id="languageMenu"></select></a>
-  </div>
+    </div>
+    <div class="nav-spacer"></div>
+
 </div>
+
+  &nbsp
 
   <div id="visualization">
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="svgMaze" width="400px" height="400px">
@@ -105,7 +107,6 @@
       </g>
     </svg>
   </div>
-
   <table width="400">
     <tr>
       // Itens below animation screen
@@ -131,11 +132,10 @@
 
 
   {call .toolbox /}
-  
-  <div id="blockly" style="top: 92px; left: 420px; width: 859px;"></div>
+  <div id="blockly"></div>
 
 
-  <div id="pegmanMenu"></div>
+  // <div id="pegmanMenu"></div>
 
   {call BlocklyGames.soy.dialog /}
   {call BlocklyGames.soy.doneDialog /}

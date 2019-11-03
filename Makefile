@@ -19,7 +19,7 @@ REQUIRED_BINS = svn unzip wget java python sed
 
 all: deps languages
 
-tg: maze-en 
+tg: index-en maze-en
 
 index-en:
 	mkdir -p generated/en/

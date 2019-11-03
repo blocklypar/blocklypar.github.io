@@ -14,19 +14,18 @@
 <body>
 
     <div class="header">
-        <a href="index.html?lang={$ij.lang}" class="logo"><img id="banner" src="index/blocklypar.png" width="100" alt="Blockly Games"></a>
-
+        <a id="back" href="/" class="logo"><img id="banner" src="index/blocklypar.png" width="100" alt="Blockly Games"></a>
+        <div class="nav-spacer"></div>
         <div class="header-right">
             <a class="color-one" href="about.html?lang={$ij.lang}">ABOUT</a>
             <a class="color-two" href="parallel.html?lang={$ij.lang}">PARALLEL PROGRAMMING</a>
-            <a class="color-three" href="code.html?lang={$ij.lang}">CODE</a>
-            <a class="language"><select id="languageMenu"></select></a>
+            <a class="active" href="code.html?lang={$ij.lang}">CODE</a>
         </div>
     </div>
 
   
-    <div id="code">
-        <h3>CODE</h3>
+    <div id="text">
+        <h3 id="title">CODE</h3>
         <a href="https://github.com/blocklypar">The code is available here!</a>
     </div>
 
