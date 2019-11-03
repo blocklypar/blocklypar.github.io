@@ -3,7 +3,7 @@ html, body {
   width: 100%;
   padding: 0;
   margin: 0;
-  background-color: rgb(107, 100, 100);
+  background-color: rgb(255, 255, 255);
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
@@ -189,15 +189,15 @@ li a:hover.color-three {
 }
 
 .header a:hover.color-one {
-  background-color: #1efc1e;
+  background-color: #fd933c;
 }
 
 .header a:hover.color-two {
-  background-color: #ff1053;
+  background-color: #ff5283;
 }
 
 .header a:hover.color-three {
-  background-color: #00f2f2;
+  background-color: #60fcfc;
 }
 
 
@@ -237,7 +237,7 @@ li a:hover.color-three {
   font-family: "Source Sans Pro", sans-serif;
   font-size: 20px;
   padding: 50px 50px;;
-  background-color: #ffffff;
+  background-color: #fd933c4b;
   text-align: center;
   color:rgb(0, 0, 0);
 }
@@ -245,9 +245,9 @@ li a:hover.color-three {
 #parallel {
   font-family: "Source Sans Pro", sans-serif;
   font-size: 20px;
-  color: #ffffff;
+  color: #000000;
   padding: 50px 50px;
-  background-color: #ff1053;
+  background-color: rgba(255, 16, 84, 0.219);
   text-align: center;
 }
 
@@ -255,7 +255,7 @@ li a:hover.color-three {
   font-family: "Source Sans Pro", sans-serif;
   font-size: 20px;
   padding: 50px 50px;
-  background-color: #00f2f2;
+  background-color: #60fcfc38;
   text-align: center;
   color: #000000;
 }
