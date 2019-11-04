@@ -76,8 +76,8 @@ button.primary {
   color: #fff;
 }
 button.secondary {
-  border: 1px solid #4d90fe;
-  background-color: #4d90fe;
+  border: 1px solid #8b38db;
+  background-color: #8b38db;
   color: #fff;
 }
 button.primary>img,
@@ -92,21 +92,22 @@ button:hover:not(:disabled)>img {
   opacity: 1;
 }
 button:active:not(:disabled) {
-  border: 1px solid #888 !important;
+  border: 1px solid #fad54f !important;
 }
 button:hover:not(:disabled) {
-  box-shadow: 2px 2px 5px #888;
+  box-shadow: 2px 2px 5px #fad54f;
 }
 
 /* Dialogs */
 #dialog {
   visibility: hidden;
+  font-family: "Source Sans Pro", sans-serif;
   background-color: #fff;
   color: #000;
-  border: 1px solid #ccc;
+  border: 1px solid #fad54f;
   position: absolute;
   border-radius: 8px;
-  box-shadow: 5px 5px 5px #888;
+  box-shadow: 5px 5px 5px #fad54f;
   padding: 10px;
 }
 #dialogBorder {
@@ -116,7 +117,7 @@ button:hover:not(:disabled) {
   color: #000;
   border: 1px solid #000;
   border-radius: 6px;
-  box-shadow: 5px 5px 5px #888;
+  box-shadow: 5px 5px 5px #fad54f;
 }
 #dialogShadow {
   visibility: hidden;
@@ -145,7 +146,7 @@ button:hover:not(:disabled) {
   margin: -10px -10px 15px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  background-color: #ddd;
+  background-color: #8b38db;
   cursor: move;
 }
 #dialog button {

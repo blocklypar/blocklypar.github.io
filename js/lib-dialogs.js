@@ -405,6 +405,7 @@ BlocklyDialogs.congratulations = function() {
     top: '3em'
   };
 
+  
   // Add the user's code.
   if (BlocklyGames.workspace) {
     var linesText = document.getElementById('dialogLinesText');
@@ -426,13 +427,21 @@ BlocklyDialogs.congratulations = function() {
       code = prettyPrintOne(code, 'js');
       pre.innerHTML = code;
     }
-    if (lineCount == 1) {
-      var text = BlocklyGames.getMsg('Games_linesOfCode1');
-    } else {
-      var text = BlocklyGames.getMsg('Games_linesOfCode2')
-          .replace('%1', String(lineCount));
+
+    var text;
+    if(BlocklyGames.LEVEL > 2){
+      text = BlocklyGames.getMsg('Games_linesOfCode3').replace('%1', String(lineCount));
+      linesText.appendChild(document.createTextNode(text));
+    }else{
+      if (lineCount == 1) {
+        text = BlocklyGames.getMsg('Games_linesOfCode1');
+      } else {
+        text = BlocklyGames.getMsg('Games_linesOfCode2')
+            .replace('%1', String(lineCount));
+      }
+      linesText.appendChild(document.createTextNode(text));
     }
-    linesText.appendChild(document.createTextNode(text));
+
   }
 
   if (BlocklyGames.LEVEL < BlocklyGames.MAX_LEVEL) {

@@ -21,22 +21,16 @@
     // (case-insensitive) or identical to the one in this file (not
     // recommended), or an error will be raised during generation of qqq.json.
     // The source-language text in the applications' definitions is ignored.
-    // <span id="Games_name">{msg meaning="Games.name" desc="The project name."}Blockly Games{/msg}</span>
-    // <span id="Games_puzzle">{{msg meaning="Games.puzzle" desc="title - Specifies that this is Blockly's '''Puzzle''' game.  Use the word for a jigsaw puzzle.\n{lb}{lb}Identical|Puzzle{rb}{rb}"}}Puzzle{{/msg}}</span>
     <span id="Games_maze">{{msg meaning="Games.maze" desc="title - Specifies that this is Blockly's '''Maze''' game.\n{lb}{lb}Identical|Maze{rb}{rb}"}}Maze{{/msg}}</span>
-    // <span id="Games_bird">{{msg meaning="Games.bird" desc="title - Specifies that this is Blockly's '''Bird''' game.\n{lb}{lb}Identical|Bird{rb}{rb}"}}Bird{{/msg}}</span>
-    // <span id="Games_turtle">{{msg meaning="Games.turtle" desc="title - Specifies that this is Blockly's '''Turtle''' game.\n{lb}{lb}Identical|Turtle{rb}{rb}"}}Turtle{{/msg}}</span>
-    // <span id="Games_movie">{{msg meaning="Games.movie" desc="title - Specifies that this is Blockly's '''Movie''' game.\n{lb}{lb}Identical|Movie{rb}{rb}"}}Movie{{/msg}}</span>
-    // <span id="Games_music">{{msg meaning="Games.music" desc="title - Specifies that this is Blockly's '''Music''' game.\n{lb}{lb}Identical|Music{rb}{rb}"}}Music{{/msg}}</span>
-    // <span id="Games_pondTutor">{{msg meaning="Games.pondTutor" desc="title - Specifies that this is Blockly's '''Pond Tutor''' game.  It is a series of lessons or practice levels to allow users to play the more advanced '''Pond''' game (in your language: '''{lb}{lb}:Blockly:Games.pond/{lb}{lb}RelevantLanguage{rb}{rb}{rb}{rb}''')."}}Pond Tutor{{/msg}}</span>
-    // <span id="Games_pond">{{msg meaning="Games.pond" desc="title - Specifies that this is Blockly's '''Pond''' game.\n{lb}{lb}Identical|Pond{rb}{rb}"}}Pond{{/msg}}</span>
     <span id="Games_genetics">{{msg meaning="Games.genetics" desc="title - Specifies that this is Blockly's '''Genetics''' game.\n{lb}{lb}Identical|Genetics{rb}{rb}"}}Genetics{{/msg}}</span>
     <span id="Games_linesOfCode1">{msg meaning="Games.linesOfCode1" desc="alert - Displayed when a level is complete."}You solved this level with 1 line of JavaScript:{/msg}</span>
-    <span id="Games_linesOfCode2">{msg meaning="Games.linesOfCode2" desc="alert - Displayed when a level is complete.  %1 is an integer greater than 1."}You solved this level with %1 lines of JavaScript:{/msg}</span>
+    <span id="Games_linesOfCode2">{msg meaning="Games.linesOfCode2" desc="alert - Displayed when a level is complete.  %1 is an integer greater than 1."} You solved this level with %1 lines of JavaScript:{/msg}</span>
+    <span id="Games_linesOfCode3">{msg meaning="Games.linesOfCode3" desc="alert - Displayed when a level is complete.  %1 is an integer greater than 1."} ...and using %1 lines of JavaScript:{/msg}</span>
+    <span id="Games_execTime">{msg meaning="Games.execTime" desc="alert - Displayed when a level is complete.  %1 is an float greater than 1."} You solved this level in %2 execution time!{/msg}</span>
     <span id="Games_nextLevel">{msg meaning="Games.nextLevel" desc="alert - This is displayed when the user solves the level, inviting them to procede to the next level of difficulty.  %1 is an integer greater than 1."}Are you ready for level %1?{/msg}</span>
     <span id="Games_finalLevel">{msg meaning="Games.finalLevel" desc="alert - This is displayed when the user solves the most difficult level and is going to go to the next game."}Are you ready for the next challenge?{/msg}</span>
     <span id="Games_submitTitle">{{msg meaning="Games.submitTitle" desc="Label in front of a field where the user is requested to type a title for their work.\n{lb}{lb}Identical|Title{rb}{rb}"}}Title:{{/msg}}</span>
-
+    
     // Buttons and tooltips.
     <span id="Games_linkTooltip">{msg meaning="Games.linkTooltip" desc="tooltip - Pressing this button will cause the current program to be saved and for a URL to be shown to later retrieve it."}Save and link to blocks.{/msg}</span>
     <span id="Games_runTooltip">{msg meaning="Games.runTooltip" desc="tooltip - Pressing this button runs the computer program the user has written."}Run the program you wrote.{/msg}</span>
@@ -126,13 +120,15 @@
  */
 {template .doneDialog private="true"}
   <div id="dialogDone" class="dialogHiddenContent">
-    <div style="font-size: large; margin: 1em;">{{msg meaning="Games.congratulations" desc="alert - This is displayed when the user solves the level.\n{lb}{lb}Identical|Congratulation{rb}{rb}"}}Congratulations!{{/msg}}
-    </div>
-    <div id="dialogDonePerformance" style="font-size: large; margin: 1em; font-weight:bold;">
-      You resolve the challenge in: 
+    <div style="font-size: large; margin: 1em;"><h2>
+    {{msg meaning="Games.congratulations" desc="alert - This is displayed when the user solves the level.\n{lb}{lb}Identical|Congratulation{rb}{rb}"}}
+      CONGRATULATIONS!{{/msg}}</h2>
     </div>
 
+    //Execution time
+    <div id="dialogRunText" style="font-size: large; margin: 1em;"></div>
     <div id="dialogLinesText" style="font-size: large; margin: 1em;"></div>
+
     <pre id="containerCode"></pre>
     <div id="dialogDoneText" style="font-size: large; margin: 1em;"></div>
     <div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0">

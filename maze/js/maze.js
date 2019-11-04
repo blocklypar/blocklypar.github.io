@@ -77,7 +77,7 @@ Maze.stepSpeed;
  * Execution time of each level
  */
 Maze.executionTime = document.getElementById("number");
-
+Maze.finalTime = 0;
 /**
  * The types of squares in the maze, which is represented
  * as a 2D array of SquareType values.
@@ -738,11 +738,8 @@ Maze.constrainDirection16 = function(d) {
 
 Maze.FinalCounter = function(){
 
-  var executionTime = document.getElementById("number").innerHTML;
-  var doneDiv = document.getElementById('dialogLinesText');
-  var exectime = document.createElement('P');
-  exectime.innerText = executionTime.toString().concat(' execution time!');
-  doneDiv.parentNode.insertBefore(exectime, doneDiv);
+  var runningTime = document.getElementById('dialogRunText');
+  runningTime.appendChild(document.createTextNode(BlocklyGames.getMsg('Games_execTime').replace('%2', Maze.finalTime)));
 
 }
 
@@ -754,6 +751,7 @@ Maze.FinalCounter = function(){
 Maze.updateTime = function(time) {
   
   var cap = time;
+  Maze.finalTime = time;
   var p = document.getElementById('time');
 
   p.style.display = 'inline';
