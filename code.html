@@ -29,11 +29,23 @@
         <a id="back" href="/" class="logo"><img id="banner" src="index/blocklypar.png" width="100" alt="Blockly Games"></a>
         <div class="nav-spacer"></div>
         <div class="header-right">
-            <a class="color-one" href="about.html?lang={$ij.lang}">ABOUT</a>
-            <a class="color-two" href="parallel.html?lang={$ij.lang}">PARALLEL PROGRAMMING</a>
-            <a class="active" href="code.html?lang={$ij.lang}">CODE</a>
+            <a class="color-one" id="aboutlink">ABOUT</a>
+            &nbsp
+            <a class="color-one" id="parlink">PARALLEL PROGRAMMING</a>
+            <a class="active" href="javascript:window.location.reload(true)">CODE</a>
         </div>
     </div>
+
+    <script>
+      var url = new URL(window.location.href);
+      var c = url.searchParams.get("lang");
+      var parallel = document.getElementById("parlink");
+      parallel.href = "parallel.html?lang=".concat(c);
+  
+      var c = url.searchParams.get("lang");
+      var about = document.getElementById("aboutlink");
+      about.href = "about.html?lang=".concat(c);
+    </script>
 
   
     <div id="text">

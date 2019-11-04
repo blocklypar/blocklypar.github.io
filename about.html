@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -27,13 +26,23 @@
         <a id="back" href="/" class="logo"><img id="banner" src="index/blocklypar.png" width="100" alt="Blockly Games"></a>
         <div class="nav-spacer"></div>
         <div class="header-right">
-          <a class="active" href="about.html?lang={$ij.lang}">ABOUT</a>
-
-          <a class="color-two" href="parallel.html?lang={$ij.lang}">PARALLEL PROGRAMMING</a>
-          <a class="color-three" href="code.html?lang={$ij.lang}">CODE</a>
+          <a class="active" href="javascript:window.location.reload(true)">ABOUT</a>
+          &nbsp
+          <a class="color-one" id="parlink">PARALLEL PROGRAMMING</a>
+          <a class="color-one" id="codelink">CODE</a>
         </div>
     </div>
 
+    <script>
+      var url = new URL(window.location.href);
+      var c = url.searchParams.get("lang");
+      
+      var parallel = document.getElementById("parlink");
+      parallel.href = "parallel.html?lang=".concat(c);
+
+      var code = document.getElementById("codelink");
+      code.href = "code.html?lang=".concat(c);
+    </script>
   
     <div id="text">
         <h3 id="title">ABOUT</h3>
@@ -41,7 +50,7 @@
           to teach parallel thinking through a game.
           It has educational purposes, and was designed specially to freshman students in Computer Science
           majors. Is expected that at the end of the games the students feel challenged
-          to explore parallelism in their programs</p>
+          to explore parallelism in their programs </p>
         
         <p>This project was developed during as a Bachelor thesis in Computer Science at the Federal University
           of Santa Maria, in Brazil.

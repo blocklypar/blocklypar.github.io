@@ -51,13 +51,10 @@ Index.init = function() {
   languageMenu.addEventListener('change', BlocklyGames.changeLanguage, true);
 
   var storedData = false;
-  var levelsDone;
   
-  levelsDone = 0;
   for (var j = 1; j <= BlocklyGames.MAX_LEVEL; j++) {
     if (BlocklyGames.loadFromLocalStorage(Index.APPS[0], j)) {
       storedData = true;
-      levelsDone++;
     }
   }
 
@@ -67,66 +64,9 @@ Index.init = function() {
     BlocklyGames.bindClick('clearData', Index.clearData_);
   }
 
-  // function animateFactory(app, angle) {
-  //   return function() {
-  //     Index.animateGauge(app, 0, angle);
-  //   };
-  // }
-  
-  // //Number of levels done
-  // for (var i = 0; i < levelsDone; i++) {
-  //   var denominator = i == 0 ? 1 : BlocklyGames.MAX_LEVEL;
-  //   var angle = i / denominator * 270;
-  //   if (angle) {
-  //     setTimeout(animateFactory(Index.APPS[0], angle), 1500);
-  //   } else {
-  //     // Remove gauge if zero, since IE renders a stub.
-  //     var path = document.getElementById('gauge-' + Index.APPS[0]);
-  //     path.parentNode.removeChild(path);
-  //   }
-  // }
 };
 
 window.addEventListener('load', Index.init, false);
-
-/**
- * Animate a gauge from zero to a target value.
- * @param {string} app Name of application.
- * @param {number} cur Current angle of gauge in degrees.
- * @param {number} max Final angle of gauge in degrees.
- */
-Index.animateGauge = function(app, cur, max) {
-  var step = 4;
-  cur += step;
-  Index.drawGauge(app, Math.min(cur, max));
-  if (cur < max) {
-    setTimeout(function() {
-      Index.animateGauge(app, cur, max);
-    }, 10);
-  }
-};
-
-/**
- * Draw the gauge for an app.
- * @param {string} app Name of application.
- * @param {number} angle Angle of gauge in degrees.
- */
-Index.drawGauge = function(app, angle) {
-  var xOffset = 150;
-  var yOffset = 60;
-  var radius = 52.75;
-  var theta = (angle - 45) / 180 * Math.PI;
-  var x = xOffset - Math.cos(theta) * radius;
-  var y = yOffset - Math.sin(theta) * radius;
-  var flag = angle > 180 ? 1 : 0;
-  // The starting point is at angle zero.
-  theta = (0 - 45) / 180 * Math.PI;
-  var mx = xOffset - Math.cos(theta) * radius;
-  var my = yOffset - Math.sin(theta) * radius;
-  var path = document.getElementById('gauge-' + app);
-  path.setAttribute('d',
-      ['M ' + mx + ',' + my + ' A', radius, radius, 0, flag, 1, x, y].join(' '));
-};
 
 /**
  * Clear all stored data.
