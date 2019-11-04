@@ -67,24 +67,24 @@ Index.init = function() {
     BlocklyGames.bindClick('clearData', Index.clearData_);
   }
 
-  function animateFactory(app, angle) {
-    return function() {
-      Index.animateGauge(app, 0, angle);
-    };
-  }
+  // function animateFactory(app, angle) {
+  //   return function() {
+  //     Index.animateGauge(app, 0, angle);
+  //   };
+  // }
   
-  //Number of levels done
-  for (var i = 0; i < levelsDone; i++) {
-    var denominator = i == 0 ? 1 : BlocklyGames.MAX_LEVEL;
-    var angle = i / denominator * 270;
-    if (angle) {
-      setTimeout(animateFactory(Index.APPS[0], angle), 1500);
-    } else {
-      // Remove gauge if zero, since IE renders a stub.
-      var path = document.getElementById('gauge-' + Index.APPS[0]);
-      path.parentNode.removeChild(path);
-    }
-  }
+  // //Number of levels done
+  // for (var i = 0; i < levelsDone; i++) {
+  //   var denominator = i == 0 ? 1 : BlocklyGames.MAX_LEVEL;
+  //   var angle = i / denominator * 270;
+  //   if (angle) {
+  //     setTimeout(animateFactory(Index.APPS[0], angle), 1500);
+  //   } else {
+  //     // Remove gauge if zero, since IE renders a stub.
+  //     var path = document.getElementById('gauge-' + Index.APPS[0]);
+  //     path.parentNode.removeChild(path);
+  //   }
+  // }
 };
 
 window.addEventListener('load', Index.init, false);
