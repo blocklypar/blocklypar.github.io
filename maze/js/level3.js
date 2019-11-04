@@ -317,7 +317,7 @@ Maze.Level3.Reset = function(first){
             Maze.Level3.Schedule([student[0].startLoc.x, student[0].startLoc.y, student[0].startDirection * 4],
                         [student[0].startLoc.x, student[0].startLoc.y, student[0].startDirection * 4 - 4], student[0].id);
                         student[0].startDirection++;
-        }, Maze.stepSpeed * 5));
+        }, Maze.stepSpeed * 4));
 
     } else 
         Maze.Level3.DisplayStudent(0, student[0].startLoc.x, student[0].startLoc.y, Maze.startDirection * 4);

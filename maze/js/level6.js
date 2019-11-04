@@ -17,8 +17,6 @@ var student = [];
 var pidList = [];
 var log = [];
 
-var speed = 100;
-
 var booksCounterNum;
 
 //****** STUDENTS */
@@ -359,14 +357,13 @@ Maze.Level6.Reset = function(first){
 
     // Move all students into initial position
     if (first) {
-        Maze.stepSpeed = speed;
         // Student 1
         student[0].startDirection++;
         pidList.push(setTimeout(function() {
             Maze.Level6.Schedule([student[0].startLoc.x, student[0].startLoc.y, student[0].startDirection * 4],
                         [student[0].startLoc.x, student[0].startLoc.y, student[0].startDirection * 4 - 4], student[0].id);
                         student[0].startDirection++;
-        }, Maze.stepSpeed * 5));
+        }, Maze.stepSpeed * 4));
 
         // Student 2   
         student[1].startDirection++;
@@ -374,7 +371,7 @@ Maze.Level6.Reset = function(first){
             Maze.Level6.Schedule([student[1].startLoc.x, student[1].startLoc.y, student[1].startDirection * 4],
                         [student[1].startLoc.x, student[1].startLoc.y, student[1].startDirection * 4 - 4], student[1].id);
                         student[1].startDirection++;
-        }, Maze.stepSpeed * 5));
+        }, Maze.stepSpeed * 4));
         
         // Student 3  
         student[2].startDirection++;
@@ -382,7 +379,7 @@ Maze.Level6.Reset = function(first){
             Maze.Level6.Schedule([student[2].startLoc.x, student[2].startLoc.y, student[2].startDirection * 4],
                         [student[2].startLoc.x, student[2].startLoc.y, student[2].startDirection * 4 - 4], student[2].id);
                         student[2].startDirection++;
-        }, Maze.stepSpeed * 5));
+        }, Maze.stepSpeed * 4));
 
     } else {
         Maze.Level6.DisplayStudent(0, student[0].startLoc.x, student[0].startLoc.y, Maze.startDirection * 4);
@@ -459,7 +456,6 @@ Maze.Level6.Execute = function(){
         return;
     }
 
-    Maze.stepSpeed = speed;
     Maze.result = Maze.Level6.NotDone() ? Maze.ResultType.FAILURE : Maze.ResultType.SUCCESS;
 
     //Fast animation if execution is successful. Slow otherwise.

@@ -71,7 +71,7 @@ Maze.MAX_BLOCKS = [undefined, // Level 0.
 /**
  * Milliseconds between each animation frame.
  */
-Maze.stepSpeed;
+Maze.stepSpeed = 80;
 
 /**
  * Execution time of each level

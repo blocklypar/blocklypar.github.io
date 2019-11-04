@@ -310,11 +310,10 @@ Maze.Level2.Reset = function(first){
     if (first) {
         student.startDirection++;
         pidList.push(setTimeout(function() {
-            Maze.stepSpeed = 100;
             Maze.Level2.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
                         [student.startLoc.x, student.startLoc.y, student.startDirection * 4 - 4]);
                         student.startDirection++;
-        }, Maze.stepSpeed * 5));
+        }, Maze.stepSpeed * 4));
     } else {
         Maze.Level2.DisplayStudent(student.startLoc.x, student.startLoc.y, Maze.startDirection * 4);
     }
@@ -372,10 +371,8 @@ Maze.Level2.Execute = function(){
     }
 
     // Fast animation if execution is successful. Slow otherwise.
-    if (Maze.result == Maze.ResultType.SUCCESS) {
-        Maze.stepSpeed = 100;
+    if (Maze.result == Maze.ResultType.SUCCESS)
         log.push(['finish', null]);
-    } 
 
     Maze.Level2.Reset(false);
     pidList.push(setTimeout(Maze.Level2.Animate, 150));
@@ -458,7 +455,7 @@ Maze.Level2.Animate = function(){
         setTimeout(BlocklyDialogs.congratulations, 1000);  
         
     }
-    pidList.push(setTimeout(Maze.Level2.Animate, Maze.stepSpeed * 5));
+    pidList.push(setTimeout(Maze.Level2.Animate, Maze.stepSpeed * 4));
 }
 
 /**

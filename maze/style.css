@@ -13,7 +13,7 @@
 #capacityBubble {
   position: absolute;
   margin-top: 0.4em;
-  left: 50px;
+  left: 10px;
   top: 375px;
   width: 360px;
 }
@@ -25,8 +25,8 @@ html[dir="RTL"] #capacityBubble {
 #capacity {
   display: none;
   color: #fff;
-  padding: 5px 1em;
-  border-radius: 15px;
+  padding: 4px 1em;
+  border-radius: 10px;
   background-color: rgba(64,64,64,0.7);
   font-size: large;
 }
@@ -37,9 +37,10 @@ html[dir="RTL"] #capacityBubble {
 #capacityBubble {
   position: absolute;
   margin-top: 0.4em;
-  left: 90px;
-  top: 375px;
-  width: 320px;
+  margin-left: 3.0em;
+  left: 110px;
+  top: 425px;
+  width: 250px;
 }
 
 html[dir="RTL"] #timeBubble {
@@ -49,8 +50,8 @@ html[dir="RTL"] #timeBubble {
 #time {
   display: none;
   color: #fff;
-  padding: 5px 1em;
-  border-radius: 15px;
+  padding: 4px 5px;
+  border-radius: 10px;
   background-color: rgba(223, 72, 72, 0.863);
   font-size: large;
 }
@@ -61,9 +62,11 @@ html[dir="RTL"] #timeBubble {
 #timeBubble {
   position: absolute;
   margin-top: 0.4em;
-  left: 20px;
-  top: 375px;
-  width: 220px;
+  margin-left: 0em;
+  left: 5px;
+  right: 5px;
+  top: 425px;
+  width: 250px;
 }
 
 

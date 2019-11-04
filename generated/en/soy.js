@@ -49,7 +49,7 @@ if (goog.DEBUG) {
 
 
 BlocklyGames.soy.doneDialog = function(opt_data, opt_ignored, opt_ijData) {
-  return '<div id="dialogDone" class="dialogHiddenContent"><div style="font-size: large; margin: 1em;"><h2>CONGRATULATIONS!</h2></div><div id="dialogRunText" style="font-size: large; margin: 1em;"></div><div id="dialogLinesText" style="font-size: large; margin: 1em;"></div><pre id="containerCode"></pre><div id="dialogDoneText" style="font-size: large; margin: 1em;"></div><div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0"><button id="doneCancel">Cancel</button><button id="doneOk" class="secondary">OK</button></div></div>';
+  return '<div id="dialogDone" class="dialogHiddenContent"><div style="font-size: large; margin: 1em;"><center><h3>CONGRATULATIONS!</center></h3></div><div id="dialogRunText" style="font-size: large; margin: 1em;"></div><div id="dialogLinesText" style="font-size: large; margin: 1em;"></div><pre id="containerCode"></pre><div id="dialogDoneText" style="font-size: large; margin: 1em;"></div><div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0"><button id="doneCancel">Cancel</button><button id="doneOk" class="secondary">OK</button></div></div>';
 };
 if (goog.DEBUG) {
   BlocklyGames.soy.doneDialog.soyTemplateName = 'BlocklyGames.soy.doneDialog';

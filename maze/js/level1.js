@@ -272,7 +272,6 @@ Maze.Level1.Reset = function(first){
     if (first) {
         student.startDirection++;
         pidList.push(setTimeout(function() {
-            Maze.stepSpeed = 100;
             Maze.Level1.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
                         [student.startLoc.x, student.startLoc.y, student.startDirection * 4 - 4]);
                         student.startDirection++;
@@ -337,12 +336,8 @@ Maze.Level1.Execute = function(){
     }
 
     // Fast animation if execution is successful.  Slow otherwise.
-    if (Maze.result == Maze.ResultType.SUCCESS) {
-        Maze.stepSpeed = 100;
+    if (Maze.result == Maze.ResultType.SUCCESS)
         log.push(['finish', null]);
-    } else {
-        Maze.stepSpeed = 100;
-    }
 
     Maze.Level1.Reset(false);
     pidList.push(setTimeout(Maze.Level1.Animate, 100));
