@@ -66,7 +66,7 @@ BlocklyInterface.nextLevel = function() {
 };
 
 Maze.MAX_BLOCKS = [undefined, // Level 0.
-    2, 4, 5, 11, 10, 13, Infinity][BlocklyGames.LEVEL];
+  Infinity, 4, 5, 11, 10, 13, Infinity][BlocklyGames.LEVEL];
 
 /**
  * Milliseconds between each animation frame.
@@ -416,13 +416,28 @@ Maze.levelHelp = function(opt_event) {
   //If fail shows message with remaining blocks or to help with the repeat block
   if (BlocklyGames.LEVEL == 1) {
 
-    Maze.Level1();
+    if (BlocklyGames.workspace.getAllBlocks().length < 2) {
+      content = document.getElementById('dialogHelpStack');
+      style = {'width': '370px', 'top': '130px'};
+      style[rtl ? 'right' : 'left'] = '215px';
+      origin = toolbar[0].getSvgRoot();
+    }
+  }
 
+  if (content) {
+    if (content.parentNode != document.getElementById('dialog')) {
+      BlocklyDialogs.showDialog(content, origin, true, false, style, null);
+    }
+  } else {
+    BlocklyDialogs.hideDialog(false);
+  }
     //Dialog presenting the block repeat
-    content = document.getElementById('dialogHelpRepeat');
-    style = {'width': '360px', 'top': '360px'};
-    style[rtl ? 'right' : 'left'] = '425px';
-    origin = toolbar[3].getSvgRoot();
+    
+    // content = document.getElementById('dialogHelpRepeat');
+
+    // style = {'width': '360px', 'top': '360px'};
+    // style[rtl ? 'right' : 'left'] = '425px';
+    // origin = toolbar[3].getSvgRoot();
     
     // if (userBlocks.indexOf('maze_forever_2activities') == -1) {
     //   if (BlocklyGames.workspace.remainingCapacity() == 0) {
@@ -437,8 +452,6 @@ Maze.levelHelp = function(opt_event) {
     //     origin = toolbar[3].getSvgRoot();
     //   }
     // }
-  }
-
   //   if (userBlocks.indexOf('maze_forever') == -1) {
   //     // if (BlocklyGames.workspace.remainingCapacity() == 0) {
   //     //   content = document.getElementById('dialogHelpCapacity');
@@ -512,13 +525,7 @@ Maze.levelHelp = function(opt_event) {
   //   }
   // }
   
-  if (content) {
-    if (content.parentNode != document.getElementById('dialog')) {
-      BlocklyDialogs.showDialog(content, origin, true, false, style, null);
-    }
-  } else {
-    BlocklyDialogs.hideDialog(false);
-  }
+
 };
 
 /**
@@ -578,7 +585,7 @@ Maze.runButtonClick = function(e) {
       BlocklyGames.workspace.getTopBlocks(false).length > 1 &&
       Maze.result != Maze.ResultType.SUCCESS &&
       !BlocklyGames.loadFromLocalStorage(BlocklyGames.NAME,
-                                         BlocklyGames.LEVEL)) {
+                                        BlocklyGames.LEVEL)) {
     Maze.levelHelp();
     return;
   }

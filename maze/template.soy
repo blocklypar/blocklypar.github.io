@@ -134,15 +134,14 @@
   {call .toolbox /}
   <div id="blockly"></div>
 
-
-  // <div id="pegmanMenu"></div>
+  <div id="pegmanMenu"></div>
 
   {call BlocklyGames.soy.dialog /}
   {call BlocklyGames.soy.doneDialog /}
   {call BlocklyGames.soy.abortDialog /}
   {call BlocklyGames.soy.storageDialog /}
 
-{if $ij.level == 1}
+  {if $ij.level == 1}
     <div id="dialogHelpStack" class="dialogHiddenContent">
       <table><tr><td>
         <img src="common/help.png">
