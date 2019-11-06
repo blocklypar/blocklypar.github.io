@@ -53,7 +53,9 @@
     <span id="Maze_whileAct4Tooltip">{msg meaning="Maze.whileAct4Tooltip" desc="tooltip - Repeat the enclosed commands until the student complete all the 4 activities to attend the class."}Repeat the enclosed commands until the student complete all the 4 activities to attend the class{/msg}</span>
     <span id="Maze_whileAct2Tooltip">{msg meaning="Maze.whileAct2Tooltip" desc="tooltip - Repeat the enclosed commands until the student complete all the 2 activities to attend the class."}Repeat the enclosed commands until the student complete all the 2 activities to attend the class{/msg}</span>
     <span id="Maze_ifStdTooltip">{msg meaning="Maze.ifStdTooltip" desc="tooltip - 'student' refers to the student available to complete the task by walking through the maze."}Do the actions related with the student selected.{/msg}</span>
- 
+    //New help messages
+    <span id="Maze_help1Student">{msg meaning="Maze.help1Student" desc="callout - This is shown when the 'student do' block is introduced."}The student block will set the action of the student.{/msg}</span>
+
   </div>
 {/template}
 
@@ -201,7 +203,15 @@
     </div>
 
   {elseif $ij.level == 3}
-  
+    //Introduce the Student block
+    <div id="dialogHelp1Student" class="dialogHiddenContent">
+      <table><tr>
+      <td>
+        {msg meaning="Maze.help1Student" desc="IBID"}
+          To move the student you need to use the 'student do' block, that relate the blocks actions with the student.
+        {/msg}
+      </td></tr></table>
+    </div>
 
   {elseif $ij.level == 4}
 

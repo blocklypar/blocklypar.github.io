@@ -462,6 +462,13 @@ Maze.levelHelp = function(opt_event) {
       origin = document.getElementById('resetButton');
     }
 
+  }else if(BlocklyGames.LEVEL == 3){
+    if (userBlocks.indexOf('maze_1student') == -1) {
+      content = document.getElementById('dialogHelp1Student');
+      style = {'width': '270px', 'top': '555px'};
+      style[rtl ? 'right' : 'left'] = '585px';
+      origin = toolbar[5].getSvgRoot();
+    }
   }
 
   if (content) {
