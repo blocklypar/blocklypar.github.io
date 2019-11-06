@@ -55,6 +55,7 @@
     <span id="Maze_ifStdTooltip">{msg meaning="Maze.ifStdTooltip" desc="tooltip - 'student' refers to the student available to complete the task by walking through the maze."}Do the actions related with the student selected.{/msg}</span>
     //New help messages
     <span id="Maze_help1Student">{msg meaning="Maze.help1Student" desc="callout - This is shown when the 'student do' block is introduced."}The student block will set the action of the student.{/msg}</span>
+    <span id="Maze_help2Students">{msg meaning="Maze.help2Students" desc="callout - This is shown when the 'students do' block is introduced."}The student block will set the action to a specific student.{/msg}</span>
 
   </div>
 {/template}
@@ -208,29 +209,38 @@
       <table><tr>
       <td>
         {msg meaning="Maze.help1Student" desc="IBID"}
-          To move the student you need to use the 'student do' block, that relate the blocks actions with the student.
+          To move the student you need to stack the blocks inside the 'student do' block.
         {/msg}
       </td></tr></table>
     </div>
 
   {elseif $ij.level == 4}
+      //Introduce the Student block
+    <div id="dialogHelp2Students" class="dialogHiddenContent">
+      <table><tr>
+      <td>
+        {msg meaning="Maze.help2Students" desc="IBID"}
+          Now you can switch between the 2 students available for the task.
+        {/msg}
+      </td></tr></table>
+    </div>
 
-    <div id="dialogHelpCapacity" class="dialogHiddenContent">
-      <table><tr><td>
-        <img src="common/help.png">
-      </td><td>&nbsp;</td><td>
-        {msg meaning="Maze.helpCapacity" desc="callout - This is shown after the user has used all the blocks permitted on this level."}You have used up all the blocks for this level. To create a new block, you first need to delete an existing block.{/msg}
-      </td></tr></table>
-    </div>
-    <div id="dialogHelpRepeatMany" class="dialogHiddenContent">
-      <table><tr><td>
-        <img src="maze/help_up.png">
-      </td><td>
-        {msg meaning="Maze.helpRepeatMany" desc="callout - This is a hint that the user should place a second block inside of a a 'repeat' block."}You can fit more than one block inside a 'repeat' block.{/msg}
-      </td><td>
-        <img src="common/help.png">
-      </td></tr></table>
-    </div>
+    // <div id="dialogHelpCapacity" class="dialogHiddenContent">
+    //   <table><tr><td>
+    //     <img src="common/help.png">
+    //   </td><td>&nbsp;</td><td>
+    //     {msg meaning="Maze.helpCapacity" desc="callout - This is shown after the user has used all the blocks permitted on this level."}You have used up all the blocks for this level. To create a new block, you first need to delete an existing block.{/msg}
+    //   </td></tr></table>
+    // </div>
+    // <div id="dialogHelpRepeatMany" class="dialogHiddenContent">
+    //   <table><tr><td>
+    //     <img src="maze/help_up.png">
+    //   </td><td>
+    //     {msg meaning="Maze.helpRepeatMany" desc="callout - This is a hint that the user should place a second block inside of a a 'repeat' block."}You can fit more than one block inside a 'repeat' block.{/msg}
+    //   </td><td>
+    //     <img src="common/help.png">
+    //   </td></tr></table>
+    // </div>
   {elseif $ij.level == 5}
     <div id="dialogHelpSkins" class="dialogHiddenContent">
       <table><tr><td>

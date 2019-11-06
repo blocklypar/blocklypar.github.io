@@ -469,6 +469,13 @@ Maze.levelHelp = function(opt_event) {
       style[rtl ? 'right' : 'left'] = '585px';
       origin = toolbar[5].getSvgRoot();
     }
+  }else if(BlocklyGames.LEVEL == 4){
+    if (userBlocks.indexOf('maze_2students') == -1) {
+      content = document.getElementById('dialogHelp2Students');
+      style = {'width': '270px', 'top': '555px'};
+      style[rtl ? 'right' : 'left'] = '585px';
+      origin = toolbar[5].getSvgRoot();
+    }
   }
 
   if (content) {
