@@ -142,23 +142,29 @@
   {call BlocklyGames.soy.storageDialog /}
 
   {if $ij.level == 1}
+
+    //Guarantee that it will be only 1 stack of blocks
+    <div id="dialogHelpOneTopBlock" class="dialogHiddenContent">
+      <table><tr>
+      <td>
+        {msg meaning="Maze.helpOneTopBlock" desc="callout - This is displayed if a user attempts to run a program composed of multiple stacks of blocks, letting them know they need to create a single stack."}
+        Hey! You need to stack together all the blocks that you want to use in the white workspace.{/msg}
+        <div id="sampleOneTopBlock" class="readonly"></div>
+      </td></tr></table>
+    </div>
+
+    //Introduce the first block if time-out
     <div id="dialogHelpStack" class="dialogHiddenContent">
-      <table><tr><td>
-        <img src="common/help.png">
-      </td><td>&nbsp;</td><td>
-        {msg meaning="Maze.helpStack" desc="callout - The word words for 'stack' and 'blocks' should be the same as for stacking children's blocks. Use the imperative verb form appropriate for speaking to a child, gender unspecified.  If no gender-neutral singular/familiar form exists but a gender-neutral plural/formal form exists, use that instead.  Be sure to use the same translation of 'move forward' as above."}Stack a couple of 'move forward' blocks together to help me reach the goal.{/msg}
+      <table><tr>
+      <td>
+        {msg meaning="Maze.helpStack" desc="callout - The word for 'stack' and 'blocks' should be the same as for stacking children's blocks. Use the imperative verb form appropriate for speaking to a child, gender unspecified.  If no gender-neutral singular/familiar form exists but a gender-neutral plural/formal form exists, use that instead.  Be sure to use the same translation of 'move forward' as above."}
+        Stack a 'move forward' block in the 'repeat until' block to help the student go to the classroom.{/msg}
       </td><td valign="top">
         <img src="maze/help_stack.png" class="mirrorImg" height=63 width=136>
       </td></tr></table>
     </div>
-    <div id="dialogHelpOneTopBlock" class="dialogHiddenContent">
-      <table><tr><td>
-        <img src="common/help.png">
-      </td><td>&nbsp;</td><td>
-        {msg meaning="Maze.helpOneTopBlock" desc="callout - This is displayed if a user attempts to run a program composed of multiple stacks of blocks, letting them know they need to create a single stack."}On this level, you need to stack together all of the blocks in the white workspace.{/msg}
-        <div id="sampleOneTopBlock" class="readonly"></div>
-      </td></tr></table>
-    </div>
+
+
     <div id="dialogHelpRun" class="dialogHiddenContent">
       <table><tr><td>
         {msg meaning="Maze.helpRun" desc="callout - This is shown after the user has created a program on the first level."}Run your program to see what happens.{/msg}
@@ -276,7 +282,6 @@
     {if $ij.level == 1}
       <block type="maze_forever_2activities"></block>
     {/if}
-
 
     {if $ij.level > 1}
 

@@ -421,9 +421,25 @@ Maze.levelHelp = function(opt_event) {
       style = {'width': '370px', 'top': '130px'};
       style[rtl ? 'right' : 'left'] = '215px';
       origin = toolbar[0].getSvgRoot();
+    } else {
+      var topBlocks = BlocklyGames.workspace.getTopBlocks(true);
+      if (topBlocks.length > 1) {
+        var xml = [
+            '<xml>',
+              '<block type="maze_forever_2activities" x="10" y="10">',
+                '<statement name="DO">',
+                  '<block type="maze_moveForward"></block>',
+                '</statement>',
+              '</block>',
+            '</xml>'];
+        BlocklyInterface.injectReadonly('sampleOneTopBlock', xml);
+        content = document.getElementById('dialogHelpOneTopBlock');
+        style = {'width': '360px', 'top': '120px'};
+        style[rtl ? 'right' : 'left'] = '225px';
+        origin = topBlocks[0].getSvgRoot();
+      }
     }
   }
-
   if (content) {
     if (content.parentNode != document.getElementById('dialog')) {
       BlocklyDialogs.showDialog(content, origin, true, false, style, null);
