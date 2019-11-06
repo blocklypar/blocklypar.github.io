@@ -158,25 +158,27 @@
       <table><tr>
       <td>
         {msg meaning="Maze.helpStack" desc="callout - The word for 'stack' and 'blocks' should be the same as for stacking children's blocks. Use the imperative verb form appropriate for speaking to a child, gender unspecified.  If no gender-neutral singular/familiar form exists but a gender-neutral plural/formal form exists, use that instead.  Be sure to use the same translation of 'move forward' as above."}
-        Stack a 'move forward' block in the 'repeat until' block to help the student go to the classroom.{/msg}
-      </td><td valign="top">
-        <img src="maze/help_stack.png" class="mirrorImg" height=63 width=136>
+        Stack a 'move forward' block in the 'repeat until' block to finish the task.{/msg}
       </td></tr></table>
     </div>
 
-
+    //Introduce the run button
     <div id="dialogHelpRun" class="dialogHiddenContent">
-      <table><tr><td>
-        {msg meaning="Maze.helpRun" desc="callout - This is shown after the user has created a program on the first level."}Run your program to see what happens.{/msg}
-      </td><td rowspan=2>
-        <img src="common/help.png">
-      </td></tr><tr><td>
-        <div><img src="maze/help_run.png" class="mirrorImg" height=27 width=141></div>
+      <table><tr>
+        <td>
+          <img src="maze/left.png">
+        </td>
+        <td>
+        {msg meaning="Maze.helpRun" desc="callout - This is shown after the user has created a program on the first level."}
+        Run your program by clicking here!{/msg}
       </td></tr></table>
     </div>
+
   {elseif $ij.level == 2}
+
     <div id="dialogHelpReset" class="dialogHiddenContent">
-      <table><tr><td>
+      <table><tr>
+      <td>
         {msg meaning="Maze.helpReset" desc="callout - This is shown after the user has run a program that does not solve the maze."}Your program didn't solve the maze. Press 'Reset' and try again.{/msg}
       </td><td rowspan=2>
         <img src="common/help.png">
@@ -184,6 +186,8 @@
         <div><img src="maze/help_run.png" class="mirrorImg" height=27 width=141></div>
       </td></tr></table>
     </div>
+
+
   {elseif $ij.level == 3 or $ij.level == 4}
     {if $ij.level == 3}
       <div id="dialogHelpRepeat" class="dialogHiddenContent">

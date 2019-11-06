@@ -146,7 +146,7 @@ button:hover:not(:disabled) {
   margin: -10px -10px 15px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  background-color: #8b38db;
+  background-color: #f9943b;
   cursor: move;
 }
 #dialog button {

@@ -236,14 +236,6 @@ html[dir="RTL"] #pegmanButton>span {
   background-color: #1efc1e;
 }
 
-.header a:hover.color-two {
-  background-color: #ff1053;
-}
-
-.header a:hover.color-three {
-  background-color: #00f2f2;
-}
-
 
 .header a.active {
   background-color: rgb(52, 113, 175);
