@@ -176,30 +176,35 @@
 
   {elseif $ij.level == 2}
 
+    //Introduce the reset button
     <div id="dialogHelpReset" class="dialogHiddenContent">
+      <table>
+      <tr>
+        <td colspan="2">{msg meaning="Maze.helpReset" desc="callout - This is shown after the user has run a program that does not solve the maze."}
+          Your program didn't solve this level.{/msg}</td>
+      </tr>
+      <tr>
+        <td><img src="maze/left.png"></td>
+        <td>Click 'Reset' and try again.</td>
+      </tr>
+      </table>
+    </div>
+
+    //Introduce the if-else blocks
+    <div id="dialogHelpIfElse" class="dialogHiddenContent">
       <table><tr>
       <td>
-        {msg meaning="Maze.helpReset" desc="callout - This is shown after the user has run a program that does not solve the maze."}Your program didn't solve the maze. Press 'Reset' and try again.{/msg}
-      </td><td rowspan=2>
-        <img src="common/help.png">
-      </td></tr><tr><td>
-        <div><img src="maze/help_run.png" class="mirrorImg" height=27 width=141></div>
+        {msg meaning="Maze.helpIfElse" desc="IBID"}
+          An 'if-else' block will do one thing if the condition is true or the other, if the condition is false.
+        {/msg}
       </td></tr></table>
     </div>
 
+  {elseif $ij.level == 3}
+  
 
-  {elseif $ij.level == 3 or $ij.level == 4}
-    {if $ij.level == 3}
-      <div id="dialogHelpRepeat" class="dialogHiddenContent">
-        <table><tr><td>
-          <img src="maze/help_up.png">
-        </td><td>
-          {msg meaning="Maze.helpRepeat" desc="callout - This is shown when the 'repeat' block is introduced.  The word 'path' refers to a path through a maze, and 'block' refers to a child's building block."}Reach the end of this path using only two blocks. Use 'repeat' to run a block more than once.{/msg}
-        </td><td>
-          <img src="common/help.png">
-        </td></tr></table>
-      </div>
-    {/if}
+  {elseif $ij.level == 4}
+
     <div id="dialogHelpCapacity" class="dialogHiddenContent">
       <table><tr><td>
         <img src="common/help.png">

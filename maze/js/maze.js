@@ -446,17 +446,23 @@ Maze.levelHelp = function(opt_event) {
       }
     }
   }else if(BlocklyGames.LEVEL == 2){
+
+    if (userBlocks.indexOf('maze_ifElse') == -1) {
+      content = document.getElementById('dialogHelpIfElse');
+      style = {'width': '240px', 'top': '450px'};
+      style[rtl ? 'right' : 'left'] = '625px';
+      origin = toolbar[5].getSvgRoot();
+    }
+
     if (Maze.result != Maze.ResultType.UNSET &&
       document.getElementById('runButton').style.display == 'none') {
       content = document.getElementById('dialogHelpReset');
-      style = {'width': '260px', 'top': '410px'};
-      style[rtl ? 'right' : 'left'] = '510px';
+      style = {'width': '260px', 'top': '505px'};
+      style[rtl ? 'right' : 'left'] = '410px';
       origin = document.getElementById('resetButton');
     }
+
   }
-
-
-
 
   if (content) {
     if (content.parentNode != document.getElementById('dialog')) {
