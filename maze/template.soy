@@ -56,6 +56,7 @@
     //New help messages
     <span id="Maze_help1Student">{msg meaning="Maze.help1Student" desc="callout - This is shown when the 'student do' block is introduced."}The student block will set the action of the student.{/msg}</span>
     <span id="Maze_help2Students">{msg meaning="Maze.help2Students" desc="callout - This is shown when the 'students do' block is introduced."}The student block will set the action to a specific student.{/msg}</span>
+    <span id="Maze_helpBooks">{msg meaning="Maze.helpBooks" desc="callout - This is shown when the 'repeat until ... in parallel' block is introduced."}This block will execute both students in parallel.{/msg}</span>
 
   </div>
 {/template}
@@ -224,6 +225,29 @@
         {/msg}
       </td></tr></table>
     </div>
+  {elseif $ij.level == 5}
+    //Introduce the parallel block
+    <div id="dialogHelpBooks" class="dialogHiddenContent">
+      <table><tr>
+      <td><img src="maze/down.png"></td>
+      <td colspan="2">
+        {msg meaning="Maze.helpBooks" desc="IBID"}
+          This block allows you to move both students at the same time, in parallel.
+        {/msg}
+      </td></tr>
+      </table>
+    </div>
+  {elseif $ij.level == 6}
+    <div id="dialogHelpBooks" class="dialogHiddenContent">
+      <table><tr>
+      <td colspan="2">
+        {msg meaning="Maze.helpBooks" desc="IBID"}
+          Try to use all the students to perform the task to see what happens!
+        {/msg}
+      </td></tr>
+      </table>
+    </div>
+    //Tell the student that she/he can use 3 students for the task.
 
     // <div id="dialogHelpCapacity" class="dialogHiddenContent">
     //   <table><tr><td>

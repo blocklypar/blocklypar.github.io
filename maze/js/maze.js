@@ -465,7 +465,7 @@ Maze.levelHelp = function(opt_event) {
   }else if(BlocklyGames.LEVEL == 3){
     if (userBlocks.indexOf('maze_1student') == -1) {
       content = document.getElementById('dialogHelp1Student');
-      style = {'width': '270px', 'top': '555px'};
+      style = {'width': '300px', 'top': '565px'};
       style[rtl ? 'right' : 'left'] = '585px';
       origin = toolbar[5].getSvgRoot();
     }
@@ -474,6 +474,20 @@ Maze.levelHelp = function(opt_event) {
       content = document.getElementById('dialogHelp2Students');
       style = {'width': '270px', 'top': '555px'};
       style[rtl ? 'right' : 'left'] = '585px';
+      origin = toolbar[5].getSvgRoot();
+    }
+  }else if(BlocklyGames.LEVEL == 5){
+    if (userBlocks.indexOf('maze_foreverbooks') == -1) {
+      content = document.getElementById('dialogHelpBooks');
+      style = {'width': '270px', 'top': '85px'};
+      style[rtl ? 'right' : 'left'] = '785px';
+      origin = toolbar[5].getSvgRoot();
+    }
+  }else if(BlocklyGames.LEVEL == 6){
+    if (userBlocks.indexOf('maze_foreverbooks') == -1) {
+      content = document.getElementById('dialogHelpBooks');
+      style = {'width': '270px', 'top': '85px'};
+      style[rtl ? 'right' : 'left'] = '785px';
       origin = toolbar[5].getSvgRoot();
     }
   }
