@@ -474,51 +474,63 @@ Maze.levelHelp = function(opt_event) {
       }
     }
   }else if(BlocklyGames.LEVEL == 2){
+    if(Maze.FirstLevel.TWO){
+      content = document.getElementById('dialog2Intro');
+      style = {'width': '40%', 'top': '3em'};
+      style[rtl ? 'right' : 'left'] = '30%';
+      origin = toolbar[0].getSvgRoot();
 
-    if (userBlocks.indexOf('maze_ifElse') == -1) {
-      content = document.getElementById('dialogHelpIfElse');
-      style = {'width': '240px', 'top': '450px'};
-      style[rtl ? 'right' : 'left'] = '625px';
-      origin = toolbar[5].getSvgRoot();
+      var ok = document.getElementById('playStart');
+      ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
+      ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+      Maze.FirstLevel.TWO = false;
+    }
+    else{
+      if (userBlocks.indexOf('maze_ifElse') == -1) {
+        content = document.getElementById('dialogHelpIfElse');
+        style = {'width': '240px', 'top': '450px'};
+        style[rtl ? 'right' : 'left'] = '625px';
+        origin = toolbar[5].getSvgRoot();
+      }
+
+      if (Maze.result != Maze.ResultType.UNSET &&
+        document.getElementById('runButton').style.display == 'none') {
+        content = document.getElementById('dialogHelpReset');
+        style = {'width': '260px', 'top': '505px'};
+        style[rtl ? 'right' : 'left'] = '410px';
+        origin = document.getElementById('resetButton');
+      }
     }
 
-    if (Maze.result != Maze.ResultType.UNSET &&
-      document.getElementById('runButton').style.display == 'none') {
-      content = document.getElementById('dialogHelpReset');
-      style = {'width': '260px', 'top': '505px'};
-      style[rtl ? 'right' : 'left'] = '410px';
-      origin = document.getElementById('resetButton');
+    }else if(BlocklyGames.LEVEL == 3){
+      if (userBlocks.indexOf('maze_1student') == -1) {
+        content = document.getElementById('dialogHelp1Student');
+        style = {'width': '300px', 'top': '565px'};
+        style[rtl ? 'right' : 'left'] = '585px';
+        origin = toolbar[5].getSvgRoot();
+      }
+    }else if(BlocklyGames.LEVEL == 4){
+      if (userBlocks.indexOf('maze_2students') == -1) {
+        content = document.getElementById('dialogHelp2Students');
+        style = {'width': '270px', 'top': '555px'};
+        style[rtl ? 'right' : 'left'] = '585px';
+        origin = toolbar[5].getSvgRoot();
+      }
+    }else if(BlocklyGames.LEVEL == 5){
+      if (userBlocks.indexOf('maze_foreverbooks') == -1) {
+        content = document.getElementById('dialogHelpBooks');
+        style = {'width': '270px', 'top': '85px'};
+        style[rtl ? 'right' : 'left'] = '785px';
+        origin = toolbar[5].getSvgRoot();
+      }
+    }else if(BlocklyGames.LEVEL == 6){
+      if (userBlocks.indexOf('maze_foreverbooks') == -1) {
+        content = document.getElementById('dialogHelpBooks');
+        style = {'width': '270px', 'top': '85px'};
+        style[rtl ? 'right' : 'left'] = '785px';
+        origin = toolbar[5].getSvgRoot();
+      }
     }
-
-  }else if(BlocklyGames.LEVEL == 3){
-    if (userBlocks.indexOf('maze_1student') == -1) {
-      content = document.getElementById('dialogHelp1Student');
-      style = {'width': '300px', 'top': '565px'};
-      style[rtl ? 'right' : 'left'] = '585px';
-      origin = toolbar[5].getSvgRoot();
-    }
-  }else if(BlocklyGames.LEVEL == 4){
-    if (userBlocks.indexOf('maze_2students') == -1) {
-      content = document.getElementById('dialogHelp2Students');
-      style = {'width': '270px', 'top': '555px'};
-      style[rtl ? 'right' : 'left'] = '585px';
-      origin = toolbar[5].getSvgRoot();
-    }
-  }else if(BlocklyGames.LEVEL == 5){
-    if (userBlocks.indexOf('maze_foreverbooks') == -1) {
-      content = document.getElementById('dialogHelpBooks');
-      style = {'width': '270px', 'top': '85px'};
-      style[rtl ? 'right' : 'left'] = '785px';
-      origin = toolbar[5].getSvgRoot();
-    }
-  }else if(BlocklyGames.LEVEL == 6){
-    if (userBlocks.indexOf('maze_foreverbooks') == -1) {
-      content = document.getElementById('dialogHelpBooks');
-      style = {'width': '270px', 'top': '85px'};
-      style[rtl ? 'right' : 'left'] = '785px';
-      origin = toolbar[5].getSvgRoot();
-    }
-  }
 
   if (content) {
     if (content.parentNode != document.getElementById('dialog')) {
@@ -645,7 +657,6 @@ Maze.reset = function(first) {
 
   switch(BlocklyGames.LEVEL){
     case 1:
-      
       Maze.Level1.Reset(first);
       break;
     case 2:

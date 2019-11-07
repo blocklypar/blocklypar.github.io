@@ -213,15 +213,17 @@
     </div>
 
   {elseif $ij.level == 2}
-  // Intro level 2
+
+    // Intro level 2
     <div id="dialog2Intro" class="dialogHiddenContent">
       <div style="font-size: large; margin: 1em;"><center><h3>
       {{msg meaning="Games.congratulations" desc="alert - This is displayed when the user solves the level.\n{lb}{lb}Identical|Congratulation{rb}{rb}"}}
         LEVEL 2{{/msg}}</center></h3>
       </div>
       <div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0; text-align: center;">
-        <div style="font-size: large; margin: 1em;">The student has more homework know before attending the class.</div>
-        <br/>        
+        <div style="font-size: large; margin: 1em;">The student has more homework now! Can you help him to finish it all before reach the classroom?</div>
+        <br/>     
+           
         <button id="playStart" class="secondary">
           {{msg meaning="Games.dialogStart" desc="IBID"}}Start{{/msg}}
         </button>
@@ -254,6 +256,23 @@
     </div>
 
   {elseif $ij.level == 3}
+    // Intro level 3
+    <div id="dialog3Intro" class="dialogHiddenContent">
+      <div style="font-size: large; margin: 1em;"><center><h3>
+      {{msg meaning="Games.congratulations" desc="alert - This is displayed when the user solves the level.\n{lb}{lb}Identical|Congratulation{rb}{rb}"}}
+        LEVEL 2{{/msg}}</center></h3>
+      </div>
+      <div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0; text-align: center;">
+        <div style="font-size: large; margin: 1em;">The student has more homework now! Can you help him to finish it all before reach the classroom?</div>
+        <br/>     
+           
+        <button id="playStart" class="secondary">
+          {{msg meaning="Games.dialogStart" desc="IBID"}}Start{{/msg}}
+        </button>
+
+      </div>
+    </div>
+
     //Introduce the Student block
     <div id="dialogHelp1Student" class="dialogHiddenContent">
       <table><tr>
