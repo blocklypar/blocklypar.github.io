@@ -58,6 +58,9 @@
     <span id="Maze_help2Students">{msg meaning="Maze.help2Students" desc="callout - This is shown when the 'students do' block is introduced."}The student block will set the action to a specific student.{/msg}</span>
     <span id="Maze_helpBooks">{msg meaning="Maze.helpBooks" desc="callout - This is shown when the 'repeat until ... in parallel' block is introduced."}This block will execute both students in parallel.{/msg}</span>
 
+    //New modals messages
+    <span id="Games_dialogStart">{{msg meaning="Games.dialogStart" desc="button label - Pressing this button you start the level.\n{lb}{lb}Identical|Start{rb}{rb}"}}Start{{/msg}}</span>
+
   </div>
 {/template}
 
@@ -146,6 +149,24 @@
   {call BlocklyGames.soy.storageDialog /}
 
   {if $ij.level == 1}
+
+    /**
+    * Introduction dialog.
+    */
+    <div id="dialog1Intro" class="dialogHiddenContent">
+      <div style="font-size: large; margin: 1em;"><center><h3>
+      {{msg meaning="Games.congratulations" desc="alert - This is displayed when the user solves the level.\n{lb}{lb}Identical|Congratulation{rb}{rb}"}}
+        LEVEL 1{{/msg}}</center></h3>
+      </div>
+      <div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0; text-align: center;">
+
+        <button id="playStart" class="secondary">
+          {{msg meaning="Games.dialogStart" desc="IBID"}}Start{{/msg}}
+        </button>
+        
+      </div>
+    </div>
+    
 
     //Guarantee that it will be only 1 stack of blocks
     <div id="dialogHelpOneTopBlock" class="dialogHiddenContent">

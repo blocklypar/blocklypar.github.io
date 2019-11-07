@@ -245,6 +245,7 @@ Maze.drawMap = function() {
       Maze.Level1.DrawMap(svg);
       Maze.Level1.AddSprites(svg, document);
       Maze.Level1.AddActivitySprites();
+      Maze.Level1.Initial();
     break;
 
     case 2: 
@@ -415,6 +416,7 @@ Maze.levelHelp = function(opt_event) {
 
   //If fail shows message with remaining blocks or to help with the repeat block
   if (BlocklyGames.LEVEL == 1) {
+
 
     if (BlocklyGames.workspace.getAllBlocks().length < 2) {
       content = document.getElementById('dialogHelpStack');

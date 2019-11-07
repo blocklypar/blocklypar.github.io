@@ -44,7 +44,7 @@ html[dir="RTL"] .farSide {
   font-size: large;
   overflow: auto;
   max-height: 200px;
-  text-align: center;
+  text-align: left;
 }
 
 img[src$="help.png"] {

@@ -601,7 +601,6 @@ Maze.Level3.InitInterpreter = function(interpreter, scope){
 
     wrapper = function(id) {
         // repeatBlock = id;
-        // alert("repeat "+id);
         return Maze.Level3.ReturnBook(Maze.Level3.currentStudent.startLoc.x, Maze.Level3.currentStudent.startLoc.y);
     };
     interpreter.setProperty(scope, 'booksZero',

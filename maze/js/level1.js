@@ -772,3 +772,33 @@ Maze.Level1.RemoveActivities = function(){
     Maze.Level1.activity_.num = 0;
     Maze.Level1.activity_.pos = 0;
 };
+
+/**Modal explaining the level */
+Maze.Level1.Initial = function() {
+    
+    // The user has already won.  They are just playing around.
+    if (Maze.result == Maze.ResultType.SUCCESS ||
+        BlocklyGames.loadFromLocalStorage(BlocklyGames.NAME,
+                                          BlocklyGames.LEVEL)) {
+        return;
+    }
+
+    var content = document.getElementById('dialog1Intro');
+    var style = {
+      width: '40%',
+      left: '30%',
+      top: '3em'
+    };
+  
+    var ok = document.getElementById('playStart');
+    ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
+    ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+  
+    BlocklyDialogs.showDialog(content, null, false, true, style,
+        function() {
+          document.body.removeEventListener('keydown',
+              BlocklyDialogs.congratulationsKeyDown, true);
+    });
+  
+};
+  
