@@ -72,6 +72,15 @@ Maze.MAX_BLOCKS = [undefined, // Level 0.
  * Milliseconds between each animation frame.
  */
 Maze.stepSpeed = 80;
+Maze.FirstLevel = {
+  ONE: true,
+  TWO: true,
+  THREE: true,
+  FOUR: true,
+  FIVE: true,
+  SIX: true 
+};
+
 
 /**
  * Execution time of each level
@@ -245,7 +254,7 @@ Maze.drawMap = function() {
       Maze.Level1.DrawMap(svg);
       Maze.Level1.AddSprites(svg, document);
       Maze.Level1.AddActivitySprites();
-      Maze.Level1.Initial();
+
     break;
 
     case 2: 
@@ -330,6 +339,7 @@ Maze.init = function() {
 
   //Level 1 must use the tasks block
   if(BlocklyGames.LEVEL == 1){
+    
     var defaultXml =
     '<xml>' +
       '<block movable="' + '" ' +
@@ -377,10 +387,13 @@ Maze.init = function() {
     Blockly.SNAP_RADIUS *= 2;
     Blockly.CONNECTING_SNAP_RADIUS = Blockly.SNAP_RADIUS;
   }
+
+  //Timeout help messages
+
   setTimeout(function() {
     BlocklyGames.workspace.addChangeListener(Maze.levelHelp);
     Maze.levelHelp();
-  }, 5000);
+  }, 1000);
   
   // Lazy-load the JavaScript interpreter.
   setTimeout(BlocklyInterface.importInterpreter, 1);
@@ -413,38 +426,51 @@ Maze.levelHelp = function(opt_event) {
   var content = null;
   var origin = null;
   var style = null;
-
+  
   //If fail shows message with remaining blocks or to help with the repeat block
+  
   if (BlocklyGames.LEVEL == 1) {
 
-
-    if (BlocklyGames.workspace.getAllBlocks().length < 2) {
-      content = document.getElementById('dialogHelpStack');
-      style = {'width': '190px', 'top': '150px'};
-      style[rtl ? 'right' : 'left'] = '215px';
+    if(Maze.FirstLevel.ONE){
+      content = document.getElementById('dialog1Intro');
+      style = {'width': '40%', 'top': '3em'};
+      style[rtl ? 'right' : 'left'] = '30%';
       origin = toolbar[0].getSvgRoot();
-    } else {
-      var topBlocks = BlocklyGames.workspace.getTopBlocks(true);
-      if (topBlocks.length > 1) {
-        var xml = [
-            '<xml>',
-              '<block type="maze_forever_2activities" x="10" y="10">',
-                '<statement name="DO">',
-                  '<block type="maze_moveForward"></block>',
-                '</statement>',
-              '</block>',
-            '</xml>'];
-        BlocklyInterface.injectReadonly('sampleOneTopBlock', xml);
-        content = document.getElementById('dialogHelpOneTopBlock');
-        style = {'width': '360px', 'top': '120px'};
-        style[rtl ? 'right' : 'left'] = '225px';
-        origin = topBlocks[0].getSvgRoot();
-      } else if (Maze.result == Maze.ResultType.UNSET) {
-        // Show run help dialog.
-        content = document.getElementById('dialogHelpRun');
-        style = {'width': '220px', 'top': '525px'};
-        style[rtl ? 'right' : 'left'] = '410px';
-        origin = document.getElementById('runButton');
+
+      var ok = document.getElementById('playStart');
+      ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
+      ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+      Maze.FirstLevel.ONE = false;
+    }
+    else{
+      if (BlocklyGames.workspace.getAllBlocks().length < 2) {
+        content = document.getElementById('dialogHelpStack');
+        style = {'width': '190px', 'top': '150px'};
+        style[rtl ? 'right' : 'left'] = '215px';
+        origin = toolbar[0].getSvgRoot();
+      } else {
+        var topBlocks = BlocklyGames.workspace.getTopBlocks(true);
+        if (topBlocks.length > 1) {
+          var xml = [
+              '<xml>',
+                '<block type="maze_forever_2activities" x="10" y="10">',
+                  '<statement name="DO">',
+                    '<block type="maze_moveForward"></block>',
+                  '</statement>',
+                '</block>',
+              '</xml>'];
+          BlocklyInterface.injectReadonly('sampleOneTopBlock', xml);
+          content = document.getElementById('dialogHelpOneTopBlock');
+          style = {'width': '360px', 'top': '120px'};
+          style[rtl ? 'right' : 'left'] = '225px';
+          origin = topBlocks[0].getSvgRoot();
+        } else if (Maze.result == Maze.ResultType.UNSET) {
+          // Show run help dialog.
+          content = document.getElementById('dialogHelpRun');
+          style = {'width': '220px', 'top': '525px'};
+          style[rtl ? 'right' : 'left'] = '410px';
+          origin = document.getElementById('runButton');
+        }
       }
     }
   }else if(BlocklyGames.LEVEL == 2){
@@ -619,6 +645,7 @@ Maze.reset = function(first) {
 
   switch(BlocklyGames.LEVEL){
     case 1:
+      
       Maze.Level1.Reset(first);
       break;
     case 2:
