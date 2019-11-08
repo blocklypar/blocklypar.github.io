@@ -122,7 +122,7 @@ button:hover:not(:disabled) {
   box-shadow: 5px 5px 5px #fad54f;
 }
 #dialogShadow {
-  visibility: visible;
+  visibility: hidden;
   position: fixed;
   top: 0;
   left: 0;

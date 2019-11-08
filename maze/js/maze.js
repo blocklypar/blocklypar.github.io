@@ -525,7 +525,7 @@ Maze.levelHelp = function(opt_event) {
     }else if(BlocklyGames.LEVEL == 4){
       if(Maze.FirstLevel.FOUR){
         content = document.getElementById('dialog4Intro');
-        style = {'width': '30%', 'top': '8em'};
+        style = {'width': '40%', 'top': '8em'};
         style[rtl ? 'right' : 'left'] = '40%';
         origin = toolbar[0].getSvgRoot();
   
@@ -572,7 +572,7 @@ Maze.levelHelp = function(opt_event) {
         ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
         Maze.FirstLevel.SIX = false;
       }else{
-        if (userBlocks.indexOf('maze_foreverbooks') == -1) {
+        if (BlocklyGames.workspace.getAllBlocks().length < 4) {
           content = document.getElementById('dialogHelpBooks');
           style = {'width': '270px', 'top': '85px'};
           style[rtl ? 'right' : 'left'] = '785px';

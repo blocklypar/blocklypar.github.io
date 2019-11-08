@@ -96,9 +96,9 @@
       </a>
       </td>
       
-    <div class="header-right">
-          <a class="language"><select id="languageMenu"></select></a>
-    </div>
+    // <div class="header-right">
+    //       <a class="language"><select id="languageMenu"></select></a>
+    // </div>
     <div class="nav-spacer"></div>
 
 </div>
@@ -225,7 +225,7 @@
       <table>
         <tr><td><img src="maze/level2.png"></td>
         <td>
-         <div style="font-size: large; margin: 1em;">The student has more homework now! Collect the 4 homework activities to attend the class.</div>
+         <div style="font-size: large; margin: 1em;">The student has more homework now. Collect the 4 homework activities to attend the class.</div>
         </td></tr>
       </table>
       <button id="playStart" class="secondary">
@@ -271,7 +271,7 @@
       <table>
         <tr>
         <td>
-         <div style="font-size: large; margin: 1em;">You need to asign this task to the student using this block:</div>
+         <div style="font-size: large; margin: 1em;">You need to asign this task to the student using the block:</div>
         </td>
         <td><img src="maze/level3.png"></td></tr>
       </table>
@@ -304,7 +304,7 @@
       <table>
         <tr>
         <td>
-         <div style="font-size: large; margin: 1em;">Try to use the 2 students to return the books at the same time, in <b>parallel</b> and see what happens with the execution time!</div>
+         <div style="font-size: large; margin: 1em;">Try to use both students to return the books at the same time, in <b>parallel</b>, and see what happens with the execution time.</div>
         </td>
         <td><img src="maze/level4.png"></td></tr>
       </table>
@@ -323,6 +323,19 @@
         {/msg}
       </td></tr></table>
     </div>
+
+    //Introduce the parallel block
+    <div id="dialogHelpBooks" class="dialogHiddenContent">
+      <table><tr>
+      <td><img src="maze/down.png"></td>
+      <td colspan="2">
+        {msg meaning="Maze.helpBooks" desc="IBID"}
+          This block allows you to move both students at the same time, in parallel.
+        {/msg}
+      </td></tr>
+      </table>
+    </div>
+
   {elseif $ij.level == 5}
     // Intro level 5
     <div id="dialog5Intro" class="dialogHiddenContent">
@@ -345,17 +358,7 @@
       </div>
     </div>
 
-    //Introduce the parallel block
-    <div id="dialogHelpBooks" class="dialogHiddenContent">
-      <table><tr>
-      <td><img src="maze/down.png"></td>
-      <td colspan="2">
-        {msg meaning="Maze.helpBooks" desc="IBID"}
-          This block allows you to move both students at the same time, in parallel.
-        {/msg}
-      </td></tr>
-      </table>
-    </div>
+
   {elseif $ij.level == 6}
 
     // Intro level 6
@@ -366,8 +369,8 @@
       </div>
 
       <div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0; text-align: center;">
-      <div style="font-size: large; margin: 1em;">Now we have 3 students to return the 8 books!</div>
-      <div style="font-size: large; margin: 1.5em;">Let's see the <b>execution time</b> compared with 2 students used before!<div>
+      <div style="font-size: large; margin: 1em;">Now we have 3 students to return the 8 books.</div>
+      <div style="font-size: large; margin: 1.5em;">Let's see the <b>execution time</b> compared with 2 students used before.<div>
         
       <button id="playStart" class="secondary">
         {{msg meaning="Games.dialogStart" desc="IBID"}}Start{{/msg}}
@@ -384,26 +387,26 @@
       </td></tr>
       </table>
     </div>
-  {elseif $ij.level == 5}
-    <div id="dialogHelpSkins" class="dialogHiddenContent">
-      <table><tr><td>
-        <img src="common/help.png">
-      </td><td width="95%">
-        {{msg meaning="Maze.helpSkins" desc="callout - This is a hint that the user can change the appearance of the player that moves within the maze."}}Choose your favourite player from this menu.{{/msg}}
-      </td><td>
-        <img src="maze/help_up.png">
-      </td></tr></table>
-    </div>
-  {elseif $ij.level == 6}
-    <div id="dialogHelpIf" class="dialogHiddenContent">
-      <table><tr><td>
-        <img src="maze/help_up.png">
-      </td><td>
-        {msg meaning="Maze.helpIf" desc="callout - This is shown when the 'if' block is introduced.  An example of an 'if' block is: 'if there is a path to the left, turn left'."}An 'if' block will do something only if the condition is true. Try turning left if there is a path to the left.{/msg}
-      </td><td>
-        <img src="common/help.png">
-      </td></tr></table>
-    </div>
+  // {elseif $ij.level == 5}
+  //   <div id="dialogHelpSkins" class="dialogHiddenContent">
+  //     <table><tr><td>
+  //       <img src="common/help.png">
+  //     </td><td width="95%">
+  //       {{msg meaning="Maze.helpSkins" desc="callout - This is a hint that the user can change the appearance of the player that moves within the maze."}}Choose your favourite player from this menu.{{/msg}}
+  //     </td><td>
+  //       <img src="maze/help_up.png">
+  //     </td></tr></table>
+  //   </div>
+  // {elseif $ij.level == 6}
+  //   <div id="dialogHelpIf" class="dialogHiddenContent">
+  //     <table><tr><td>
+  //       <img src="maze/help_up.png">
+  //     </td><td>
+  //       {msg meaning="Maze.helpIf" desc="callout - This is shown when the 'if' block is introduced.  An example of an 'if' block is: 'if there is a path to the left, turn left'."}An 'if' block will do something only if the condition is true. Try turning left if there is a path to the left.{/msg}
+  //     </td><td>
+  //       <img src="common/help.png">
+  //     </td></tr></table>
+  //   </div>
   {elseif $ij.level == 7}
     //USAR O ABAIXO
     <div id="dialogHelpMenu" class="dialogHiddenContent">
