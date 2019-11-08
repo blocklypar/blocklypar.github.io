@@ -433,8 +433,8 @@ Maze.levelHelp = function(opt_event) {
 
     if(Maze.FirstLevel.ONE){
       content = document.getElementById('dialog1Intro');
-      style = {'width': '40%', 'top': '3em'};
-      style[rtl ? 'right' : 'left'] = '30%';
+      style = {'width': '30%', 'top': '8em'};
+      style[rtl ? 'right' : 'left'] = '40%';
       origin = toolbar[0].getSvgRoot();
 
       var ok = document.getElementById('playStart');
@@ -476,8 +476,8 @@ Maze.levelHelp = function(opt_event) {
   }else if(BlocklyGames.LEVEL == 2){
     if(Maze.FirstLevel.TWO){
       content = document.getElementById('dialog2Intro');
-      style = {'width': '40%', 'top': '3em'};
-      style[rtl ? 'right' : 'left'] = '30%';
+      style = {'width': '30%', 'top': '8em'};
+      style[rtl ? 'right' : 'left'] = '40%';
       origin = toolbar[0].getSvgRoot();
 
       var ok = document.getElementById('playStart');
@@ -506,8 +506,8 @@ Maze.levelHelp = function(opt_event) {
 
       if(Maze.FirstLevel.THREE){
         content = document.getElementById('dialog3Intro');
-        style = {'width': '40%', 'top': '3em'};
-        style[rtl ? 'right' : 'left'] = '30%';
+        style = {'width': '30%', 'top': '8em'};
+        style[rtl ? 'right' : 'left'] = '40%';
         origin = toolbar[0].getSvgRoot();
   
         var ok = document.getElementById('playStart');
@@ -525,8 +525,8 @@ Maze.levelHelp = function(opt_event) {
     }else if(BlocklyGames.LEVEL == 4){
       if(Maze.FirstLevel.FOUR){
         content = document.getElementById('dialog4Intro');
-        style = {'width': '40%', 'top': '3em'};
-        style[rtl ? 'right' : 'left'] = '30%';
+        style = {'width': '30%', 'top': '8em'};
+        style[rtl ? 'right' : 'left'] = '40%';
         origin = toolbar[0].getSvgRoot();
   
         var ok = document.getElementById('playStart');
@@ -544,8 +544,8 @@ Maze.levelHelp = function(opt_event) {
     }else if(BlocklyGames.LEVEL == 5){
       if(Maze.FirstLevel.FIVE){
         content = document.getElementById('dialog5Intro');
-        style = {'width': '40%', 'top': '3em'};
-        style[rtl ? 'right' : 'left'] = '30%';
+        style = {'width': '30%', 'top': '8em'};
+        style[rtl ? 'right' : 'left'] = '40%';
         origin = toolbar[0].getSvgRoot();
   
         var ok = document.getElementById('playStart');
@@ -563,8 +563,8 @@ Maze.levelHelp = function(opt_event) {
     }else if(BlocklyGames.LEVEL == 6){
       if(Maze.FirstLevel.SIX){
         content = document.getElementById('dialog6Intro');
-        style = {'width': '40%', 'top': '3em'};
-        style[rtl ? 'right' : 'left'] = '30%';
+        style = {'width': '30%', 'top': '8em'};
+        style[rtl ? 'right' : 'left'] = '40%';
         origin = toolbar[0].getSvgRoot();
   
         var ok = document.getElementById('playStart');

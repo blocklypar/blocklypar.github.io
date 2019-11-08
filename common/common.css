@@ -122,14 +122,14 @@ button:hover:not(:disabled) {
   box-shadow: 5px 5px 5px #fad54f;
 }
 #dialogShadow {
-  visibility: hidden;
+  visibility: visible;
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: #000;
-  opacity: 0.3
+  background-color: rgba(0, 0, 0, 0.7);
+  opacity: 0.3;
 }
 .dialogAnimate {
   transition-property: width height left top opacity;
@@ -142,6 +142,7 @@ button:hover:not(:disabled) {
   top: 0;
   left: 0;
   z-index: -1;
+  
 }
 #dialogHeader {
   height: 25px;
