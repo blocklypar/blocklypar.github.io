@@ -503,32 +503,81 @@ Maze.levelHelp = function(opt_event) {
     }
 
     }else if(BlocklyGames.LEVEL == 3){
-      if (userBlocks.indexOf('maze_1student') == -1) {
-        content = document.getElementById('dialogHelp1Student');
-        style = {'width': '300px', 'top': '565px'};
-        style[rtl ? 'right' : 'left'] = '585px';
-        origin = toolbar[5].getSvgRoot();
+
+      if(Maze.FirstLevel.THREE){
+        content = document.getElementById('dialog3Intro');
+        style = {'width': '40%', 'top': '3em'};
+        style[rtl ? 'right' : 'left'] = '30%';
+        origin = toolbar[0].getSvgRoot();
+  
+        var ok = document.getElementById('playStart');
+        ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
+        ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+        Maze.FirstLevel.THREE = false;
+      }else{
+        if (userBlocks.indexOf('maze_1student') == -1) {
+          content = document.getElementById('dialogHelp1Student');
+          style = {'width': '300px', 'top': '565px'};
+          style[rtl ? 'right' : 'left'] = '585px';
+          origin = toolbar[5].getSvgRoot();
+        }
       }
     }else if(BlocklyGames.LEVEL == 4){
-      if (userBlocks.indexOf('maze_2students') == -1) {
-        content = document.getElementById('dialogHelp2Students');
-        style = {'width': '270px', 'top': '555px'};
-        style[rtl ? 'right' : 'left'] = '585px';
-        origin = toolbar[5].getSvgRoot();
+      if(Maze.FirstLevel.FOUR){
+        content = document.getElementById('dialog4Intro');
+        style = {'width': '40%', 'top': '3em'};
+        style[rtl ? 'right' : 'left'] = '30%';
+        origin = toolbar[0].getSvgRoot();
+  
+        var ok = document.getElementById('playStart');
+        ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
+        ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+        Maze.FirstLevel.FOUR = false;
+      }else{
+        if (userBlocks.indexOf('maze_2students') == -1) {
+          content = document.getElementById('dialogHelp2Students');
+          style = {'width': '270px', 'top': '555px'};
+          style[rtl ? 'right' : 'left'] = '585px';
+          origin = toolbar[5].getSvgRoot();
+        }
       }
     }else if(BlocklyGames.LEVEL == 5){
-      if (userBlocks.indexOf('maze_foreverbooks') == -1) {
-        content = document.getElementById('dialogHelpBooks');
-        style = {'width': '270px', 'top': '85px'};
-        style[rtl ? 'right' : 'left'] = '785px';
-        origin = toolbar[5].getSvgRoot();
+      if(Maze.FirstLevel.FIVE){
+        content = document.getElementById('dialog5Intro');
+        style = {'width': '40%', 'top': '3em'};
+        style[rtl ? 'right' : 'left'] = '30%';
+        origin = toolbar[0].getSvgRoot();
+  
+        var ok = document.getElementById('playStart');
+        ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
+        ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+        Maze.FirstLevel.FIVE = false;
+      }else{
+        if (userBlocks.indexOf('maze_foreverbooks') == -1) {
+          content = document.getElementById('dialogHelpBooks');
+          style = {'width': '270px', 'top': '85px'};
+          style[rtl ? 'right' : 'left'] = '785px';
+          origin = toolbar[5].getSvgRoot();
+        }
       }
     }else if(BlocklyGames.LEVEL == 6){
-      if (userBlocks.indexOf('maze_foreverbooks') == -1) {
-        content = document.getElementById('dialogHelpBooks');
-        style = {'width': '270px', 'top': '85px'};
-        style[rtl ? 'right' : 'left'] = '785px';
-        origin = toolbar[5].getSvgRoot();
+      if(Maze.FirstLevel.SIX){
+        content = document.getElementById('dialog6Intro');
+        style = {'width': '40%', 'top': '3em'};
+        style[rtl ? 'right' : 'left'] = '30%';
+        origin = toolbar[0].getSvgRoot();
+  
+        var ok = document.getElementById('playStart');
+        ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
+        ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+        Maze.FirstLevel.SIX = false;
+      }else{
+        if (userBlocks.indexOf('maze_foreverbooks') == -1) {
+          content = document.getElementById('dialogHelpBooks');
+          style = {'width': '270px', 'top': '85px'};
+          style[rtl ? 'right' : 'left'] = '785px';
+          origin = toolbar[5].getSvgRoot();
+        }
       }
     }
 
