@@ -157,7 +157,6 @@ BlocklyGames.init = function() {
       languageMenu.options.add(option);
     }
 
-    alert(languageMenu.options.length);
     if (languageMenu.options.length <= 1) {
       // No choices.  Hide the language menu.
       languageMenu.style.display = 'none';
