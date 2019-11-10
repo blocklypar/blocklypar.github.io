@@ -66,7 +66,7 @@ BlocklyInterface.nextLevel = function() {
 };
 
 Maze.MAX_BLOCKS = [undefined, // Level 0.
-  Infinity, 4, 5, 11, 10, 13, Infinity][BlocklyGames.LEVEL];
+  Infinity, Infinity, 5, 11, 10, 13, Infinity][BlocklyGames.LEVEL];
 
 /**
  * Milliseconds between each animation frame.
