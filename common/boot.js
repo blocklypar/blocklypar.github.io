@@ -29,7 +29,8 @@
   appName = appName ? appName[1].replace('-', '/') : 'index';
 
   // Supported languages (consistent across all apps).
-  window['BlocklyGamesLanguages'] = ['en', 'pt-br'];
+  // window['BlocklyGamesLanguages'] = ['en', 'pt-br'];
+  window['BlocklyGamesLanguages'] = ['en'];
 
   // Use a series of heuristics that determine the likely language of this user.
   // First choice: The URL specified language.

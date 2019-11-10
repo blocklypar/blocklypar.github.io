@@ -32,8 +32,9 @@ goog.require('Blockly.utils.math');
  * Lookup for names of languages.  Keys should be in ISO 639 format.
  */
 BlocklyGames.LANGUAGE_NAME = {
-  'en': 'English',
-  'pt-br': 'Português Brasileiro'
+  'en': 'English'
+  // ,
+  // 'pt-br': 'Português Brasileiro'
 };
 
 /**
@@ -155,6 +156,8 @@ BlocklyGames.init = function() {
       }
       languageMenu.options.add(option);
     }
+
+    alert(languageMenu.options.length);
     if (languageMenu.options.length <= 1) {
       // No choices.  Hide the language menu.
       languageMenu.style.display = 'none';
