@@ -752,8 +752,6 @@ Maze.Level2.DisplayStudent = function(x, y, d, opt_angle) {
     if((x == finish_.x) && (y == finish_.y)){
         Maze.Level2.Reset(false);
         Maze.Level2.Execute();
-        if(Maze.Level2.activity_.num == 2)
-            Maze.Level2.AddActivitySprites();
     }
 };
 
@@ -783,7 +781,7 @@ Maze.Level2.ScheduleLook = function(d, x, y) {
 };
 
 Maze.Level2.NotDone = function(){
-    return Maze.Level2.activity_.num != 4;
+    return Maze.Level2.activity_.num != 2;
 };
 
 Maze.Level2.isActivity = function(x, y){
