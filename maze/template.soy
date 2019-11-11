@@ -398,30 +398,34 @@
     <block type="maze_turn"><field name="DIR">turnLeft</field></block>
     <block type="maze_turn"><field name="DIR">turnRight</field></block>
 
-    {if $ij.level == 1}
+    {if $ij.level == 1 or $ij.level == 2}
       <block type="maze_forever_2activities"></block>
     {/if}
 
     {if $ij.level > 1}
 
-      <block type="maze_if"><field name="DIR">isPathRight</field></block>
-      <block type="maze_ifElse"></block>
-
-      {if $ij.level == 2}
-        <block type="maze_forever_4activities"></block>
-      {elseif $ij.level == 3}
+      {if $ij.level == 3}
+        <block type="maze_forever_2activities"></block>
         <block type="maze_1student"><field name="STD">isStudent0</field></block>
-        <block type="maze_forever_books"></block>
-      {elseif $ij.level == 4 or $ij.level == 5}
-        <block type="maze_2students"><field name="STD">isStudent0</field></block>
       {/if}
-
-      {if $ij.level > 3}
+      
+      {if $ij.level == 4}
+         <block type="maze_forever_books"></block>
+         <block type="maze_1student"><field name="STD">isStudent0</field></block>
+      {/if}
+             
+      {if $ij.level > 4}
         <block type="maze_forever_booksPar"></block>
-        {if $ij.level == 6 or $ij.level == 7}
+        {if $ij.level == 5 or $ij.level == 6}
+          <block type="maze_2students"><field name="STD">isStudent0</field></block>
+          <block type="maze_forever_books"></block>
+        {elseif $ij.level == 7}
           <block type="maze_student"><field name="STD">isStudent0</field></block>
         {/if}
       {/if}
+
+      <block type="maze_if"><field name="DIR">isPathRight</field></block>
+      <block type="maze_ifElse"></block>
 
     {/if}
 

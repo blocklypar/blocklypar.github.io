@@ -346,7 +346,7 @@ Maze.init = function() {
       'turnRight,turnLeft,isPathForward,isPathRight,isPathBackward,isPathLeft');
 
   //Level 1 must use the tasks block
-  if(BlocklyGames.LEVEL == 1){
+  if(BlocklyGames.LEVEL >= 1 && BlocklyGames.LEVEL <= 3){
     
     var defaultXml =
     '<xml>' +
@@ -354,22 +354,14 @@ Maze.init = function() {
       'type="maze_forever_2activities" x="70" y="70"></block>' +
     '</xml>';
   }
-  //Level 1 must use the tasks block
-  else if(BlocklyGames.LEVEL == 2){
-    var defaultXml =
-    '<xml>' +
-      '<block movable="' + '" ' +
-      'type="maze_forever_4activities" x="70" y="70"></block>' +
-    '</xml>';
-  }
-  else if(BlocklyGames.LEVEL == 3){
+  else if(BlocklyGames.LEVEL == 4){
     var defaultXml =
     '<xml>' +
       '<block movable="' + (BlocklyGames.LEVEL != 1) + '" ' +
       'type="maze_forever_books" x="70" y="70"></block>' +
     '</xml>';
   }
-  else if(BlocklyGames.LEVEL > 3){
+  else if(BlocklyGames.LEVEL > 4){
     var defaultXml =
     '<xml>' +
       '<block movable="' + (BlocklyGames.LEVEL != 1) + '" ' +

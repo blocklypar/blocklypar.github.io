@@ -526,7 +526,7 @@ Maze.Level3.InitInterpreter = function(interpreter, scope){
         // Maze.Level7.activityActivate = true;
         // return Maze.Level3.GetActivity(student.startLoc.x, student.startLoc.y);
     };
-    interpreter.setProperty(scope, '4activitiesComplete',
+    interpreter.setProperty(scope, '2activitiesComplete',
         interpreter.createNativeFunction(wrapper));
 };
 
