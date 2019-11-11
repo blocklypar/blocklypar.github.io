@@ -16,6 +16,9 @@ var student;
 var activity_pos = [];
 var pidList = [];
 var log = [];
+var action_std1 = [];
+var std1, action;
+var action_ = [];
 
 Maze.Level3.activity_ = {
     num:0,
@@ -35,42 +38,6 @@ Maze.Level3.VIEW = {
     activity: 'maze/activity.png',
     skin: 'maze/pegman.png',
     graph:false
-};
-
-Maze.Level3 = function(){
-
-    if (BlocklyGames.workspace.getAllBlocks().length < 2) {
-
-        Maze.content = document.getElementById('dialogHelpStack');
-        Maze.style = {'width': '370px', 'top': '130px'};
-        Maze.style[Maze.rtl ? 'right' : 'left'] = '215px';
-        Maze.origin = Maze.toolbar[0].getSvgRoot();
-
-    } else {
-
-        var topBlocks = BlocklyGames.workspace.getTopBlocks(true);
-        if (topBlocks.length > 1) {
-            var xml = [
-                '<xml>',
-                    '<block type="maze_moveForward" x="10" y="10">',
-                    '<next>',
-                        '<block type="maze_moveForward"></block>',
-                    '</next>',
-                    '</block>',
-                '</xml>'];
-            BlocklyInterface.injectReadonly('sampleOneTopBlock', xml);
-            Maze.content = document.getElementById('dialogHelpOneTopBlock');
-            Maze.style = {'width': '360px', 'top': '120px'};
-            Maze.style[Maze.rtl ? 'right' : 'left'] = '225px';
-            Maze.origin = topBlocks[0].getSvgRoot();
-        } else if (Maze.result == Maze.ResultType.UNSET) {
-            // Show run help dialog.
-            Maze.content = document.getElementById('dialogHelpRun');
-            Maze.style = {'width': '360px', 'top': '410px'};
-            Maze.style[Maze.rtl ? 'right' : 'left'] = '400px';
-            Maze.origin = document.getElementById('runButton');
-        }
-    }
 };
 
 /**
@@ -306,6 +273,11 @@ Maze.Level3.Reset = function(first){
 
     student.reset(Maze.startDirection, start_.x, start_.y);
 
+    std1 = 0;
+    action = 0;
+    action_std1 = [];
+    action_ = [];
+
     // Move the student into initial position
     if (first) {
         student.startDirection++;
@@ -327,7 +299,7 @@ Maze.Level3.Reset = function(first){
 
 };
 
-Maze.Level3.Execute = function(){
+Maze.Level3.ExecuteFirst = function(){
 
     if (!('Interpreter' in window)) {
         // Interpreter lazy loads and hasn't arrived yet. Try again later.
@@ -370,94 +342,140 @@ Maze.Level3.Execute = function(){
         }
     }
 
-    // Fast animation if execution is successful. Slow otherwise.
-    if (Maze.result == Maze.ResultType.SUCCESS)
+    // Fast animation if execution is successful.  Slow otherwise.
+    if (Maze.result == Maze.ResultType.SUCCESS) 
         log.push(['finish', null]);
 
+    //Animate the transcript
     Maze.Level3.Reset(false);
-    pidList.push(setTimeout(Maze.Level3.Animate, 150));
+    Maze.Level3.PreAnimate(0);
+    pidList.push(setTimeout(Maze.Level3.Animate, speed));
 };
 
+Maze.Level3.Execute = function(){
+
+    if (!('Interpreter' in window)) {
+        setTimeout(Maze.execute, 250);
+        return;
+    }
+
+    Maze.result = Maze.Level3.NotDone() ? Maze.ResultType.FAILURE : Maze.ResultType.SUCCESS;
+
+    //Fast animation if execution is successful. Slow otherwise.
+    if (Maze.result == Maze.ResultType.SUCCESS) {
+
+        BlocklyInterface.saveToLocalStorage();
+        setTimeout(BlocklyDialogs.congratulations, 1000);
+        return;
+    }
+
+    pidList.push(setTimeout(Maze.Level3.Animate, speed));
+};
+
+Maze.Level3.PreAnimate = function(id){
+
+    var action = log.shift();
+
+    if(!action) {
+        BlocklyInterface.highlight(null);
+        Maze.levelHelp();
+        return;
+    }
+
+    if(action[0] == 'student0')
+        id = 1;
+
+    switch(id){
+        case 1:
+            action_std1.push(action);
+            break;
+        default:
+            action_.push(action);
+    }
+
+    Maze.Level3.PreAnimate(id);
+};
 
 Maze.Level3.Animate = function(){
 
-    var action = log.shift();
-    if (!action) {
-      BlocklyInterface.highlight(null);
-      Maze.levelHelp();
-      return;
-    }
-    BlocklyInterface.highlight(action[1]);
+    var action1 = action_std1[std1++];
 
-    switch (action[0]) {
-        case 'north':
-        Maze.Level3.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
-            [student.startLoc.x, student.startLoc.y - 1, student.startDirection * 4]);
-        student.startLoc.y--;
-        break;
+    if(action1)
+        Maze.Level3.AnimateMove(student, action1);
 
-        case 'east':
-        Maze.Level3.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
-            [student.startLoc.x + 1, student.startLoc.y, student.startDirection * 4]);
-        student.startLoc.x++;
-        break;
-
-        case 'south':
-        Maze.Level3.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
-            [student.startLoc.x, student.startLoc.y + 1, student.startDirection * 4]);
-        student.startLoc.y++;
-        break;
-
-        case 'west':
-        Maze.Level3.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
-            [student.startLoc.x - 1, student.startLoc.y, student.startDirection * 4]);
-        student.startLoc.x--;
-        break;
-
-        case 'look_north':
-        Maze.Level3.ScheduleLook(Maze.DirectionType.NORTH, student.startLoc.x, student.startLoc.y);
-        break;
-
-        case 'look_east':
-        Maze.Level3.ScheduleLook(Maze.DirectionType.EAST, student.startLoc.x, student.startLoc.y);
-        break;
-        
-        case 'look_south':
-        Maze.Level3.ScheduleLook(Maze.DirectionType.SOUTH, student.startLoc.x, student.startLoc.y);
-        break;
-        
-        case 'look_west':
-        Maze.Level3.ScheduleLook(Maze.DirectionType.WEST, student.startLoc.x, student.startLoc.y);
-        break;
-        
-        case 'fail_forward':
-        Maze.Level3.ScheduleFail(true);
-        break;
-        
-        case 'fail_backward':
-        Maze.Level3.ScheduleFail(false);
-        break;
-        
-        case 'left':
-        Maze.Level3.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
-            [student.startLoc.x, student.startLoc.y, student.startDirection * 4 - 4], student.id);
-        student.startDirection = Maze.constrainDirection4(student.startDirection - 1);
-        break;
-        
-        case 'right':
-        Maze.Level3.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
-            [student.startLoc.x, student.startLoc.y, student.startDirection * 4 + 4], student.id);
-        student.startDirection = Maze.constrainDirection4(student.startDirection + 1);
-        break; 
-
-        case 'finish':
-        BlocklyInterface.saveToLocalStorage();
-        setTimeout(BlocklyDialogs.congratulations, 1000);  
-        
-    }
     pidList.push(setTimeout(Maze.Level3.Animate, Maze.stepSpeed * 4));
 }
 
+Maze.Level3.AnimateMove = function(avatar, action){
+
+    BlocklyInterface.highlight(action[1]);
+
+    switch (action[0]) {
+        case 'north': //value: 1
+        Maze.Level3.Schedule([avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4],
+            [avatar.startLoc.x, avatar.startLoc.y - 1, avatar.startDirection * 4], avatar.id);
+        avatar.startLoc.y--;
+        break;
+
+        case 'east': //value 1
+        Maze.Level3.Schedule([avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4],
+            [avatar.startLoc.x + 1, avatar.startLoc.y, avatar.startDirection * 4], avatar.id);
+        avatar.startLoc.x++;
+        break;
+
+        case 'south': //value 1
+        Maze.Level3.Schedule([avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4],
+            [avatar.startLoc.x, avatar.startLoc.y + 1, avatar.startDirection * 4], avatar.id);
+        avatar.startLoc.y++;
+        break;
+
+        case 'west': //value 1
+        Maze.Level3.Schedule([avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4],
+            [avatar.startLoc.x - 1, avatar.startLoc.y, avatar.startDirection * 4], avatar.id);
+        avatar.startLoc.x--;
+        break;
+
+        case 'look_north': //value 0.5
+        Maze.Level3.ScheduleLook(Maze.DirectionType.NORTH, avatar.startLoc.x, avatar.startLoc.y);
+        break;
+
+        case 'look_east': //value 0.5
+        Maze.Level3.ScheduleLook(Maze.DirectionType.EAST, avatar.startLoc.x, avatar.startLoc.y);
+        break;
+        
+        case 'look_south': //value 0.5
+        Maze.Level3.ScheduleLook(Maze.DirectionType.SOUTH, avatar.startLoc.x, avatar.startLoc.y);
+        break;
+        
+        case 'look_west': //value 0.5
+        Maze.Level3.ScheduleLook(Maze.DirectionType.WEST, avatar.startLoc.x, avatar.startLoc.y);
+        break;
+        
+        case 'fail_forward':
+        Maze.Level3.ScheduleFail(true, avatar);
+        break;
+        
+        case 'fail_backward':
+        Maze.Level3.ScheduleFail(false, avatar);
+        break;
+        
+        case 'left': //value 1
+        Maze.Level3.Schedule([avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4],
+            [avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4 - 4], avatar.id);
+        avatar.startDirection = Maze.constrainDirection4(avatar.startDirection - 1);
+        break;
+        
+        case 'right': //value 1
+        Maze.Level3.Schedule([avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4],
+            [avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4 + 4], avatar.id);
+        avatar.startDirection = Maze.constrainDirection4(avatar.startDirection + 1);
+        break; 
+        
+        case 'finish':
+        BlocklyInterface.saveToLocalStorage();
+        setTimeout(BlocklyDialogs.congratulations, 1000);     
+    }
+}
 /**
  * Inject the Maze API into a JavaScript interpreter.
  * @param {!Interpreter} interpreter The JS Interpreter.
@@ -528,8 +546,33 @@ Maze.Level3.InitInterpreter = function(interpreter, scope){
     };
     interpreter.setProperty(scope, '2activitiesComplete',
         interpreter.createNativeFunction(wrapper));
+
+    //Students control:
+    wrapper = function(id) {
+        return Maze.Level3.isStudent(0, id);
+    };
+    interpreter.setProperty(scope, 'isStudent0',
+    interpreter.createNativeFunction(wrapper));
 };
 
+/**
+ * Find the student setted using the block
+ * @param {student_id} Student ID
+ * @return {boolean} True if it is a student.
+ */
+Maze.Level3.isStudent = function(student_id, id) {
+
+    var command = 'student0';
+       
+    if(id) {
+        log.push([command, id]);
+    }
+
+    if(command == undefined)
+        return false;
+
+    return true;
+};
 
 /**
  * Attempt to move pegman forward or backward.

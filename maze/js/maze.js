@@ -124,11 +124,11 @@ Maze.map = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0]],
   // Level 3.
   [[0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 2, 1, 4, 1, 0, 0],
-  [0, 0, 0, 0, 1, 0, 1, 1, 0],
-  [0, 0, 0, 0, 1, 1, 1, 1, 0],
-  [0, 0, 0, 0, 0, 0, 4, 0, 0],
-  [0, 0, 0, 0, 0, 0, 3, 0, 0],
+  [0, 0, 0, 0, 1, 1, 1, 0, 0],
+  [0, 0, 0, 0, 4, 0, 1, 0, 0],
+  [0, 0, 0, 2, 1, 0, 4, 0, 0],
+  [0, 0, 0, 0, 0, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 1, 3, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0]],
   // Level 4.
   [[0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -731,14 +731,14 @@ Maze.reset = function(first) {
       Maze.Level4.Reset(first);
       break;
     case 5:
-        Maze.Level5.Reset(first);
-    break;
+      Maze.Level5.Reset(first);
+      break;
     case 6:
       Maze.Level6.Reset(first);
-    break;
+      break;
     case 7:
       Maze.Level7.Reset(first);
-    break;
+      break;
   }
 };
 
@@ -821,7 +821,7 @@ Maze.resetButtonClick = function(e) {
     return;
   }
 
-  if(BlocklyGames.LEVEL > 2)
+  if(BlocklyGames.LEVEL > 3)
     Maze.updateTime(0);
 
   switch(BlocklyGames.LEVEL){
@@ -878,7 +878,7 @@ Maze.execute = function() {
       Maze.Level2.Execute();
       break;
     case 3:
-      Maze.Level3.Execute();
+      Maze.Level3.ExecuteFirst();
     break;
     case 4:
       Maze.Level4.ExecuteFirst();
