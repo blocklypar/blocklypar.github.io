@@ -38,6 +38,7 @@ goog.require('Maze.Level3');
 goog.require('Maze.Level4');
 goog.require('Maze.Level5');
 goog.require('Maze.Level6');
+goog.require('Maze.Level7');
 
 BlocklyGames.NAME = 'maze';
 
@@ -66,7 +67,7 @@ BlocklyInterface.nextLevel = function() {
 };
 
 Maze.MAX_BLOCKS = [undefined, // Level 0.
-  Infinity, Infinity, 5, 11, 10, 13, Infinity][BlocklyGames.LEVEL];
+  Infinity, Infinity, Infinity, 5, 11, 10, 13, Infinity][BlocklyGames.LEVEL];
 
 /**
  * Milliseconds between each animation frame.
@@ -78,7 +79,8 @@ Maze.FirstLevel = {
   THREE: true,
   FOUR: true,
   FIVE: true,
-  SIX: true 
+  SIX: true,
+  SEVEN: true
 };
 
 
@@ -122,42 +124,42 @@ Maze.map = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0]],
   // Level 3.
   [[0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 2, 1, 1, 1, 1, 1, 0],
-  [0, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 0, 0, 0, 0, 0, 0, 3, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 2, 1, 4, 1, 0, 0],
+  [0, 0, 0, 0, 1, 0, 1, 1, 0],
+  [0, 0, 0, 0, 1, 1, 1, 1, 0],
+  [0, 0, 0, 0, 0, 0, 4, 0, 0],
+  [0, 0, 0, 0, 0, 0, 3, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0]],
   // Level 4.
   [[0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 2, 1, 1, 1, 1, 1, 0],
   [0, 0, 0, 0, 0, 0, 0, 1, 0],
   [0, 0, 0, 0, 0, 0, 0, 3, 0],
-  [0, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 0, 2, 1, 1, 1, 1, 1, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0]],
   // Level 5.
   [[0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 2, 1, 1, 1, 1, 1, 0],
   [0, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 0, 2, 1, 1, 1, 1, 3, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 3, 0],
+  [0, 0, 0, 0, 0, 0, 0, 1, 0],
+  [0, 0, 2, 1, 1, 1, 1, 1, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0]],
-  //Level 6
+  // Level 6.
   [[0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 2, 1, 1, 1, 1, 1, 0],
   [0, 0, 0, 0, 0, 0, 0, 1, 0],
   [0, 0, 2, 1, 1, 1, 1, 3, 0],
-  [0, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 0, 2, 1, 1, 1, 1, 1, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0]],
   //Level 7
   [[0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 2, 1, 1, 1, 1, 1, 0],
-  [0, 0, 1, 0, 0, 0, 0, 1, 0],
+  [0, 0, 0, 0, 0, 0, 0, 1, 0],
   [0, 0, 2, 1, 1, 1, 1, 3, 0],
-  [0, 0, 1, 0, 0, 0, 0, 1, 0],
+  [0, 0, 0, 0, 0, 0, 0, 1, 0],
   [0, 0, 2, 1, 1, 1, 1, 1, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0]]
 ][BlocklyGames.LEVEL];
@@ -263,12 +265,12 @@ Maze.drawMap = function() {
       Maze.Level2.AddActivitySprites();
     break;
 
-    case 3:
+    case 3: 
       Maze.Level3.DrawMap(svg);
-      Maze.Level3.AddBooks();
       Maze.Level3.AddSprites(svg, document);
+      Maze.Level3.AddActivitySprites();
     break;
-    
+
     case 4:
       Maze.Level4.DrawMap(svg);
       Maze.Level4.AddBooks();
@@ -285,6 +287,12 @@ Maze.drawMap = function() {
       Maze.Level6.DrawMap(svg);
       Maze.Level6.AddBooks();
       Maze.Level6.AddSprites(svg, document);
+    break;
+    
+    case 7:
+      Maze.Level7.DrawMap(svg);
+      Maze.Level7.AddBooks();
+      Maze.Level7.AddSprites(svg, document);
     break;
   }
 };
@@ -376,7 +384,7 @@ Maze.init = function() {
 
   BlocklyGames.workspace.addChangeListener(function() {Maze.updateCapacity();});
 
-  if(BlocklyGames.LEVEL > 2)
+  if(BlocklyGames.LEVEL > 3)
     BlocklyGames.workspace.addChangeListener(function() {Maze.updateTime(0);});
   
   BlocklyGames.bindClick('runButton', Maze.runButtonClick);
@@ -461,8 +469,8 @@ Maze.levelHelp = function(opt_event) {
               '</xml>'];
           BlocklyInterface.injectReadonly('sampleOneTopBlock', xml);
           content = document.getElementById('dialogHelpOneTopBlock');
-          style = {'width': '360px', 'top': '120px'};
-          style[rtl ? 'right' : 'left'] = '225px';
+          style = {'width': '360px', 'top': '170px'};
+          style[rtl ? 'right' : 'left'] = '300px';
           origin = topBlocks[0].getSvgRoot();
         } else if (Maze.result == Maze.ResultType.UNSET) {
           // Show run help dialog.
@@ -514,7 +522,8 @@ Maze.levelHelp = function(opt_event) {
         ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
         ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
         Maze.FirstLevel.THREE = false;
-      }else{
+      }
+      else{
         if (userBlocks.indexOf('maze_1student') == -1) {
           content = document.getElementById('dialogHelp1Student');
           style = {'width': '300px', 'top': '565px'};
@@ -525,7 +534,7 @@ Maze.levelHelp = function(opt_event) {
     }else if(BlocklyGames.LEVEL == 4){
       if(Maze.FirstLevel.FOUR){
         content = document.getElementById('dialog4Intro');
-        style = {'width': '40%', 'top': '8em'};
+        style = {'width': '30%', 'top': '8em'};
         style[rtl ? 'right' : 'left'] = '40%';
         origin = toolbar[0].getSvgRoot();
   
@@ -533,18 +542,11 @@ Maze.levelHelp = function(opt_event) {
         ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
         ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
         Maze.FirstLevel.FOUR = false;
-      }else{
-        if (userBlocks.indexOf('maze_2students') == -1) {
-          content = document.getElementById('dialogHelp2Students');
-          style = {'width': '270px', 'top': '555px'};
-          style[rtl ? 'right' : 'left'] = '585px';
-          origin = toolbar[5].getSvgRoot();
-        }
       }
     }else if(BlocklyGames.LEVEL == 5){
       if(Maze.FirstLevel.FIVE){
         content = document.getElementById('dialog5Intro');
-        style = {'width': '30%', 'top': '8em'};
+        style = {'width': '40%', 'top': '8em'};
         style[rtl ? 'right' : 'left'] = '40%';
         origin = toolbar[0].getSvgRoot();
   
@@ -553,10 +555,10 @@ Maze.levelHelp = function(opt_event) {
         ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
         Maze.FirstLevel.FIVE = false;
       }else{
-        if (userBlocks.indexOf('maze_foreverbooks') == -1) {
-          content = document.getElementById('dialogHelpBooks');
-          style = {'width': '270px', 'top': '85px'};
-          style[rtl ? 'right' : 'left'] = '785px';
+        if (userBlocks.indexOf('maze_2students') == -1) {
+          content = document.getElementById('dialogHelp2Students');
+          style = {'width': '270px', 'top': '555px'};
+          style[rtl ? 'right' : 'left'] = '585px';
           origin = toolbar[5].getSvgRoot();
         }
       }
@@ -571,6 +573,25 @@ Maze.levelHelp = function(opt_event) {
         ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
         ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
         Maze.FirstLevel.SIX = false;
+      }else{
+        if (userBlocks.indexOf('maze_foreverbooks') == -1) {
+          content = document.getElementById('dialogHelpBooks');
+          style = {'width': '270px', 'top': '85px'};
+          style[rtl ? 'right' : 'left'] = '785px';
+          origin = toolbar[5].getSvgRoot();
+        }
+      }
+    }else if(BlocklyGames.LEVEL == 7){
+      if(Maze.FirstLevel.SEVEN){
+        content = document.getElementById('dialog7Intro');
+        style = {'width': '30%', 'top': '8em'};
+        style[rtl ? 'right' : 'left'] = '40%';
+        origin = toolbar[0].getSvgRoot();
+  
+        var ok = document.getElementById('playStart');
+        ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
+        ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+        Maze.FirstLevel.SEVEN = false;
       }else{
         if (BlocklyGames.workspace.getAllBlocks().length < 4) {
           content = document.getElementById('dialogHelpBooks');
@@ -723,6 +744,9 @@ Maze.reset = function(first) {
     case 6:
       Maze.Level6.Reset(first);
     break;
+    case 7:
+      Maze.Level7.Reset(first);
+    break;
   }
 };
 
@@ -818,7 +842,8 @@ Maze.resetButtonClick = function(e) {
       Maze.Level2.AddActivitySprites();
     break;
     case 3:
-      Maze.Level3.AddBooks();
+      Maze.Level3.RemoveActivities();
+      Maze.Level3.AddActivitySprites();
     break;
     case 4:
       Maze.Level4.AddBooks();
@@ -828,6 +853,9 @@ Maze.resetButtonClick = function(e) {
     break;
     case 6:
       Maze.Level6.AddBooks();
+    break;
+    case 7:
+      Maze.Level7.AddBooks();
     break;
   }
     
@@ -858,16 +886,19 @@ Maze.execute = function() {
       Maze.Level2.Execute();
       break;
     case 3:
-      Maze.Level3.ExecuteFirst();
-      break;
+      Maze.Level3.Execute();
+    break;
     case 4:
       Maze.Level4.ExecuteFirst();
-    break;
+      break;
     case 5:
       Maze.Level5.ExecuteFirst();
     break;
     case 6:
       Maze.Level6.ExecuteFirst();
+    break;
+    case 7:
+      Maze.Level7.ExecuteFirst();
     break;
   }
   

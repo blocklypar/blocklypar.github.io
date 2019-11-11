@@ -17,14 +17,17 @@ var student = [];
 var pidList = [];
 var log = [];
 
+var speed = 100;
+var repeatBlock;
 var booksCounterNum;
 
 //****** STUDENTS */
 var studentsActive = [];
 var action_std1 = [];
-var action_std2 = [];
-var std1, std2, action;
+var std1, action;
 var action_ = [];
+var std_name = 'estudante0';
+var clip_name = 'clipRect0';
 
 /**
  * The student currently executing the code
@@ -200,7 +203,6 @@ Maze.Level4.DrawMap = function(svg){
     for(var i=1.1; i<5.1; i++){
         bookslist_[cont_book++] = {x: 0.6, y: i};
     }
-    booksCounterNum = 4;
 
     //Set the current student as the first student
     Maze.Level4.currentStudent = student[0];
@@ -252,9 +254,6 @@ Maze.Level4.AddBooks = function(){
         bookscount[i].getAttribute('height') + 10);
         svg.appendChild(bookscount[i]);
     }
-
-    student[0].time = 0;
-    student[1].time = 0;
 };
 
 /**
@@ -288,23 +287,6 @@ Maze.Level4.AddSprites = function(svg, document){
     pegmanIcon.setAttribute('clip-path', 'url(#pegmanClipPath)');
     svg.appendChild(pegmanIcon);
 
-    //Estudante 2
-    var estudanteClip2 = document.createElementNS(Blockly.utils.dom.SVG_NS, 'clipPath');
-    estudanteClip2.id = 'estudanteClip2Path';
-    var clipRect2 = document.createElementNS(Blockly.utils.dom.SVG_NS, 'rect');
-    clipRect2.id = 'clipRect1';
-    clipRect2.setAttribute('width', Maze.PEGMAN_WIDTH);
-    clipRect2.setAttribute('height', Maze.PEGMAN_HEIGHT);
-    estudanteClip2.appendChild(clipRect2);
-    svg.appendChild(estudanteClip2);
-
-    var estudante2 = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-    estudante2.id = 'estudante1';
-    estudante2.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Maze.Level4.VIEW.skin);
-    estudante2.setAttribute('height', Maze.PEGMAN_HEIGHT);
-    estudante2.setAttribute('width', Maze.PEGMAN_WIDTH*21); // 49 * 21 = 1029
-    estudante2.setAttribute('clip-path', 'url(#estudanteClip2Path)');
-    svg.appendChild(estudante2);
 };
 
 /**
@@ -319,38 +301,27 @@ Maze.Level4.Reset = function(first){
     pidList = [];
 
     student[0].reset(Maze.startDirection, start_[student[0].id].x, start_[student[0].id].y);
-    student[1].reset(Maze.startDirection, start_[student[1].id].x, start_[student[1].id].y);
+
     student[0].time = 0;
-    student[1].time = 0;
     std1 = 0;
-    std2 = 0;
     action = 0;
     action_std1 = [];
-    action_std2 = [];
     action_ = [];
 
-    // Move all students into initial position
+    // Move the student into initial position
     if (first) {
-        // Student 1
+
         student[0].startDirection++;
         pidList.push(setTimeout(function() {
+            Maze.stepSpeed = speed;
             Maze.Level4.Schedule([student[0].startLoc.x, student[0].startLoc.y, student[0].startDirection * 4],
                         [student[0].startLoc.x, student[0].startLoc.y, student[0].startDirection * 4 - 4], student[0].id);
                         student[0].startDirection++;
         }, Maze.stepSpeed * 4));
 
-        // Student 2   
-        student[1].startDirection++;
-        pidList.push(setTimeout(function() {
-            Maze.Level4.Schedule([student[1].startLoc.x, student[1].startLoc.y, student[1].startDirection * 4],
-                        [student[1].startLoc.x, student[1].startLoc.y, student[1].startDirection * 4 - 4], student[1].id);
-                        student[1].startDirection++;
-        }, Maze.stepSpeed * 4));
-
-    } else {
+    } else 
         Maze.Level4.DisplayStudent(0, student[0].startLoc.x, student[0].startLoc.y, Maze.startDirection * 4);
-        Maze.Level4.DisplayStudent(1, student[1].startLoc.x, student[1].startLoc.y, Maze.startDirection * 4);
-    }
+       
 
     // Move the finish icons into positions.
     var finishIcon = document.getElementById('finish');
@@ -411,36 +382,7 @@ Maze.Level4.ExecuteFirst = function(){
     //Animate the transcript
     Maze.Level4.Reset(false);
     Maze.Level4.PreAnimate(0);
-    pidList.push(setTimeout(Maze.Level4.Animate, 150));
-};
-
-Maze.Level4.Execute = function(){
-
-    if (!('Interpreter' in window)) {
-        setTimeout(Maze.execute, 250);
-        return;
-    }
-
-    Maze.result = Maze.Level4.NotDone() ? Maze.ResultType.FAILURE : Maze.ResultType.SUCCESS;
-
-    //Fast animation if execution is successful. Slow otherwise.
-    if (Maze.result == Maze.ResultType.SUCCESS) {
-
-        for(var i = 0; i < pidList.length; i++) {
-            window.clearTimeout(pidList[i]);
-        }
-        pidList = [];
-
-        BlocklyInterface.saveToLocalStorage();
-
-        Maze.FinalCounter();
-        Maze.updateTime(0);
-
-        setTimeout(BlocklyDialogs.congratulations, 1000);
-        return;
-    }
-
-    pidList.push(setTimeout(Maze.Level4.Animate, 150));
+    pidList.push(setTimeout(Maze.Level4.Animate, speed));
 };
 
 Maze.Level4.PreAnimate = function(id){
@@ -455,50 +397,51 @@ Maze.Level4.PreAnimate = function(id){
 
     if(action[0] == 'student0')
         id = 1;
-    else if(action[0] == 'student1')
-        id = 2;
 
     switch(id){
         case 1:
             action_std1.push(action);
-            break;
-        case 2:
-            action_std2.push(action);
             break;
         default:
             action_.push(action);
     }
 
     Maze.Level4.PreAnimate(id);
-}
+};
 
-Maze.Level4.Animate = function(){
 
-    var action1 = action_std1[++std1];
-    var action2 = action_std2[++std2];
+Maze.Level4.Execute = function(){
 
-    if(action_[action]){
-        action++;
+    if (!('Interpreter' in window)) {
+        setTimeout(Maze.execute, 250);
         return;
     }
 
-    if(action1){
-        Maze.Level4.currentStudent = student[0];
-        Maze.Level4.AnimateMove(student[0], action1);
-    }   
+    Maze.result = Maze.Level4.NotDone() ? Maze.ResultType.FAILURE : Maze.ResultType.SUCCESS;
 
-    if(action2){
-        Maze.Level4.currentStudent = student[1];
-        Maze.Level4.AnimateMove(student[1], action2);
-    }    
-    
-    if(action1 && action2)
-        Maze.updateTime(((student[0].time + student[1].time)/2).toFixed(2));
-    else if(!action1)
-        Maze.updateTime(student[1].time);
-    else if(!action2)
-        Maze.updateTime(student[0].time);
-        
+    //Fast animation if execution is successful. Slow otherwise.
+    if (Maze.result == Maze.ResultType.SUCCESS) {
+
+        BlocklyInterface.saveToLocalStorage();
+
+        Maze.FinalCounter();
+        Maze.updateTime(0);
+
+        setTimeout(BlocklyDialogs.congratulations, 1000);
+        return;
+    }
+
+    pidList.push(setTimeout(Maze.Level4.Animate, speed));
+};
+
+Maze.Level4.Animate = function(){
+
+    var action1 = action_std1[std1++];
+
+    if(action1)
+        Maze.Level4.AnimateMove(student[0], action1);
+
+    Maze.updateTime(student[0].time);
     pidList.push(setTimeout(Maze.Level4.Animate, Maze.stepSpeed * 4));
 }
 
@@ -589,7 +532,7 @@ Maze.Level4.AnimateMove = function(avatar, action){
  * @param {!Interpreter.Object} scope Global scope.
  */
 Maze.Level4.InitInterpreter = function(interpreter, scope){
-
+    
     // API
     var wrapper;
 
@@ -629,18 +572,6 @@ Maze.Level4.InitInterpreter = function(interpreter, scope){
     };
     interpreter.setProperty(scope, 'isStudent0',
     interpreter.createNativeFunction(wrapper));
-
-    wrapper = function(id) {
-        return Maze.Level4.isStudent(1, id);
-    };
-    interpreter.setProperty(scope, 'isStudent1',
-    interpreter.createNativeFunction(wrapper));
-
-    wrapper = function(id) {
-        return Maze.Level4.isStudent(2, id);
-    };
-    interpreter.setProperty(scope, 'isStudent2',
-    interpreter.createNativeFunction(wrapper));
    
     wrapper = function(id) {
         return Maze.Level4.isPath(1, id, Maze.Level4.currentStudent);
@@ -667,11 +598,14 @@ Maze.Level4.InitInterpreter = function(interpreter, scope){
         interpreter.createNativeFunction(wrapper));
 
     //Books == 0
-    wrapper = function() {
+
+    wrapper = function(id) {
+        // repeatBlock = id;
         return Maze.Level4.ReturnBook(Maze.Level4.currentStudent.startLoc.x, Maze.Level4.currentStudent.startLoc.y);
     };
     interpreter.setProperty(scope, 'booksZero',
         interpreter.createNativeFunction(wrapper));
+
 };
 
 /**
@@ -779,21 +713,11 @@ Maze.Level4.isPath = function(direction, id, avatar) {
  * @return {boolean} True if it is a student.
  */
 Maze.Level4.isStudent = function(student_id, id) {
-    var command;
 
-    switch(student_id) {
-      case 0:
-        command = 'student0';
-        Maze.Level4.currentStudent = student[0];
-        break;
-      case 1:
-        command = 'student1';
-        Maze.Level4.currentStudent = student[1];
-        break;
-      default:
-        break;
-    }
-
+    var command = 'student0';
+    
+    Maze.Level4.currentStudent = student[0];
+       
     if(id) {
         log.push([command, id]);
     }
@@ -901,7 +825,6 @@ Maze.Level4.ScheduleFinish = function(sound) {
     if (sound) {
       BlocklyGames.workspace.getAudioManager().play('win', 0.5);
     }
-    Maze.stepSpeed = speed;  // Slow down victory animation a bit.
     pidList.push(setTimeout(function() {
         Maze.Level4.DisplayStudent(Maze.Level4.currentStudent.startLoc.x, Maze.Level4.currentStudent.startLoc.y, 18);
       }, Maze.stepSpeed));
@@ -922,10 +845,7 @@ Maze.Level4.ScheduleFinish = function(sound) {
  */
 Maze.Level4.DisplayStudent = function(est, x, y, d, opt_angle) {
 
-    var std = 'estudante';
-    var clip = 'clipRect';
-
-    var estudante = document.getElementById(std.concat(est.toString()));
+    var estudante = document.getElementById(std_name);
     estudante.setAttribute('x', x * Maze.SQUARE_SIZE - d * Maze.PEGMAN_WIDTH + 1);
     estudante.setAttribute('y', Maze.SQUARE_SIZE * (y + 0.5) - Maze.PEGMAN_HEIGHT / 2 - 8);
 
@@ -937,16 +857,15 @@ Maze.Level4.DisplayStudent = function(est, x, y, d, opt_angle) {
         estudante.setAttribute('transform', 'rotate(0, 0, 0)');
     }
 
-    var clipRect = document.getElementById(clip.concat(est.toString()));
+    var clipRect = document.getElementById(clip_name);
     clipRect.setAttribute('x', x * Maze.SQUARE_SIZE + 1);
     clipRect.setAttribute('y', estudante.getAttribute('y'));
-
-    var svg = document.getElementById('svgMaze');
 
     if(Maze.Level4.ReturnBook(x, y)){
         //Remove one book from the list and decrement the counter
         booksCounterNum--;
         //Move the student to the initial position and run the code again
+        var svg = (document.getElementById('svgMaze'));
         Maze.Level4.ResetOneStd(est);
         Maze.Level4.RemoveBooks(svg, document);
         Maze.Level4.Execute();
@@ -956,33 +875,14 @@ Maze.Level4.DisplayStudent = function(est, x, y, d, opt_angle) {
 
 Maze.Level4.ResetOneStd = function(est){
 
-    if(est == 0){
-        std1 = 0;
-        student[0].reset(Maze.startDirection, start_[student[0].id].x, start_[student[0].id].y);
-        Maze.Level4.DisplayStudent(0, student[0].startLoc.x, student[0].startLoc.y, Maze.startDirection * 4);
-
-        if(action_std2.length == 0){
-            for(var i = 0; i < pidList.length; i++) {
-                window.clearTimeout(pidList[i]);
-            }
-            pidList = [];
-        }else{
-            for(var i = 0; i < pidList.length - 4; i++) {
-                window.clearTimeout(pidList[i]);
-            }
-        }
-
-    }else if(est == 1){
-        std2 = 0;
-        student[1].reset(Maze.startDirection, start_[student[1].id].x, start_[student[1].id].y);
-        Maze.Level4.DisplayStudent(1, student[1].startLoc.x, student[1].startLoc.y, Maze.startDirection * 4);
-    
-        for(var i = 0; i < pidList.length; i++) {
-            window.clearTimeout(pidList[i]);
-        }
-        pidList = [];
+    for(var i = 0; i < pidList.length; i++) {
+        window.clearTimeout(pidList[i]);
     }
-
+    
+    pidList = [];
+    student[est].reset(Maze.startDirection, start_[est].x, start_[est].y);
+    Maze.Level4.DisplayStudent(est, student[est].startLoc.x, student[est].startLoc.y, Maze.startDirection * 4);
+    std1 = 0;
 };
 
 /**

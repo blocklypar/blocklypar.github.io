@@ -236,6 +236,7 @@
       "maze/js/level3.js",
       "maze/js/level5.js",
       "maze/js/level6.js",
+      "maze/js/level7.js",
       "maze/js/level4.js",
       "maze/js/maze.js"
   ];

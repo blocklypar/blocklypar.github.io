@@ -17,24 +17,16 @@ var student = [];
 var pidList = [];
 var log = [];
 
-var speed = 100;
-
-var booksCounter = {
-    //posição da lista de livros
-    x:0.3, 
-    y:8,
-    num:5 //numero maximo de livros
-};
+var booksCounterNum;
 
 //****** STUDENTS */
 var studentsActive = [];
 var action_std1 = [];
 var action_std2 = [];
-var std1, std2, action;
+var action_std3 = [];
+var std1, std2, std3, action;
 var action_ = [];
 var executionTime = 0;
-var std_names = ['estudante0', 'estudante1'];
-var clip_names = ['clipRect0', 'clipRect1'];
 
 /**
  * The student currently executing the code
@@ -45,7 +37,7 @@ Maze.Level7.currentStudent = null;
  * Background and other elements
  */
 Maze.Level7.VIEW = {
-    background: 'maze/fundobiblioteca.jpg',
+    background: 'maze/library.png',
     tiles: 'maze/tiles_ufsm.png',
     finishMarker: 'maze/marker.png',
     book: 'maze/book.png',
@@ -207,13 +199,14 @@ Maze.Level7.DrawMap = function(svg){
 
     //Initialize the list of books full
     var cont_book = 0;
-    for(var i=0.5; i<10.5; i++){
-        bookslist_[cont_book++] = {x: 0.3, y: i/1.5};
+    for(var i=0.9; i<10.9; i++){
+        bookslist_[cont_book++] = {x: 0.6, y: i/1.3};
     }
+    booksCounterNum = 8;
 
     //Set the current student as the first student
     Maze.Level7.currentStudent = student[0];
-
+    Maze.executionTime = document.getElementById("number");
 };
 
 /**
@@ -221,19 +214,19 @@ Maze.Level7.DrawMap = function(svg){
  */
 Maze.Level7.AddBooks = function(){
 
-    booksCounter.num = 10;
+    booksCounterNum = 8;
     var svg = document.getElementById('svgMaze');
 
     // Edit books list
     var books = [];
     var book = 'book';
 
-    for(var i=0; i < booksCounter.num; i++){
+    for(var i=0; i < booksCounterNum; i++){
         books[i] = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
         books[i].id = book.concat(i.toString());
         books[i].setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Maze.Level7.VIEW.book);
-        books[i].setAttribute('height', 45);
-        books[i].setAttribute('width', 35);
+        books[i].setAttribute('height', 50);
+        books[i].setAttribute('width', 45);
         svg.appendChild(books[i]);
         
         //Move the initial list of books into position
@@ -248,19 +241,23 @@ Maze.Level7.AddBooks = function(){
     var bookscount = [];
     var name = 'booksCounter';
     
-    for(var i=0; i<=booksCounter.num; i++){
+    for(var i=0; i<=booksCounterNum; i++){
 
         bookscount[i] = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
         bookscount[i].id = name.concat(i.toString());
         bookscount[i].setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', 'maze/books/'.concat(i.toString()).concat('.png'));
         bookscount[i].setAttribute('height', 60);
         bookscount[i].setAttribute('width', 80);
-        bookscount[i].setAttribute('x', Maze.SQUARE_SIZE * (booksCounter.x + 0.5) -
-        bookscount[i].getAttribute('width') / 2);
-        bookscount[i].setAttribute('y', Maze.SQUARE_SIZE * (booksCounter.y + 0.6) -
-        bookscount[i].getAttribute('height'));
+        bookscount[i].setAttribute('x', Maze.SQUARE_SIZE * (0.1) -
+        bookscount[i].getAttribute('width') / 2  + 35);
+        bookscount[i].setAttribute('y', Maze.SQUARE_SIZE * (8) -
+        bookscount[i].getAttribute('height') + 10);
         svg.appendChild(bookscount[i]);
     }
+
+    student[0].active = 0;
+    student[1].active = 0;
+    student[2].active = 0;
 };
 
 /**
@@ -312,6 +309,24 @@ Maze.Level7.AddSprites = function(svg, document){
     estudante2.setAttribute('clip-path', 'url(#estudanteClip2Path)');
     svg.appendChild(estudante2);
 
+    //Estudante 3
+    var estudanteClip3 = document.createElementNS(Blockly.utils.dom.SVG_NS, 'clipPath');
+    estudanteClip3.id = 'estudanteClip3Path';
+    var clipRect3 = document.createElementNS(Blockly.utils.dom.SVG_NS, 'rect');
+    clipRect3.id = 'clipRect2';
+    clipRect3.setAttribute('width', Maze.PEGMAN_WIDTH);
+    clipRect3.setAttribute('height', Maze.PEGMAN_HEIGHT);
+    estudanteClip3.appendChild(clipRect3);
+    svg.appendChild(estudanteClip3);
+
+    var estudante3 = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
+    estudante3.id = 'estudante2';
+    estudante3.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Maze.Level7.VIEW.skin);
+    estudante3.setAttribute('height', Maze.PEGMAN_HEIGHT);
+    estudante3.setAttribute('width', Maze.PEGMAN_WIDTH*21); // 49 * 21 = 1029
+    estudante3.setAttribute('clip-path', 'url(#estudanteClip3Path)');
+    svg.appendChild(estudante3);
+
 };
 
 /**
@@ -327,38 +342,49 @@ Maze.Level7.Reset = function(first){
 
     student[0].reset(Maze.startDirection, start_[student[0].id].x, start_[student[0].id].y);
     student[1].reset(Maze.startDirection, start_[student[1].id].x, start_[student[1].id].y);
-
+    student[2].reset(Maze.startDirection, start_[student[2].id].x, start_[student[2].id].y);
+    student[0].time = 0;
+    student[1].time = 0;
+    student[2].time = 0;
     std1 = 0;
     std2 = 0;
+    std3 = 0;
     action = 0;
     action_std1 = [];
     action_std2 = [];
+    action_std3 = [];
     action_ = [];
 
     // Move all students into initial position
     if (first) {
-
         // Student 1
         student[0].startDirection++;
         pidList.push(setTimeout(function() {
-            Maze.stepSpeed = speed;
             Maze.Level7.Schedule([student[0].startLoc.x, student[0].startLoc.y, student[0].startDirection * 4],
                         [student[0].startLoc.x, student[0].startLoc.y, student[0].startDirection * 4 - 4], student[0].id);
                         student[0].startDirection++;
-        }, Maze.stepSpeed * 5));
+        }, Maze.stepSpeed * 4));
 
         // Student 2   
         student[1].startDirection++;
         pidList.push(setTimeout(function() {
-            Maze.stepSpeed = speed;
             Maze.Level7.Schedule([student[1].startLoc.x, student[1].startLoc.y, student[1].startDirection * 4],
                         [student[1].startLoc.x, student[1].startLoc.y, student[1].startDirection * 4 - 4], student[1].id);
                         student[1].startDirection++;
-        }, Maze.stepSpeed * 5));
+        }, Maze.stepSpeed * 4));
+        
+        // Student 3  
+        student[2].startDirection++;
+        pidList.push(setTimeout(function() {
+            Maze.Level7.Schedule([student[2].startLoc.x, student[2].startLoc.y, student[2].startDirection * 4],
+                        [student[2].startLoc.x, student[2].startLoc.y, student[2].startDirection * 4 - 4], student[2].id);
+                        student[2].startDirection++;
+        }, Maze.stepSpeed * 4));
 
     } else {
         Maze.Level7.DisplayStudent(0, student[0].startLoc.x, student[0].startLoc.y, Maze.startDirection * 4);
         Maze.Level7.DisplayStudent(1, student[1].startLoc.x, student[1].startLoc.y, Maze.startDirection * 4);
+        Maze.Level7.DisplayStudent(2, student[2].startLoc.x, student[2].startLoc.y, Maze.startDirection * 4);
     }
 
     // Move the finish icons into positions.
@@ -423,36 +449,6 @@ Maze.Level7.ExecuteFirst = function(){
     pidList.push(setTimeout(Maze.Level7.Animate, 150));
 };
 
-Maze.Level7.PreAnimate = function(id){
-
-    var action = log.shift();
-
-    if(!action) {
-        BlocklyInterface.highlight(null);
-        Maze.levelHelp();
-        return;
-    }
-
-    if(action[0] == 'student0')
-        id = 1;
-    else if(action[0] == 'student1')
-        id = 2;
-
-    switch(id){
-        case 1:
-            action_std1.push(action);
-            break;
-        case 2:
-            action_std2.push(action);
-            break;
-        default:
-            action_.push(action);
-    }
-
-    Maze.Level7.PreAnimate(id);
-};
-
-
 Maze.Level7.Execute = function(){
 
     if (!('Interpreter' in window)) {
@@ -467,14 +463,9 @@ Maze.Level7.Execute = function(){
 
         BlocklyInterface.saveToLocalStorage();
 
-        executionTime = document.getElementById("number").innerHTML;
+        Maze.FinalCounter();
+        Maze.updateTime(0);
 
-        var doneDiv = document.getElementById('dialogLinesText');
-        var exectime = document.createElement('P');
-        exectime.innerText = executionTime.toString().concat(' seconds!');
-        // doneDiv.insertAdjacentElement(doneDiv, exectime);        
-
-        doneDiv.parentNode.insertBefore(exectime, doneDiv);
         setTimeout(BlocklyDialogs.congratulations, 1000);
         return;
     }
@@ -482,17 +473,67 @@ Maze.Level7.Execute = function(){
     pidList.push(setTimeout(Maze.Level7.Animate, 150));
 };
 
+Maze.Level7.PreAnimate = function(id){
+
+    var action = log.shift();
+
+    if(!action) {
+        BlocklyInterface.highlight(null);
+        Maze.levelHelp();
+        return;
+    }
+
+    if(action[0] == 'student0')
+        id = 1;
+    else if(action[0] == 'student1')
+        id = 2;
+    else if(action[0] == 'student2')
+        id = 3;
+
+    switch(id){
+        case 1:
+            action_std1.push(action);
+            break;
+        case 2:
+            action_std2.push(action);
+            break;
+        case 3:
+            action_std3.push(action);
+            break;
+        default:
+            action_.push(action);
+    }
+
+    Maze.Level7.PreAnimate(id);
+}
+
 Maze.Level7.Animate = function(){
 
     var action1 = action_std1[++std1];
     var action2 = action_std2[++std2];
+    var action3 = action_std3[++std3];
 
-    if(action1)
+    if(action_[action]){
+        action++;
+        return;
+    }
+
+    if(action1){
+        Maze.Level7.currentStudent = student[0];
         Maze.Level7.AnimateMove(student[0], action1);
-    
-    if(action2)
+    }    
+
+    if(action2){
+        Maze.Level7.currentStudent = student[1];
         Maze.Level7.AnimateMove(student[1], action2);
-    
+    }   
+
+    if(action3){
+        Maze.Level7.currentStudent = student[2];
+        Maze.Level7.AnimateMove(student[2], action3);
+    }   
+
+    Maze.updateTime(((student[0].time + student[1].time + student[2].time)/(student[0].active + student[1].active + student[2].active)).toFixed(2));
     pidList.push(setTimeout(Maze.Level7.Animate, Maze.stepSpeed * 4));
 }
 
@@ -501,44 +542,52 @@ Maze.Level7.AnimateMove = function(avatar, action){
     BlocklyInterface.highlight(action[1]);
 
     switch (action[0]) {
-        case 'north':
+        case 'north': //value: 1
         Maze.Level7.Schedule([avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4],
             [avatar.startLoc.x, avatar.startLoc.y - 1, avatar.startDirection * 4], avatar.id);
         avatar.startLoc.y--;
+        avatar.time++;
         break;
 
-        case 'east':
+        case 'east': //value 1
         Maze.Level7.Schedule([avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4],
             [avatar.startLoc.x + 1, avatar.startLoc.y, avatar.startDirection * 4], avatar.id);
         avatar.startLoc.x++;
+        avatar.time++;
         break;
 
-        case 'south':
+        case 'south': //value 1
         Maze.Level7.Schedule([avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4],
             [avatar.startLoc.x, avatar.startLoc.y + 1, avatar.startDirection * 4], avatar.id);
         avatar.startLoc.y++;
+        avatar.time++;
         break;
 
-        case 'west':
+        case 'west': //value 1
         Maze.Level7.Schedule([avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4],
             [avatar.startLoc.x - 1, avatar.startLoc.y, avatar.startDirection * 4], avatar.id);
         avatar.startLoc.x--;
+        avatar.time++;
         break;
 
-        case 'look_north':
+        case 'look_north': //value 0.5
         Maze.Level7.ScheduleLook(Maze.DirectionType.NORTH, avatar.startLoc.x, avatar.startLoc.y);
+        avatar.time = avatar.time + 0.5;
         break;
 
-        case 'look_east':
+        case 'look_east': //value 0.5
         Maze.Level7.ScheduleLook(Maze.DirectionType.EAST, avatar.startLoc.x, avatar.startLoc.y);
+        avatar.time = avatar.time + 0.5;
         break;
         
-        case 'look_south':
+        case 'look_south': //value 0.5
         Maze.Level7.ScheduleLook(Maze.DirectionType.SOUTH, avatar.startLoc.x, avatar.startLoc.y);
+        avatar.time = avatar.time + 0.5;
         break;
         
-        case 'look_west':
+        case 'look_west': //value 0.5
         Maze.Level7.ScheduleLook(Maze.DirectionType.WEST, avatar.startLoc.x, avatar.startLoc.y);
+        avatar.time = avatar.time + 0.5;
         break;
         
         case 'fail_forward':
@@ -549,16 +598,18 @@ Maze.Level7.AnimateMove = function(avatar, action){
         Maze.Level7.ScheduleFail(false, avatar);
         break;
         
-        case 'left':
+        case 'left': //value 1
         Maze.Level7.Schedule([avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4],
             [avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4 - 4], avatar.id);
         avatar.startDirection = Maze.constrainDirection4(avatar.startDirection - 1);
+        avatar.time++;
         break;
         
-        case 'right':
+        case 'right': //value 1
         Maze.Level7.Schedule([avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4],
             [avatar.startLoc.x, avatar.startLoc.y, avatar.startDirection * 4 + 4], avatar.id);
         avatar.startDirection = Maze.constrainDirection4(avatar.startDirection + 1);
+        avatar.time++;
         break; 
         
         case 'finish':
@@ -618,6 +669,12 @@ Maze.Level7.InitInterpreter = function(interpreter, scope){
         return Maze.Level7.isStudent(1, id);
     };
     interpreter.setProperty(scope, 'isStudent1',
+    interpreter.createNativeFunction(wrapper));
+
+    wrapper = function(id) {
+        return Maze.Level7.isStudent(2, id);
+    };
+    interpreter.setProperty(scope, 'isStudent2',
     interpreter.createNativeFunction(wrapper));
    
     wrapper = function(id) {
@@ -763,10 +820,17 @@ Maze.Level7.isStudent = function(student_id, id) {
       case 0:
         command = 'student0';
         Maze.Level7.currentStudent = student[0];
+        student[0].active = 1;
         break;
       case 1:
         command = 'student1';
         Maze.Level7.currentStudent = student[1];
+        student[1].active = 1;
+        break;
+      case 2:
+        command = 'student2';
+        Maze.Level7.currentStudent = student[2];
+        student[2].active = 1;
         break;
       default:
         break;
@@ -879,6 +943,7 @@ Maze.Level7.ScheduleFinish = function(sound) {
     if (sound) {
       BlocklyGames.workspace.getAudioManager().play('win', 0.5);
     }
+    Maze.stepSpeed = speed;  // Slow down victory animation a bit.
     pidList.push(setTimeout(function() {
         Maze.Level7.DisplayStudent(Maze.Level7.currentStudent.startLoc.x, Maze.Level7.currentStudent.startLoc.y, 18);
       }, Maze.stepSpeed));
@@ -899,7 +964,10 @@ Maze.Level7.ScheduleFinish = function(sound) {
  */
 Maze.Level7.DisplayStudent = function(est, x, y, d, opt_angle) {
 
-    var estudante = document.getElementById(std_names[est]);
+    var std = 'estudante';
+    var clip = 'clipRect';
+
+    var estudante = document.getElementById(std.concat(est.toString()));
     estudante.setAttribute('x', x * Maze.SQUARE_SIZE - d * Maze.PEGMAN_WIDTH + 1);
     estudante.setAttribute('y', Maze.SQUARE_SIZE * (y + 0.5) - Maze.PEGMAN_HEIGHT / 2 - 8);
 
@@ -911,16 +979,17 @@ Maze.Level7.DisplayStudent = function(est, x, y, d, opt_angle) {
         estudante.setAttribute('transform', 'rotate(0, 0, 0)');
     }
 
-    var clipRect = document.getElementById(clip_names[est]);
+    var clipRect = document.getElementById(clip.concat(est.toString()));
     clipRect.setAttribute('x', x * Maze.SQUARE_SIZE + 1);
     clipRect.setAttribute('y', estudante.getAttribute('y'));
 
+    var svg = document.getElementById('svgMaze');
+
     if(Maze.Level7.ReturnBook(x, y)){
-        //Remove one book from the list and decrement the counter
-        booksCounter.num--;
         //Move the student to the initial position and run the code again
-        var svg = (document.getElementById('svgMaze'));
         Maze.Level7.ResetOneStd(est);
+        //Remove one book from the list and decrement the counter
+        booksCounterNum--;
         Maze.Level7.RemoveBooks(svg, document);
         Maze.Level7.Execute();
     }
@@ -934,13 +1003,21 @@ Maze.Level7.ResetOneStd = function(est){
     }
     
     pidList = [];
-    student[est].reset(Maze.startDirection, start_[est].x, start_[est].y);
-    Maze.Level7.DisplayStudent(est, student[est].startLoc.x, student[est].startLoc.y, Maze.startDirection * 4);
-
-    if(est == 0)
+    
+    if(est == 0){
         std1 = 0;
-    else 
+        student[0].reset(Maze.startDirection, start_[student[0].id].x, start_[student[0].id].y);
+        Maze.Level7.DisplayStudent(0, student[0].startLoc.x, student[0].startLoc.y, Maze.startDirection * 4);
+    }else if(est == 1){
         std2 = 0;
+        student[1].reset(Maze.startDirection, start_[student[1].id].x, start_[student[1].id].y);
+        Maze.Level7.DisplayStudent(1, student[1].startLoc.x, student[1].startLoc.y, Maze.startDirection * 4);
+    }else if(est == 2){
+        std3 = 0;
+        student[2].reset(Maze.startDirection, start_[student[2].id].x, start_[student[2].id].y);
+        Maze.Level7.DisplayStudent(2, student[2].startLoc.x, student[2].startLoc.y, Maze.startDirection * 4);
+    }
+
 };
 
 /**
@@ -983,15 +1060,15 @@ Maze.Level7.ReturnBook = function(x, y){
  */
 Maze.Level7.RemoveBooks = function(svg, document){
     var book = 'book';
-    const bookremove = document.getElementById(book.concat(booksCounter.num.toString()));
+    const bookremove = document.getElementById(book.concat(booksCounterNum.toString()));
     svg.removeChild(bookremove);
 
     var bookcont = 'booksCounter';
-    var id = booksCounter.num + 1;
+    var id = booksCounterNum + 1;
     const bookcontremove = document.getElementById(bookcont.concat(id.toString()));
     svg.removeChild(bookcontremove);
 }
 
 Maze.Level7.NotDone = function(){
-    return booksCounter.num != 0;
+    return booksCounterNum != 0;
 };

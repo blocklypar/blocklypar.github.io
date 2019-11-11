@@ -16,7 +16,8 @@ var finish;
 var student = [];
 var pidList = [];
 var log = [];
-var booksCounterNum; //numero maximo de livros
+
+var booksCounterNum;
 
 //****** STUDENTS */
 var studentsActive = [];
@@ -24,9 +25,6 @@ var action_std1 = [];
 var action_std2 = [];
 var std1, std2, action;
 var action_ = [];
-var executionTime = 0;
-var std_names = ['estudante0', 'estudante1'];
-var clip_names = ['clipRect0', 'clipRect1'];
 
 /**
  * The student currently executing the code
@@ -199,9 +197,10 @@ Maze.Level5.DrawMap = function(svg){
 
     //Initialize the list of books full
     var cont_book = 0;
-    for(var i=0.9; i<10.9; i++){
-        bookslist_[cont_book++] = {x: 0.6, y: i/1.3};
+    for(var i=1.1; i<5.1; i++){
+        bookslist_[cont_book++] = {x: 0.6, y: i};
     }
+    booksCounterNum = 4;
 
     //Set the current student as the first student
     Maze.Level5.currentStudent = student[0];
@@ -213,7 +212,7 @@ Maze.Level5.DrawMap = function(svg){
  */
 Maze.Level5.AddBooks = function(){
 
-    booksCounterNum = 8;
+    booksCounterNum = 4;
     var svg = document.getElementById('svgMaze');
 
     // Edit books list
@@ -306,7 +305,6 @@ Maze.Level5.AddSprites = function(svg, document){
     estudante2.setAttribute('width', Maze.PEGMAN_WIDTH*21); // 49 * 21 = 1029
     estudante2.setAttribute('clip-path', 'url(#estudanteClip2Path)');
     svg.appendChild(estudante2);
-
 };
 
 /**
@@ -322,7 +320,8 @@ Maze.Level5.Reset = function(first){
 
     student[0].reset(Maze.startDirection, start_[student[0].id].x, start_[student[0].id].y);
     student[1].reset(Maze.startDirection, start_[student[1].id].x, start_[student[1].id].y);
-
+    student[0].time = 0;
+    student[1].time = 0;
     std1 = 0;
     std2 = 0;
     action = 0;
@@ -332,7 +331,6 @@ Maze.Level5.Reset = function(first){
 
     // Move all students into initial position
     if (first) {
-
         // Student 1
         student[0].startDirection++;
         pidList.push(setTimeout(function() {
@@ -416,6 +414,35 @@ Maze.Level5.ExecuteFirst = function(){
     pidList.push(setTimeout(Maze.Level5.Animate, 150));
 };
 
+Maze.Level5.Execute = function(){
+
+    if (!('Interpreter' in window)) {
+        setTimeout(Maze.execute, 250);
+        return;
+    }
+
+    Maze.result = Maze.Level5.NotDone() ? Maze.ResultType.FAILURE : Maze.ResultType.SUCCESS;
+
+    //Fast animation if execution is successful. Slow otherwise.
+    if (Maze.result == Maze.ResultType.SUCCESS) {
+
+        for(var i = 0; i < pidList.length; i++) {
+            window.clearTimeout(pidList[i]);
+        }
+        pidList = [];
+
+        BlocklyInterface.saveToLocalStorage();
+
+        Maze.FinalCounter();
+        Maze.updateTime(0);
+
+        setTimeout(BlocklyDialogs.congratulations, 1000);
+        return;
+    }
+
+    pidList.push(setTimeout(Maze.Level5.Animate, 150));
+};
+
 Maze.Level5.PreAnimate = function(id){
 
     var action = log.shift();
@@ -443,52 +470,35 @@ Maze.Level5.PreAnimate = function(id){
     }
 
     Maze.Level5.PreAnimate(id);
-};
-
-
-Maze.Level5.Execute = function(){
-
-    if (!('Interpreter' in window)) {
-        setTimeout(Maze.execute, 250);
-        return;
-    }
-
-    Maze.result = Maze.Level5.NotDone() ? Maze.ResultType.FAILURE : Maze.ResultType.SUCCESS;
-
-    //Fast animation if execution is successful. Slow otherwise.
-    if (Maze.result == Maze.ResultType.SUCCESS) {
-
-        BlocklyInterface.saveToLocalStorage();
-
-        Maze.FinalCounter();
-        Maze.updateTime(0);
-
-        setTimeout(BlocklyDialogs.congratulations, 1000);
-        return;
-    }
-
-    pidList.push(setTimeout(Maze.Level5.Animate, 150));
-};
+}
 
 Maze.Level5.Animate = function(){
 
     var action1 = action_std1[++std1];
     var action2 = action_std2[++std2];
 
-    if(action1)
-        Maze.Level5.AnimateMove(student[0], action1);
-    
-    if(action2)
-        Maze.Level5.AnimateMove(student[1], action2);
+    if(action_[action]){
+        action++;
+        return;
+    }
 
+    if(action1){
+        Maze.Level5.currentStudent = student[0];
+        Maze.Level5.AnimateMove(student[0], action1);
+    }   
+
+    if(action2){
+        Maze.Level5.currentStudent = student[1];
+        Maze.Level5.AnimateMove(student[1], action2);
+    }    
+    
     if(action1 && action2)
         Maze.updateTime(((student[0].time + student[1].time)/2).toFixed(2));
     else if(!action1)
         Maze.updateTime(student[1].time);
     else if(!action2)
         Maze.updateTime(student[0].time);
-
-    
+        
     pidList.push(setTimeout(Maze.Level5.Animate, Maze.stepSpeed * 4));
 }
 
@@ -624,6 +634,12 @@ Maze.Level5.InitInterpreter = function(interpreter, scope){
         return Maze.Level5.isStudent(1, id);
     };
     interpreter.setProperty(scope, 'isStudent1',
+    interpreter.createNativeFunction(wrapper));
+
+    wrapper = function(id) {
+        return Maze.Level5.isStudent(2, id);
+    };
+    interpreter.setProperty(scope, 'isStudent2',
     interpreter.createNativeFunction(wrapper));
    
     wrapper = function(id) {
@@ -885,6 +901,7 @@ Maze.Level5.ScheduleFinish = function(sound) {
     if (sound) {
       BlocklyGames.workspace.getAudioManager().play('win', 0.5);
     }
+    Maze.stepSpeed = speed;  // Slow down victory animation a bit.
     pidList.push(setTimeout(function() {
         Maze.Level5.DisplayStudent(Maze.Level5.currentStudent.startLoc.x, Maze.Level5.currentStudent.startLoc.y, 18);
       }, Maze.stepSpeed));
@@ -905,7 +922,10 @@ Maze.Level5.ScheduleFinish = function(sound) {
  */
 Maze.Level5.DisplayStudent = function(est, x, y, d, opt_angle) {
 
-    var estudante = document.getElementById(std_names[est]);
+    var std = 'estudante';
+    var clip = 'clipRect';
+
+    var estudante = document.getElementById(std.concat(est.toString()));
     estudante.setAttribute('x', x * Maze.SQUARE_SIZE - d * Maze.PEGMAN_WIDTH + 1);
     estudante.setAttribute('y', Maze.SQUARE_SIZE * (y + 0.5) - Maze.PEGMAN_HEIGHT / 2 - 8);
 
@@ -917,15 +937,16 @@ Maze.Level5.DisplayStudent = function(est, x, y, d, opt_angle) {
         estudante.setAttribute('transform', 'rotate(0, 0, 0)');
     }
 
-    var clipRect = document.getElementById(clip_names[est]);
+    var clipRect = document.getElementById(clip.concat(est.toString()));
     clipRect.setAttribute('x', x * Maze.SQUARE_SIZE + 1);
     clipRect.setAttribute('y', estudante.getAttribute('y'));
+
+    var svg = document.getElementById('svgMaze');
 
     if(Maze.Level5.ReturnBook(x, y)){
         //Remove one book from the list and decrement the counter
         booksCounterNum--;
         //Move the student to the initial position and run the code again
-        var svg = (document.getElementById('svgMaze'));
         Maze.Level5.ResetOneStd(est);
         Maze.Level5.RemoveBooks(svg, document);
         Maze.Level5.Execute();
@@ -935,18 +956,33 @@ Maze.Level5.DisplayStudent = function(est, x, y, d, opt_angle) {
 
 Maze.Level5.ResetOneStd = function(est){
 
-    for(var i = 0; i < pidList.length; i++) {
-        window.clearTimeout(pidList[i]);
-    }
-    
-    pidList = [];
-    student[est].reset(Maze.startDirection, start_[est].x, start_[est].y);
-    Maze.Level5.DisplayStudent(est, student[est].startLoc.x, student[est].startLoc.y, Maze.startDirection * 4);
-
-    if(est == 0)
+    if(est == 0){
         std1 = 0;
-    else 
+        student[0].reset(Maze.startDirection, start_[student[0].id].x, start_[student[0].id].y);
+        Maze.Level5.DisplayStudent(0, student[0].startLoc.x, student[0].startLoc.y, Maze.startDirection * 4);
+
+        if(action_std2.length == 0){
+            for(var i = 0; i < pidList.length; i++) {
+                window.clearTimeout(pidList[i]);
+            }
+            pidList = [];
+        }else{
+            for(var i = 0; i < pidList.length - 4; i++) {
+                window.clearTimeout(pidList[i]);
+            }
+        }
+
+    }else if(est == 1){
         std2 = 0;
+        student[1].reset(Maze.startDirection, start_[student[1].id].x, start_[student[1].id].y);
+        Maze.Level5.DisplayStudent(1, student[1].startLoc.x, student[1].startLoc.y, Maze.startDirection * 4);
+    
+        for(var i = 0; i < pidList.length; i++) {
+            window.clearTimeout(pidList[i]);
+        }
+        pidList = [];
+    }
+
 };
 
 /**

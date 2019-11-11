@@ -16,17 +16,17 @@ var finish;
 var student = [];
 var pidList = [];
 var log = [];
-
-var booksCounterNum;
+var booksCounterNum; //numero maximo de livros
 
 //****** STUDENTS */
 var studentsActive = [];
 var action_std1 = [];
 var action_std2 = [];
-var action_std3 = [];
-var std1, std2, std3, action;
+var std1, std2, action;
 var action_ = [];
 var executionTime = 0;
+var std_names = ['estudante0', 'estudante1'];
+var clip_names = ['clipRect0', 'clipRect1'];
 
 /**
  * The student currently executing the code
@@ -202,7 +202,6 @@ Maze.Level6.DrawMap = function(svg){
     for(var i=0.9; i<10.9; i++){
         bookslist_[cont_book++] = {x: 0.6, y: i/1.3};
     }
-    booksCounterNum = 8;
 
     //Set the current student as the first student
     Maze.Level6.currentStudent = student[0];
@@ -255,9 +254,8 @@ Maze.Level6.AddBooks = function(){
         svg.appendChild(bookscount[i]);
     }
 
-    student[0].active = 0;
-    student[1].active = 0;
-    student[2].active = 0;
+    student[0].time = 0;
+    student[1].time = 0;
 };
 
 /**
@@ -309,24 +307,6 @@ Maze.Level6.AddSprites = function(svg, document){
     estudante2.setAttribute('clip-path', 'url(#estudanteClip2Path)');
     svg.appendChild(estudante2);
 
-    //Estudante 3
-    var estudanteClip3 = document.createElementNS(Blockly.utils.dom.SVG_NS, 'clipPath');
-    estudanteClip3.id = 'estudanteClip3Path';
-    var clipRect3 = document.createElementNS(Blockly.utils.dom.SVG_NS, 'rect');
-    clipRect3.id = 'clipRect2';
-    clipRect3.setAttribute('width', Maze.PEGMAN_WIDTH);
-    clipRect3.setAttribute('height', Maze.PEGMAN_HEIGHT);
-    estudanteClip3.appendChild(clipRect3);
-    svg.appendChild(estudanteClip3);
-
-    var estudante3 = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-    estudante3.id = 'estudante2';
-    estudante3.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Maze.Level6.VIEW.skin);
-    estudante3.setAttribute('height', Maze.PEGMAN_HEIGHT);
-    estudante3.setAttribute('width', Maze.PEGMAN_WIDTH*21); // 49 * 21 = 1029
-    estudante3.setAttribute('clip-path', 'url(#estudanteClip3Path)');
-    svg.appendChild(estudante3);
-
 };
 
 /**
@@ -342,21 +322,17 @@ Maze.Level6.Reset = function(first){
 
     student[0].reset(Maze.startDirection, start_[student[0].id].x, start_[student[0].id].y);
     student[1].reset(Maze.startDirection, start_[student[1].id].x, start_[student[1].id].y);
-    student[2].reset(Maze.startDirection, start_[student[2].id].x, start_[student[2].id].y);
-    student[0].time = 0;
-    student[1].time = 0;
-    student[2].time = 0;
+
     std1 = 0;
     std2 = 0;
-    std3 = 0;
     action = 0;
     action_std1 = [];
     action_std2 = [];
-    action_std3 = [];
     action_ = [];
 
     // Move all students into initial position
     if (first) {
+
         // Student 1
         student[0].startDirection++;
         pidList.push(setTimeout(function() {
@@ -372,19 +348,10 @@ Maze.Level6.Reset = function(first){
                         [student[1].startLoc.x, student[1].startLoc.y, student[1].startDirection * 4 - 4], student[1].id);
                         student[1].startDirection++;
         }, Maze.stepSpeed * 4));
-        
-        // Student 3  
-        student[2].startDirection++;
-        pidList.push(setTimeout(function() {
-            Maze.Level6.Schedule([student[2].startLoc.x, student[2].startLoc.y, student[2].startDirection * 4],
-                        [student[2].startLoc.x, student[2].startLoc.y, student[2].startDirection * 4 - 4], student[2].id);
-                        student[2].startDirection++;
-        }, Maze.stepSpeed * 4));
 
     } else {
         Maze.Level6.DisplayStudent(0, student[0].startLoc.x, student[0].startLoc.y, Maze.startDirection * 4);
         Maze.Level6.DisplayStudent(1, student[1].startLoc.x, student[1].startLoc.y, Maze.startDirection * 4);
-        Maze.Level6.DisplayStudent(2, student[2].startLoc.x, student[2].startLoc.y, Maze.startDirection * 4);
     }
 
     // Move the finish icons into positions.
@@ -449,6 +416,36 @@ Maze.Level6.ExecuteFirst = function(){
     pidList.push(setTimeout(Maze.Level6.Animate, 150));
 };
 
+Maze.Level6.PreAnimate = function(id){
+
+    var action = log.shift();
+
+    if(!action) {
+        BlocklyInterface.highlight(null);
+        Maze.levelHelp();
+        return;
+    }
+
+    if(action[0] == 'student0')
+        id = 1;
+    else if(action[0] == 'student1')
+        id = 2;
+
+    switch(id){
+        case 1:
+            action_std1.push(action);
+            break;
+        case 2:
+            action_std2.push(action);
+            break;
+        default:
+            action_.push(action);
+    }
+
+    Maze.Level6.PreAnimate(id);
+};
+
+
 Maze.Level6.Execute = function(){
 
     if (!('Interpreter' in window)) {
@@ -473,67 +470,25 @@ Maze.Level6.Execute = function(){
     pidList.push(setTimeout(Maze.Level6.Animate, 150));
 };
 
-Maze.Level6.PreAnimate = function(id){
-
-    var action = log.shift();
-
-    if(!action) {
-        BlocklyInterface.highlight(null);
-        Maze.levelHelp();
-        return;
-    }
-
-    if(action[0] == 'student0')
-        id = 1;
-    else if(action[0] == 'student1')
-        id = 2;
-    else if(action[0] == 'student2')
-        id = 3;
-
-    switch(id){
-        case 1:
-            action_std1.push(action);
-            break;
-        case 2:
-            action_std2.push(action);
-            break;
-        case 3:
-            action_std3.push(action);
-            break;
-        default:
-            action_.push(action);
-    }
-
-    Maze.Level6.PreAnimate(id);
-}
-
 Maze.Level6.Animate = function(){
 
     var action1 = action_std1[++std1];
     var action2 = action_std2[++std2];
-    var action3 = action_std3[++std3];
 
-    if(action_[action]){
-        action++;
-        return;
-    }
-
-    if(action1){
-        Maze.Level6.currentStudent = student[0];
+    if(action1)
         Maze.Level6.AnimateMove(student[0], action1);
-    }    
-
-    if(action2){
-        Maze.Level6.currentStudent = student[1];
+    
+    if(action2)
         Maze.Level6.AnimateMove(student[1], action2);
-    }   
 
-    if(action3){
-        Maze.Level6.currentStudent = student[2];
-        Maze.Level6.AnimateMove(student[2], action3);
-    }   
+    if(action1 && action2)
+        Maze.updateTime(((student[0].time + student[1].time)/2).toFixed(2));
+    else if(!action1)
+        Maze.updateTime(student[1].time);
+    else if(!action2)
+        Maze.updateTime(student[0].time);
 
-    Maze.updateTime(((student[0].time + student[1].time + student[2].time)/(student[0].active + student[1].active + student[2].active)).toFixed(2));
+    
     pidList.push(setTimeout(Maze.Level6.Animate, Maze.stepSpeed * 4));
 }
 
@@ -669,12 +624,6 @@ Maze.Level6.InitInterpreter = function(interpreter, scope){
         return Maze.Level6.isStudent(1, id);
     };
     interpreter.setProperty(scope, 'isStudent1',
-    interpreter.createNativeFunction(wrapper));
-
-    wrapper = function(id) {
-        return Maze.Level6.isStudent(2, id);
-    };
-    interpreter.setProperty(scope, 'isStudent2',
     interpreter.createNativeFunction(wrapper));
    
     wrapper = function(id) {
@@ -820,17 +769,10 @@ Maze.Level6.isStudent = function(student_id, id) {
       case 0:
         command = 'student0';
         Maze.Level6.currentStudent = student[0];
-        student[0].active = 1;
         break;
       case 1:
         command = 'student1';
         Maze.Level6.currentStudent = student[1];
-        student[1].active = 1;
-        break;
-      case 2:
-        command = 'student2';
-        Maze.Level6.currentStudent = student[2];
-        student[2].active = 1;
         break;
       default:
         break;
@@ -943,7 +885,6 @@ Maze.Level6.ScheduleFinish = function(sound) {
     if (sound) {
       BlocklyGames.workspace.getAudioManager().play('win', 0.5);
     }
-    Maze.stepSpeed = speed;  // Slow down victory animation a bit.
     pidList.push(setTimeout(function() {
         Maze.Level6.DisplayStudent(Maze.Level6.currentStudent.startLoc.x, Maze.Level6.currentStudent.startLoc.y, 18);
       }, Maze.stepSpeed));
@@ -964,10 +905,7 @@ Maze.Level6.ScheduleFinish = function(sound) {
  */
 Maze.Level6.DisplayStudent = function(est, x, y, d, opt_angle) {
 
-    var std = 'estudante';
-    var clip = 'clipRect';
-
-    var estudante = document.getElementById(std.concat(est.toString()));
+    var estudante = document.getElementById(std_names[est]);
     estudante.setAttribute('x', x * Maze.SQUARE_SIZE - d * Maze.PEGMAN_WIDTH + 1);
     estudante.setAttribute('y', Maze.SQUARE_SIZE * (y + 0.5) - Maze.PEGMAN_HEIGHT / 2 - 8);
 
@@ -979,17 +917,16 @@ Maze.Level6.DisplayStudent = function(est, x, y, d, opt_angle) {
         estudante.setAttribute('transform', 'rotate(0, 0, 0)');
     }
 
-    var clipRect = document.getElementById(clip.concat(est.toString()));
+    var clipRect = document.getElementById(clip_names[est]);
     clipRect.setAttribute('x', x * Maze.SQUARE_SIZE + 1);
     clipRect.setAttribute('y', estudante.getAttribute('y'));
 
-    var svg = document.getElementById('svgMaze');
-
     if(Maze.Level6.ReturnBook(x, y)){
-        //Move the student to the initial position and run the code again
-        Maze.Level6.ResetOneStd(est);
         //Remove one book from the list and decrement the counter
         booksCounterNum--;
+        //Move the student to the initial position and run the code again
+        var svg = (document.getElementById('svgMaze'));
+        Maze.Level6.ResetOneStd(est);
         Maze.Level6.RemoveBooks(svg, document);
         Maze.Level6.Execute();
     }
@@ -1003,21 +940,13 @@ Maze.Level6.ResetOneStd = function(est){
     }
     
     pidList = [];
-    
-    if(est == 0){
-        std1 = 0;
-        student[0].reset(Maze.startDirection, start_[student[0].id].x, start_[student[0].id].y);
-        Maze.Level6.DisplayStudent(0, student[0].startLoc.x, student[0].startLoc.y, Maze.startDirection * 4);
-    }else if(est == 1){
-        std2 = 0;
-        student[1].reset(Maze.startDirection, start_[student[1].id].x, start_[student[1].id].y);
-        Maze.Level6.DisplayStudent(1, student[1].startLoc.x, student[1].startLoc.y, Maze.startDirection * 4);
-    }else if(est == 2){
-        std3 = 0;
-        student[2].reset(Maze.startDirection, start_[student[2].id].x, start_[student[2].id].y);
-        Maze.Level6.DisplayStudent(2, student[2].startLoc.x, student[2].startLoc.y, Maze.startDirection * 4);
-    }
+    student[est].reset(Maze.startDirection, start_[est].x, start_[est].y);
+    Maze.Level6.DisplayStudent(est, student[est].startLoc.x, student[est].startLoc.y, Maze.startDirection * 4);
 
+    if(est == 0)
+        std1 = 0;
+    else 
+        std2 = 0;
 };
 
 /**

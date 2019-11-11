@@ -29,7 +29,7 @@ Maze.Level2.activity_ = {
  * Background and other elements
  */
 Maze.Level2.VIEW = {
-    background: 'maze/level1-2.png',
+    background: 'maze/img/bg/level123.png',
     tiles: 'maze/tiles_ufsm2.png',
     finishMarker: 'maze/classroom.png',
     activity: 'maze/activity.png',
