@@ -243,7 +243,7 @@ Maze.Level3.ActivityDone = function(){
     //Move the activity into the list
     activity.setAttribute('x', Maze.SQUARE_SIZE * (0.3 + 0.8) - activity.getAttribute('width') / 2);
     Maze.Level3.activity_.pos = Maze.Level3.activity_.pos + 1;
-    activity.setAttribute('y', Maze.SQUARE_SIZE * (Maze.Level3.activity_.pos + 1.0) - activity.getAttribute('height'));
+    activity.setAttribute('y', Maze.SQUARE_SIZE * (Maze.Level3.activity_.pos + 2.5) - activity.getAttribute('height'));
 
     //Remove activity from the maze
     var name = 'activity';
@@ -363,7 +363,7 @@ Maze.Level3.Execute = function(){
 
     //Fast animation if execution is successful. Slow otherwise.
     if (Maze.result == Maze.ResultType.SUCCESS) {
-
+        BlocklyGames.workspace.getAudioManager().play('win', 0.5);
         BlocklyInterface.saveToLocalStorage();
         setTimeout(BlocklyDialogs.congratulations, 1000);
         return;

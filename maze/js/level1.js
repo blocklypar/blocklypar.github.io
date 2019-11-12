@@ -295,8 +295,11 @@ Maze.Level1.Execute = function(){
     }
 
     // Fast animation if execution is successful.  Slow otherwise.
-    if (Maze.result == Maze.ResultType.SUCCESS)
+    if (Maze.result == Maze.ResultType.SUCCESS){
+        BlocklyGames.workspace.getAudioManager().play('win', 0.5);
         log.push(['finish', null]);
+    }
+        
 
     Maze.Level1.Reset(false);
     pidList.push(setTimeout(Maze.Level1.Animate, 100));
@@ -727,7 +730,7 @@ Maze.Level1.ActivityDone = function(){
     activity.setAttribute('x', Maze.SQUARE_SIZE * (0.3 + 0.8) -
         activity.getAttribute('width') / 2);
           Maze.Level1.activity_.pos = Maze.Level1.activity_.pos + 1;
-    activity.setAttribute('y', Maze.SQUARE_SIZE * (Maze.Level1.activity_.pos + 1.0) -
+    activity.setAttribute('y', Maze.SQUARE_SIZE * (Maze.Level1.activity_.pos + 2.5) -
         activity.getAttribute('height'));
     
     //Remove activity from the maze

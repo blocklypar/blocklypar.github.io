@@ -394,7 +394,7 @@ Maze.Level5.Execute = function(){
             window.clearTimeout(pidList[i]);
         }
         pidList = [];
-
+        BlocklyGames.workspace.getAudioManager().play('win', 0.5);
         BlocklyInterface.saveToLocalStorage();
 
         Maze.FinalCounter();

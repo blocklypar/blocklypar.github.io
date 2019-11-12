@@ -389,7 +389,7 @@ Maze.Level4.Execute = function(){
 
         Maze.FinalCounter();
         Maze.updateTime(0);
-
+        BlocklyGames.workspace.getAudioManager().play('win', 0.5);
         setTimeout(BlocklyDialogs.congratulations, 1000);
         return;
     }

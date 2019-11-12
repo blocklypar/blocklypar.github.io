@@ -426,7 +426,7 @@ Maze.Level7.Execute = function(){
     if (Maze.result == Maze.ResultType.SUCCESS) {
 
         BlocklyInterface.saveToLocalStorage();
-
+        BlocklyGames.workspace.getAudioManager().play('win', 0.5);
         Maze.FinalCounter();
         Maze.updateTime(0);
 
