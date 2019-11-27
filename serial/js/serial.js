@@ -368,13 +368,6 @@ Serial.levelHelp = function(opt_event) {
       }
   }
   }else if(BlocklyGames.LEVEL == 2){
-    
-    if (userBlocks.indexOf('maze_ifElse') == -1) {
-      content = document.getElementById('dialogHelpIfElse');
-      style = {'width': '240px', 'top': '450px'};
-      style[rtl ? 'right' : 'left'] = '625px';
-      origin = toolbar[0].getSvgRoot();
-    }
 
     if (Serial.result != Serial.ResultType.UNSET &&
       document.getElementById('runButton').style.display == 'none') {
@@ -383,6 +376,15 @@ Serial.levelHelp = function(opt_event) {
       style[rtl ? 'right' : 'left'] = '410px';
       origin = document.getElementById('resetButton');
     }
+  }else if(BlocklyGames.LEVEL == 3){
+    
+    if (userBlocks.indexOf('maze_ifElse') == -1) {
+      content = document.getElementById('dialogHelpIfElse');
+      style = {'width': '240px', 'top': '550px'};
+      style[rtl ? 'right' : 'left'] = '625px';
+      origin = toolbar[4].getSvgRoot();
+    }
+
   }
 
   if (content) {

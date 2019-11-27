@@ -22,7 +22,7 @@ var log = [];
  */
 Serial.Level1.VIEW = {
     background: '',
-    tiles: 'serial/img/tiles_pegman.png',
+    tiles: 'serial/img/tiles_ufsm2.png',
     finishMarker: 'serial/img/marker.png',
     skin: 'serial/img/pegman.png',
     graph:false
