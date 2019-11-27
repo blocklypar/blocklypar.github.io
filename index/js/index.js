@@ -32,7 +32,7 @@ goog.require('Index.soy');
 /**
  * Array of application names.
  */
-Index.APPS = ['maze'];
+Index.APPS = ['maze', 'parallel', 'tasks', 'serial'];
 
 /**
  * Initialize Blockly and the maze.  Called on page load.
@@ -51,13 +51,16 @@ Index.init = function() {
   languageMenu.addEventListener('change', BlocklyGames.changeLanguage, true);
 
   var storedData = false;
-  
-  for (var j = 1; j <= BlocklyGames.MAX_LEVEL; j++) {
-    if (BlocklyGames.loadFromLocalStorage(Index.APPS[0], j)) {
-      storedData = true;
+  var levelsDone = [];
+  for (var i = 0; i < Index.APPS.length; i++) {
+    levelsDone[i] = 0;
+    for (var j = 1; j <= BlocklyGames.MAX_LEVEL; j++) {
+      if (BlocklyGames.loadFromLocalStorage(Index.APPS[i], j)) {
+        storedData = true;
+        levelsDone[i]++;
+      }
     }
   }
-
   if (storedData) {
     var clearButtonPara = document.getElementById('clearDataPara');
     clearButtonPara.style.visibility = 'visible';
@@ -76,8 +79,10 @@ Index.clearData_ = function() {
   if (!confirm(BlocklyGames.getMsg('Index_clear'))) {
     return;
   }
-  for (var j = 1; j <= BlocklyGames.MAX_LEVEL; j++) {
-    delete window.localStorage[Index.APPS[0] + j];
+  for (var i = 0; i < Index.APPS.length; i++) {
+    for (var j = 1; j <= BlocklyGames.MAX_LEVEL; j++) {
+      delete window.localStorage[Index.APPS[i] + j];
+    }
   }
   location.reload();
 };

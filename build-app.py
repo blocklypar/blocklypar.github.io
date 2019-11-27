@@ -57,7 +57,6 @@ def main(name, lang):
     for lang in langs:
       language(name, lang)
 
-
 def language(name, lang):
   if os.path.exists('third-party/blockly/msg/js/%s.js' % lang):
     # Convert 'pt-br' to 'pt.br'.

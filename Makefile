@@ -14,12 +14,12 @@ REQUIRED_BINS = svn unzip wget java python sed
 
 ##############################
 # Rules
-# tg: maze-en index-en maze index 
+# tg: maze-en index-en maze index parallel-en
 ##############################
 
 all: deps languages
 
-tg: index-en
+tg: serial-en index-en parallel-en maze-en tasks-en
 
 index-en:
 	mkdir -p generated/en/
@@ -33,6 +33,18 @@ puzzle-en: common-en
 maze-en: common-en
 	$(SOY_COMPILER) --outputPathFormat maze/generated/en/soy.js --srcs maze/template.soy
 	python build-app.py maze en
+
+parallel-en: common-en
+	$(SOY_COMPILER) --outputPathFormat parallel/generated/en/soy.js --srcs parallel/template.soy
+	python build-app.py parallel en
+
+tasks-en: common-en
+	$(SOY_COMPILER) --outputPathFormat tasks/generated/en/soy.js --srcs tasks/template.soy
+	python build-app.py tasks en
+
+serial-en: common-en
+	$(SOY_COMPILER) --outputPathFormat serial/generated/en/soy.js --srcs serial/template.soy
+	python build-app.py serial en
 
 bird-en: common-en
 	$(SOY_COMPILER) --outputPathFormat bird/generated/en/soy.js --srcs bird/template.soy

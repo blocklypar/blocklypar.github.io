@@ -444,12 +444,22 @@ BlocklyDialogs.congratulations = function() {
 
   }
 
-  if (BlocklyGames.LEVEL < BlocklyGames.MAX_LEVEL) {
-    var text = BlocklyGames.getMsg('Games_nextLevel')
-        .replace('%1', String(BlocklyGames.LEVEL + 1));
-  } else {
-    var text = BlocklyGames.getMsg('Games_finalLevel');
+  if(BlocklyGames.NAME == 'maze'){
+    if (BlocklyGames.LEVEL < BlocklyGames.MAX_LEVEL) {
+      var text = BlocklyGames.getMsg('Games_nextLevel')
+          .replace('%1', String(BlocklyGames.LEVEL + 1));
+    } else {
+      var text = BlocklyGames.getMsg('Games_finalLevel');
+    }
+  }else{
+    if (BlocklyGames.LEVEL < 4) {
+      var text = BlocklyGames.getMsg('Games_nextLevel')
+          .replace('%1', String(BlocklyGames.LEVEL + 1));
+    } else {
+      var text = BlocklyGames.getMsg('Games_finalLevel');
+    }
   }
+  
 
   var cancel = document.getElementById('doneCancel');
   cancel.addEventListener('click', BlocklyDialogs.hideDialog, true);

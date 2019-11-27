@@ -305,7 +305,7 @@ Maze.init = function() {
   document.body.innerHTML = Maze.soy.start({}, null,
       {lang: BlocklyGames.LANG,
        level: BlocklyGames.LEVEL,
-       maxLevel: BlocklyGames.MAX_LEVEL,
+       maxLevel: 7,
        skin: 0,
        html: BlocklyGames.IS_HTML});
 

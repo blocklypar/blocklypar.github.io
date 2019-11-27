@@ -1,0 +1,289 @@
+{namespace Parallel.soy}
+
+/**
+ * This is a Closure Template.
+ *
+ * To regenerate just English, run:
+ *   make maze-en
+ *
+ * To regenerate all languages, run:
+ *   make languages
+ */
+
+/**
+ * Translated messages for use in JavaScript.
+ */
+{template .messages}
+  {call BlocklyGames.soy.messages /}
+  <div style="display: none">
+    <span id="Maze_moveForward">{msg meaning="Maze.moveForward" desc="block text - Imperative or infinitive of a verb for a person moving (walking) in the direction he/she is facing."}move forward{/msg}</span>
+    <span id="Maze_turnLeft">{msg meaning="Maze.turnLeft" desc="[[Translating:Blockly#Drop-Down_Menus dropdown]] - Imperative or infinitive of a verb for a person turning his head and body one quarter rotation counter-clockwise.  Prefer a translation that has text in common with the translation of 'turn right'.  See [[Translating:Blockly#Drop-Down_Menus]]."}turn left{/msg}</span>
+    <span id="Maze_turnRight">{msg meaning="Maze.turnRight" desc="[[Translating:Blockly#Drop-Down_Menus dropdown]] - Imperative or infinitive of a verb for a person turning his head and body one quarter rotation clockwise.  Prefer a translation that has text in common with the translation of 'turn left'.  See [[Translating:Blockly#Drop-Down_Menus]]."}turn right{/msg}</span>
+    <span id="Maze_doCode">{{msg meaning="Maze.doCode" desc="block text - Imperative or infinitive of a verb preceding one or more commands to a person.  This is part of [https://github.com/google/blockly/wiki/Loops#repeat repeat] and [https://github.com/google/blockly/wiki/IfElse#If_blocks if] blocks.\n{lb}{lb}Identical|Do{rb}{rb}"}}do{{/msg}}</span>
+    <span id="Maze_elseCode">{{msg meaning="Maze.elseCode" desc="block text - Conjunction meaning 'otherwise', introducing commands to be performed if a previous condition was not true, as in 'if x>3, do this, else do that'.  See [https://github.com/google/blockly/wiki/IfElse#If-Else_blocks].\n{lb}{lb}Identical|Else{rb}{rb}"}}else{{/msg}}</span>
+    // The helpIfElse definition was copied up here ahead of when it is needed
+    // so that it is adjacent to the previous definition.
+    <span id="Maze_helpIfElse">{msg meaning="Maze.helpIfElse" desc="callout - This is shown when the 'if-else' block is introduced.  For 'if-else' concatenate the words for 'if' and 'else/otherwise'."}If-else blocks will do one thing or the other.{/msg}</span>
+    <span id="Maze_pathAhead">{msg meaning="Maze.pathAhead" desc="[[Translating:Blockly#Drop-Down_Menus dropdown]] - Condensed form of 'if there is a path ahead', as in: 'if path ahead, go forward'.  Prefer translation that has text in common with 'if path to the left' and 'if path to the right'."}if path ahead{/msg}</span>
+    <span id="Maze_pathLeft">{msg meaning="Maze.pathLeft" desc="[[Translating:Blockly#Drop-Down_Menus dropdown]] - Condensed form of 'if there is a path to the left', as in: 'if path to the left, turn left'."}if path to the left{/msg}</span>
+    <span id="Maze_pathRight">{msg meaning="Maze.pathRight" desc="[[Translating:Blockly#Drop-Down_Menus dropdown]] - Condensed form of 'if there is a path to the right', as in: 'if path to the right, turn right'."}if path to the right{/msg}</span>
+    <span id="Maze_repeatUntil">{msg meaning="Maze.repeatUntil" desc="block text - Imperative or infinitive of a verb to repeat the following commands.  The phrase is followed by the symbol denoting the end of the maze."}repeat until{/msg}</span>
+    <span id="Maze_moveForwardTooltip">{msg meaning="Maze.moveForwardTooltip" desc="tooltip - Moves the icon on the screen representing the player forward one square on the maze board."}Moves the player forward one space.{/msg}</span>
+    <span id="Maze_turnTooltip">{msg meaning="Maze.turnTooltip" desc="tooltip - Turns the icon on the screen representing the player 90 degrees counter-clockwise (left) or clockwise (right)."}Turns the player left or right by 90 degrees.{/msg}</span>
+    <span id="Maze_ifTooltip">{msg meaning="Maze.ifTooltip" desc="tooltip - 'path' refers to a path through a maze."}If there is a path in the specified direction, then do some actions.{/msg}</span>
+    <span id="Maze_ifelseTooltip">{msg meaning="Maze.ifelseTooltip" desc="tooltip - 'path' refers to a path through a maze."}If there is a path in the specified direction, then do the first block of actions. Otherwise, do the second block of actions.{/msg}</span>
+    <span id="Maze_whileTooltip">{msg meaning="Maze.whileTooltip" desc="tooltip - Repeat the enclosed commands until the maze has been successfully completed (the end point reached)."}Repeat the enclosed actions until finish point is reached.{/msg}</span>
+    <span id="Maze_capacity0">{msg meaning="Maze.capacity0" desc="warning - No more blocks may be added until some are removed.  Please include '%0' in the translated string.  It will be replaced with '0' and made bold."}You have %0 blocks left.{/msg}</span>
+    <span id="Maze_capacity1">{{msg meaning="Maze.capacity1" desc="warning - Only one more block may be added. Please include '%1' in the translated string. It will be replaced with '1' and made bold.\n\nSee also:\n* {lb}{lb}msg-blockly|Maze.capacity2{rb}{rb}"}}You have %1 block left.{{/msg}}</span>
+    <span id="Maze_capacity2">{{msg meaning="Maze.capacity2" desc="warning - Only %2 more blocks may be used, where %2 is an integer greater than 1.\n\nSee also:\n* {lb}{lb}msg-blockly|Maze.capacity1{rb}{rb}"}}You have %2 blocks left.{{/msg}}</span>
+
+    //New commands - Ana
+    <span id="Maze_2activitiesComplete">{msg meaning="Maze.2activitiesComplete" desc="block text - Imperative or infinitive of a verb to repeat the following commands.  The phrase is followed by the symbol denoting the end of the maze."}== 2{/msg}</span>
+    <span id="Maze_4activitiesComplete">{msg meaning="Maze.4activitiesComplete" desc="block text - Imperative or infinitive of a verb to repeat the following commands.  The phrase is followed by the symbol denoting the end of the maze."}== 4{/msg}</span>
+    <span id="Maze_booksZero">{msg meaning="Maze.booksZero" desc="block text - Imperative or infinitive of a verb to repeat the following commands.  The phrase is followed by the symbol denoting the end of the maze."}== 0{/msg}</span>
+    <span id="Maze_booksZeroPar">{msg meaning="Maze.booksZeroPar" desc="block text - Imperative or infinitive of a verb to repeat the following commands.  The phrase is followed by the symbol denoting the end of the maze."}== 0 in parallel{/msg}</span>
+    <span id="Maze_student0">{msg meaning="Maze.student0" desc="[[Translating:Blockly#Drop-Down_Menus dropdown]] - Condensed form of 'if there is a path ahead', as in: 'if path ahead, go forward'.  Prefer translation that has text in common with 'if path to the left' and 'if path to the right'."}student 1{/msg}</span>
+    <span id="Maze_student1">{msg meaning="Maze.student1" desc="[[Translating:Blockly#Drop-Down_Menus dropdown]] - Condensed form of 'if there is a path to the left', as in: 'if path to the left, turn left'."}student 2{/msg}</span>
+    <span id="Maze_student2">{msg meaning="Maze.student2" desc="[[Translating:Blockly#Drop-Down_Menus dropdown]] - Condensed form of 'if there is a path to the right', as in: 'if path to the right, turn right'."}student 3{/msg}</span>
+    <span id="Maze_repeatTaskUntil">{msg meaning="Maze.repeatTaskUntil" desc="block text - Imperative or infinitive of a verb to repeat the following commands.  The phrase is followed by the symbol denoting the end of the maze."}repeat until{/msg}</span>
+    <span id="Maze_time">{{msg meaning="Maze.time" desc="warning - Only %2 more blocks may be used, where %2 is an integer greater than 1.\n\nSee also:\n* {lb}{lb}msg-blockly|Maze.capacity1{rb}{rb}"}}Time: %2{{/msg}}</span>
+    //New tooltips
+    <span id="Maze_whileBooksTooltip">{msg meaning="Maze.whileBooksTooltip" desc="tooltip - Repeat the enclosed commands until the student return all books to the library (the books list is empty)."}Repeat the enclosed actions until return all books to library.{/msg}</span>
+    <span id="Maze_whileBooksTooltipPar">{msg meaning="Maze.whileBooksTooltipPar" desc="tooltip - Repeat the enclosed commands until the student/students return all books to the library in parallel (students can walk at the same time)."}Repeat the enclosed actions in parallel until return all books to library.{/msg}</span>
+    <span id="Maze_whileAct4Tooltip">{msg meaning="Maze.whileAct4Tooltip" desc="tooltip - Repeat the enclosed commands until the student complete all the 4 activities to attend the class."}Repeat the enclosed commands until the student complete all the 4 activities to attend the class{/msg}</span>
+    <span id="Maze_whileAct2Tooltip">{msg meaning="Maze.whileAct2Tooltip" desc="tooltip - Repeat the enclosed commands until the student complete all the 2 activities to attend the class."}Repeat the enclosed commands until the student complete all the 2 activities to attend the class{/msg}</span>
+    <span id="Maze_ifStdTooltip">{msg meaning="Maze.ifStdTooltip" desc="tooltip - 'student' refers to the student available to complete the task by walking through the maze."}Do the actions related with the student selected.{/msg}</span>
+    //New help messages
+    <span id="Maze_help1Student">{msg meaning="Maze.help1Student" desc="callout - This is shown when the 'student do' block is introduced."}The student block will set the action of the student.{/msg}</span>
+    <span id="Maze_help2Students">{msg meaning="Maze.help2Students" desc="callout - This is shown when the 'students do' block is introduced."}The student block will set the action to a specific student.{/msg}</span>
+    <span id="Maze_helpBooks">{msg meaning="Maze.helpBooks" desc="callout - This is shown when the 'repeat until ... in parallel' block is introduced."}This block will execute both students in parallel.{/msg}</span>
+
+    //New modals messages
+    <span id="Games_dialogStart">{{msg meaning="Games.dialogStart" desc="button label - Pressing this button you start the level.\n{lb}{lb}Identical|Start{rb}{rb}"}}Start{{/msg}}</span>
+
+  </div>
+{/template}
+
+/**
+ * Web page structure.
+ */
+{template .start}
+
+{call .messages /}
+
+<div class="header">
+
+    <a id="back" href="index.html" class="logo"><img id="banner" src="index/blocklypar.png" width="70" alt="Blockly Games"></a>
+    &nbsp
+    <td>
+    <a>
+      <h1>
+
+          {call BlocklyGames.soy.titleSpan}
+            {param appName}
+              {msg meaning="Games.parallel" desc="IBID"}Introduction to Parallelism{/msg}
+            {/param}
+          {/call}
+
+          {call BlocklyGames.soy.levelLinks}
+            {param level: $ij.level /}
+            {param maxLevel: $ij.maxLevel /}
+            {param lang: $ij.lang /}
+            {param suffix}&skin={$ij.skin}{/param}
+          {/call}
+
+          </h1>
+      </a>
+      </td>
+      
+    // <div class="header-right">
+    //       <a class="language"><select id="languageMenu"></select></a>
+    // </div>
+    <div class="nav-spacer"></div>
+
+</div>
+
+  &nbsp
+
+  <div id="visualization">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="svgMaze" width="400px" height="400px">
+      <g id="look">
+        <path d="M 0,-15 a 15 15 0 0 1 15 15" />
+        <path d="M 0,-35 a 35 35 0 0 1 35 35" />
+        <path d="M 0,-55 a 55 55 0 0 1 55 55" />
+      </g>
+    </svg>
+  </div>
+  <table width="400">
+    <tr>
+      // Itens below animation screen
+      <div class='parent'>
+        <div align='left' class='child inline-block-child' id="counter"></div>
+        <div align='center' class='child inline-block-child' id="number"></div>
+        <div align='center' class='child inline-block-child' id="timeBubble"> <div id="time"></div> </div>
+        <div align='right' class='child inline-block-child' id="capacityBubble"> <div id="capacity"></div> </div>
+      </div>
+
+      <td style="width: 220px; text-align: right; vertical-align: top;">
+        <td>
+          <button id="runButton" class="primary" title="{msg meaning="Maze.runTooltip" desc="tooltip - Pressing this button runs the computer program the user has written to move the player through the maze."}Makes the player do what the blocks say.{/msg}">
+            <img src="common/1x1.gif" class="run icon21"> {msg meaning="Games.runProgram" desc="IBID"}Run Program{/msg}
+          </button>
+          <button id="resetButton" class="primary" style="display: none" title="{msg meaning="Maze.resetTooltip" desc="tooltip - Pressing this button restores the player to the start position and enables the user's program to be run again."}Put the player back at the start of the maze.{/msg}">
+            <img src="common/1x1.gif" class="stop icon21"> {msg meaning="Games.resetProgram" desc="IBID"}Reset{/msg}
+          </button>
+        </td>
+      </tr>
+        
+  </table>
+
+
+  {call .toolbox /}
+  <div id="blockly"></div>
+
+  <div id="pegmanMenu"></div>
+
+  {call BlocklyGames.soy.dialog /}
+  {call BlocklyGames.soy.doneDialog /}
+  {call BlocklyGames.soy.abortDialog /}
+  {call BlocklyGames.soy.storageDialog /}
+
+  {if $ij.level == 1}
+    /**
+    * Introduction dialog.
+    */
+    <div id="dialog1Intro" class="dialogHiddenContent">
+      <div style="font-size: large; margin: 1em;"><center><h3>
+      {{msg meaning="Games.congratulations" desc="alert - This is displayed when the user solves the level.\n{lb}{lb}Identical|Congratulation{rb}{rb}"}}
+        LEVEL 1{{/msg}}</center></h3>
+      </div>
+
+      <div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0; text-align: center;">
+      The student has to return all the 4 books to the library.
+      <table>
+        <tr><td><img class="img-responsive" src="parallel/img/level1.png"></td>
+        <td>
+          <div style="font-size: large; margin: 1em;">Help the student empty the entire list of books to be returned.</div>
+          <div style="font-size: large; margin: 1em;">Now you can control the execution time of this task.</div>
+        </td>
+      </table>
+      <button id="playStart" class="secondary">{{msg meaning="Games.dialogStart" desc="IBID"}}Ok{{/msg}}</button>
+      </div>
+    </div>
+
+  {elseif $ij.level == 2}
+    /**
+    * Introduction dialog.
+    */
+    <div id="dialog2Intro" class="dialogHiddenContent">
+      <div style="font-size: large; margin: 1em;"><center><h3>
+      {{msg meaning="Games.congratulations" desc="alert - This is displayed when the user solves the level.\n{lb}{lb}Identical|Congratulation{rb}{rb}"}}
+        LEVEL 2{{/msg}}</center></h3>
+      </div>
+
+      <div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0; text-align: center;">
+      Another student came to help!
+      <table>
+        <tr><td>
+         <div style="font-size: large; margin: 1em;">Try to use both students to return the books at the same time, in <b>parallel</b>, and see what happens with the execution time.</div>
+        </td>
+        <td><img src="parallel/img/level2.png"></td></tr>
+      </table>
+      <button id="playStart" class="secondary">{{msg meaning="Games.dialogStart" desc="IBID"}}Ok{{/msg}}</button>
+      </div>
+    </div>
+
+    //Introduce the Student block
+    <div id="dialogHelp2Students" class="dialogHiddenContent">
+        {msg meaning="Maze.help2Students" desc="IBID"}Now you can switch between the 2 students available for the task.{/msg}
+    </div>
+
+    //Introduce the parallel block
+    <div id="dialogHelpBooks" class="dialogHiddenContent">
+      <table><tr>
+      <td><img src="parallel/img/down.png"></td>
+      <td colspan="2">
+        {msg meaning="Maze.helpBooks" desc="IBID"}This block allows you to move both students at the same time, in parallel.{/msg}
+      </td></tr>
+      </table>
+    </div>
+
+  {elseif $ij.level == 3}
+
+    /**
+    * Introduction dialog.
+    */
+    <div id="dialog3Intro" class="dialogHiddenContent">
+      <div style="font-size: large; margin: 1em;"><center><h3>
+      {{msg meaning="Games.congratulations" desc="alert - This is displayed when the user solves the level.\n{lb}{lb}Identical|Congratulation{rb}{rb}"}}
+        LEVEL 3{{/msg}}</center></h3>
+      </div>
+
+      <div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0; text-align: center;">
+      The students have to return 8 books now, can you help them?
+      <table>
+        <tr><td><img src="parallel/img/level3.png"></td>
+        <td>
+         <div style="font-size: large; margin: 1em;">Pay attention in the execution time spent in this level using both students.<div>
+        </td></tr>
+      </table>
+      <button id="playStart" class="secondary">{{msg meaning="Games.dialogStart" desc="IBID"}}Ok{{/msg}}</button>
+      </div>
+    </div>
+
+  {elseif $ij.level == 4}
+    /**
+    * Introduction dialog.
+    */
+    <div id="dialog4Intro" class="dialogHiddenContent">
+    <div style="font-size: large; margin: 1em;"><center><h3>
+    {{msg meaning="Games.congratulations" desc="alert - This is displayed when the user solves the level.\n{lb}{lb}Identical|Congratulation{rb}{rb}"}}
+      LEVEL 4{{/msg}}</center></h3>
+    </div>
+      <div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0; text-align: center;">
+        Now we have 3 students to return the 8 books.
+        <div style="font-size: large; margin: 1.5em;">Let's see the <b>execution time</b> compared with 2 students used before.<div>
+          
+        <button id="playStart" class="secondary">{{msg meaning="Games.dialogStart" desc="IBID"}}Ok{{/msg}}</button>
+      </div>
+    </div>
+
+    <div id="dialogHelpBooks" class="dialogHiddenContent">
+        {msg meaning="Maze.helpBooks" desc="IBID"}
+          Try to use all the students to perform the task to see what happens!
+        {/msg}
+    </div>
+  {/if}
+{/template}
+
+/**
+ * Toolboxes for each level.
+ */
+{template .toolbox}
+
+  <xml id="toolbox" style="display: none;" xmlns="https://developers.google.com/blockly/xml">
+
+    <block type="maze_moveForward"></block>
+    <block type="maze_turn"><field name="DIR">turnLeft</field></block>
+    <block type="maze_turn"><field name="DIR">turnRight</field></block>
+  
+    {if $ij.level == 1}
+      <block type="maze_forever_books"></block>
+      <block type="maze_1student"><field name="STD">isStudent0</field></block>
+    {/if}
+            
+    {if $ij.level > 1}
+      <block type="maze_forever_booksPar"></block>
+      {if $ij.level == 2 or $ij.level == 3}
+        <block type="maze_2students"><field name="STD">isStudent0</field></block>
+        <block type="maze_forever_books"></block>
+      {elseif $ij.level == 4}
+        <block type="maze_student"><field name="STD">isStudent0</field></block>
+      {/if}
+    {/if}
+
+    <block type="maze_if"><field name="DIR">isPathRight</field></block>
+    <block type="maze_ifElse"></block>
+
+  </xml>
+{/template}
