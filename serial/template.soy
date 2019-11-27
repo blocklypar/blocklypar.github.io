@@ -96,9 +96,6 @@
       </a>
       </td>
       
-    // <div class="header-right">
-    //       <a class="language"><select id="languageMenu"></select></a>
-    // </div>
     <div class="nav-spacer"></div>
 
 </div>
@@ -149,6 +146,25 @@
   {call BlocklyGames.soy.storageDialog /}
 
   {if $ij.level == 1}
+    /**
+    * Introduction dialog.
+    */
+    <div id="dialog1Intro" class="dialogHiddenContent">
+      <div style="font-size: large; margin: 1em;"><center><h3>
+      {{msg meaning="Games.congratulations" desc="alert - This is displayed when the user solves the level.\n{lb}{lb}Identical|Congratulation{rb}{rb}"}}
+        LEVEL 1{{/msg}}</center></h3>
+      </div>
+
+      <div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0; text-align: center;">
+        Programming with blocks is easy! 
+        <table cellspacing="5">
+          <tr><td><img class="img-responsive" src="serial/img/level1.png"></td>
+          <td>Just drag and drop the blocks together, one above the other to build your program.</td>
+        </table>
+        
+        <button id="playStart" class="secondary">{{msg meaning="Games.dialogStart" desc="IBID"}}Ok{{/msg}}</button>
+      </div>
+    </div>
     
     //Guarantee that it will be only 1 stack of blocks
     <div id="dialogHelpOneTopBlock" class="dialogHiddenContent">

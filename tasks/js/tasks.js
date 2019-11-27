@@ -400,12 +400,6 @@ Tasks.levelHelp = function(opt_event) {
           style = {'width': '360px', 'top': '170px'};
           style[rtl ? 'right' : 'left'] = '300px';
           origin = topBlocks[0].getSvgRoot();
-        } else if (Tasks.result == Tasks.ResultType.UNSET) {
-          // Show run help dialog.
-          content = document.getElementById('dialogHelpRun');
-          style = {'width': '220px', 'top': '525px'};
-          style[rtl ? 'right' : 'left'] = '410px';
-          origin = document.getElementById('runButton');
         }
       }
     }
@@ -422,12 +416,6 @@ Tasks.levelHelp = function(opt_event) {
       Tasks.FirstLevel.TWO = false;
     }
     else{
-      if (userBlocks.indexOf('maze_ifElse') == -1) {
-        content = document.getElementById('dialogHelpIfElse');
-        style = {'width': '240px', 'top': '450px'};
-        style[rtl ? 'right' : 'left'] = '625px';
-        origin = toolbar[5].getSvgRoot();
-      }
 
       if (Tasks.result != Tasks.ResultType.UNSET &&
         document.getElementById('runButton').style.display == 'none') {

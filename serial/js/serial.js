@@ -67,13 +67,7 @@ Serial.MAX_BLOCKS = [undefined, // Level 0.
  * Milliseconds between each animation frame.
  */
 Serial.stepSpeed = 60;
-Serial.FirstLevel = {
-  ONE: true,
-  TWO: true,
-  THREE: true,
-  FOUR: true
-};
-
+var levelValue = true;
 
 /**
  * Execution time of each level
@@ -271,7 +265,14 @@ Serial.init = function() {
   Blockly.JavaScript.addReservedWords('moveForward,moveBackward' +
       'turnRight,turnLeft,isPathForward,isPathRight,isPathBackward,isPathLeft');
 
-  if(BlocklyGames.LEVEL > 1){
+  if(BlocklyGames.LEVEL == 1){
+    var defaultXml =
+    '<xml>' +
+      '<block movable="' + (BlocklyGames.LEVEL != 1) + '" ' +
+      'type="maze_moveForward" x="70" y="70"></block>' +
+    '</xml>';
+  }
+  else{
     var defaultXml =
     '<xml>' +
       '<block movable="' + (BlocklyGames.LEVEL != 1) + '" ' +
@@ -337,28 +338,42 @@ Serial.levelHelp = function(opt_event) {
   //If fail shows message with remaining blocks or to help with the repeat block
   
   if (BlocklyGames.LEVEL == 1) {
-    if (BlocklyGames.workspace.getAllBlocks().length < 2) {
-      content = document.getElementById('dialogHelpStack');
-      style = {'width': '190px', 'top': '150px'};
-      style[rtl ? 'right' : 'left'] = '215px';
+
+    if(levelValue){
+      content = document.getElementById('dialog1Intro');
+      style = {'width': '30%', 'top': '8em'};
+      style[rtl ? 'right' : 'left'] = '40%';
       origin = toolbar[0].getSvgRoot();
-    } else {
-      if (Serial.result == Serial.ResultType.UNSET) {
-        // Show run help dialog.
-        content = document.getElementById('dialogHelpRun');
-        style = {'width': '220px', 'top': '525px'};
-        style[rtl ? 'right' : 'left'] = '410px';
-        origin = document.getElementById('runButton');
-      }
-      
+
+      var ok = document.getElementById('playStart');
+      ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
+      ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+      levelValue = false;
     }
+    else {
+      if(BlocklyGames.workspace.getAllBlocks().length < 2) {
+        content = document.getElementById('dialogHelpStack');
+        style = {'width': '190px', 'top': '150px'};
+        style[rtl ? 'right' : 'left'] = '215px';
+        origin = toolbar[0].getSvgRoot();
+      } else {
+        if (Serial.result == Serial.ResultType.UNSET) {
+          // Show run help dialog.
+          content = document.getElementById('dialogHelpRun');
+          style = {'width': '220px', 'top': '525px'};
+          style[rtl ? 'right' : 'left'] = '410px';
+          origin = document.getElementById('runButton');
+        }
+        
+      }
+  }
   }else if(BlocklyGames.LEVEL == 2){
     
     if (userBlocks.indexOf('maze_ifElse') == -1) {
       content = document.getElementById('dialogHelpIfElse');
       style = {'width': '240px', 'top': '450px'};
       style[rtl ? 'right' : 'left'] = '625px';
-      origin = toolbar[5].getSvgRoot();
+      origin = toolbar[0].getSvgRoot();
     }
 
     if (Serial.result != Serial.ResultType.UNSET &&
@@ -368,9 +383,7 @@ Serial.levelHelp = function(opt_event) {
       style[rtl ? 'right' : 'left'] = '410px';
       origin = document.getElementById('resetButton');
     }
-    
-
-    }
+  }
 
   if (content) {
     if (content.parentNode != document.getElementById('dialog')) {

@@ -21,7 +21,8 @@ REQUIRED_BINS = svn unzip wget java python sed
 
 all: deps languages
 
-tg: index-en
+tg: tasks-en 
+
 index-en:
 	mkdir -p generated/en/
 	$(SOY_COMPILER) --outputPathFormat index/generated/en/soy.js --srcs index/template.soy

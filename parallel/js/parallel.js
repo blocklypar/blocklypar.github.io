@@ -366,73 +366,75 @@ Parallel.levelHelp = function(opt_event) {
   //If fail shows message with remaining blocks or to help with the repeat block
   
   if(BlocklyGames.LEVEL == 1){
-      if(Parallel.FirstLevel.ONE){
-        content = document.getElementById('dialog1Intro');
-        style = {'width': '30%', 'top': '8em'};
-        style[rtl ? 'right' : 'left'] = '40%';
-        origin = toolbar[0].getSvgRoot();
-  
-        var ok = document.getElementById('playStart');
-        ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
-        ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
-        Parallel.FirstLevel.ONE = false;
-      }
-    }else if(BlocklyGames.LEVEL == 2){
-      if(Parallel.FirstLevel.TWO){
-        content = document.getElementById('dialog2Intro');
-        style = {'width': '40%', 'top': '8em'};
-        style[rtl ? 'right' : 'left'] = '40%';
-        origin = toolbar[0].getSvgRoot();
-  
-        var ok = document.getElementById('playStart');
-        ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
-        ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
-        Parallel.FirstLevel.TWO = false;
-      }else{
-        if (userBlocks.indexOf('maze_2students') == -1) {
-          content = document.getElementById('dialogHelp2Students');
-          style = {'width': '270px', 'top': '555px'};
-          style[rtl ? 'right' : 'left'] = '585px';
-          origin = toolbar[5].getSvgRoot();
-        }
-      }
-    }else if(BlocklyGames.LEVEL == 3){
-      if(Parallel.FirstLevel.THREE){
-        content = document.getElementById('dialog3Intro');
-        style = {'width': '30%', 'top': '8em'};
-        style[rtl ? 'right' : 'left'] = '40%';
-        origin = toolbar[0].getSvgRoot();
-  
-        var ok = document.getElementById('playStart');
-        ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
-        ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
-        Parallel.FirstLevel.THREE = false;
-      }else{
-        if (userBlocks.indexOf('maze_foreverbooks') == -1) {
-          content = document.getElementById('dialogHelpBooks');
-          style = {'width': '270px', 'top': '85px'};
-          style[rtl ? 'right' : 'left'] = '785px';
-          origin = toolbar[5].getSvgRoot();
-        }
-      }
-    }else if(BlocklyGames.LEVEL == 4){
-      if(Parallel.FirstLevel.FOUR){
-        content = document.getElementById('dialog4Intro');
-        style = {'width': '30%', 'top': '8em'};
-        style[rtl ? 'right' : 'left'] = '40%';
-        origin = toolbar[0].getSvgRoot();
-  
-        var ok = document.getElementById('playStart');
-        ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
-        ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
-        Parallel.FirstLevel.FOUR = false;
-      }
-      content = document.getElementById('dialogHelpBooks');
-      style = {'width': '270px', 'top': '85px'};
-      style[rtl ? 'right' : 'left'] = '785px';
-      origin = toolbar[5].getSvgRoot();
-        
+
+    if(Parallel.FirstLevel.ONE){
+      content = document.getElementById('dialog1Intro');
+      style = {'width': '30%', 'top': '8em'};
+      style[rtl ? 'right' : 'left'] = '40%';
+      origin = toolbar[0].getSvgRoot();
+
+      var ok = document.getElementById('playStart');
+      ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
+      ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+      Parallel.FirstLevel.ONE = false;
     }
+  }else if(BlocklyGames.LEVEL == 2){
+
+    if(Parallel.FirstLevel.TWO){
+      content = document.getElementById('dialog2Intro');
+      style = {'width': '40%', 'top': '8em'};
+      style[rtl ? 'right' : 'left'] = '40%';
+      origin = toolbar[0].getSvgRoot();
+
+      var ok = document.getElementById('playStart');
+      ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
+      ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+      Parallel.FirstLevel.TWO = false;
+    }else{
+      if (userBlocks.indexOf('maze_2students') == -1) {
+        content = document.getElementById('dialogHelp2Students');
+        style = {'width': '270px', 'top': '555px'};
+        style[rtl ? 'right' : 'left'] = '585px';
+        origin = toolbar[5].getSvgRoot();
+      }
+    }
+  }else if(BlocklyGames.LEVEL == 3){
+    if(Parallel.FirstLevel.THREE){
+      content = document.getElementById('dialog3Intro');
+      style = {'width': '30%', 'top': '8em'};
+      style[rtl ? 'right' : 'left'] = '40%';
+      origin = toolbar[0].getSvgRoot();
+
+      var ok = document.getElementById('playStart');
+      ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
+      ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+      Parallel.FirstLevel.THREE = false;
+    }else{
+      if (userBlocks.indexOf('maze_foreverbooks') == -1) {
+        content = document.getElementById('dialogHelpBooks');
+        style = {'width': '270px', 'top': '85px'};
+        style[rtl ? 'right' : 'left'] = '785px';
+        origin = toolbar[5].getSvgRoot();
+      }
+    }
+  }else if(BlocklyGames.LEVEL == 4){
+    if(Parallel.FirstLevel.FOUR){
+      content = document.getElementById('dialog4Intro');
+      style = {'width': '30%', 'top': '8em'};
+      style[rtl ? 'right' : 'left'] = '40%';
+      origin = toolbar[0].getSvgRoot();
+
+      var ok = document.getElementById('playStart');
+      ok.addEventListener('click', BlocklyDialogs.hideDialog, true);
+      ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+      Parallel.FirstLevel.FOUR = false;
+    }
+    content = document.getElementById('dialogHelpBooks');
+    style = {'width': '270px', 'top': '85px'};
+    style[rtl ? 'right' : 'left'] = '785px';
+    origin = toolbar[5].getSvgRoot();
+      
+  }
 
   if (content) {
     if (content.parentNode != document.getElementById('dialog')) {

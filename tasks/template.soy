@@ -190,17 +190,6 @@
       </td></tr></table>
     </div>
 
-    //Introduce the run button
-    <div id="dialogHelpRun" class="dialogHiddenContent">
-      <table>
-      <tr><td>
-      <img src="maze/img/modals/left.png"></td>
-        <td>{msg meaning="Tasks.helpRun" desc="callout - This is shown after the user has created a program on the first level."}
-        Run your program by clicking here!{/msg}
-      </td>
-      </tr></table>
-    </div>
-
   {elseif $ij.level == 2}
 
     /**
@@ -220,27 +209,6 @@
       </table>
       <button id="playStart" class="secondary">{{msg meaning="Games.dialogStart" desc="IBID"}}Ok{{/msg}}</button>
       </div>
-    </div>
-
-    //Introduce the reset button
-    <div id="dialogHelpReset" class="dialogHiddenContent">
-      <table>
-      <tr>
-        <td colspan="2">{msg meaning="Tasks.helpReset" desc="callout - This is shown after the user has run a program that does not solve the maze."}
-          Your program didn't solve this level.{/msg}</td>
-      </tr>
-      <tr>
-        <td><img src="maze/img/modals/left.png"></td>
-        <td>Click 'Reset' and try again.</td>
-      </tr>
-      </table>
-    </div>
-
-    //Introduce the if-else blocks
-    <div id="dialogHelpIfElse" class="dialogHiddenContent">
-        {msg meaning="Tasks.helpIfElse" desc="IBID"}
-          An 'if-else' block will do one thing if the condition is true or the other, if the condition is false.
-        {/msg}
     </div>
 
   {elseif $ij.level == 3}
