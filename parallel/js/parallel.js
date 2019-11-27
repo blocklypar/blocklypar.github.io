@@ -64,7 +64,7 @@ BlocklyInterface.nextLevel = function() {
 };
 
 Parallel.MAX_BLOCKS = [undefined, // Level 0.
-  5, 11, 10, 13, Infinity][BlocklyGames.LEVEL];
+  5, 11, 10, 12, Infinity][BlocklyGames.LEVEL];
 
 /**
  * Milliseconds between each animation frame.
