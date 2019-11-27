@@ -138,8 +138,7 @@ Tasks.Level2.DrawMap = function(svg){
         }
     }
 
-    var cont = 0;
-    // Locate the start, finish and itens squares.
+    // Locate the start and finish squares.
     for (var y = 0; y < Tasks.ROWS; y++) {
         for (var x = 0; x < Tasks.COLS; x++) {
             if (Tasks.map[y][x] == Tasks.SquareType.START) {
@@ -147,11 +146,6 @@ Tasks.Level2.DrawMap = function(svg){
                 student = new Tasks.Avatar(0, Tasks.startDirection, x, y, Tasks.Level2.VIEW.skin);
             } else if (Tasks.map[y][x] == Tasks.SquareType.FINISH) {
                 finish_ = {x: x, y: y};
-            } else if(Tasks.map[y][x] == Tasks.SquareType.ITEM) {
-                if(Tasks.Level2.activity_.pos0 == 0)
-                    Tasks.Level2.activity_.pos0 = {x: x, y:y};
-                else
-                    Tasks.Level2.activity_.pos1 = {x: x, y:y};
             }
         }
     }
@@ -196,6 +190,17 @@ Tasks.Level2.AddSprites = function(svg, document){
 Tasks.Level2.AddActivitySprites = function(){
 
     var svg = document.getElementById('svgMaze');
+
+    for (var y = 0; y < Tasks.ROWS; y++) {
+        for (var x = 0; x < Tasks.COLS; x++) {
+            if(Tasks.map[y][x] == Tasks.SquareType.ITEM) {
+                if(Tasks.Level2.activity_.pos0 == 0)
+                    Tasks.Level2.activity_.pos0 = {x: x, y:y};
+                else
+                    Tasks.Level2.activity_.pos1 = {x: x, y:y};
+            }
+        }
+    }
 
     var activity1 = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
     activity1.id = 'activity0';
@@ -752,11 +757,16 @@ Tasks.Level2.NotDone = function(){
 
 Tasks.Level2.isActivity = function(x, y){
 
-    if((x == Tasks.Level2.activity_.pos0.x) && (y == Tasks.Level2.activity_.pos0.y))
+    if((x == Tasks.Level2.activity_.pos0.x) && (y == Tasks.Level2.activity_.pos0.y)){
+        Tasks.Level2.activity_.pos0 = 0;
         return true;
+    }
+       
     
-    if((x == Tasks.Level2.activity_.pos1.x) && (y == Tasks.Level2.activity_.pos1.y))
+    if((x == Tasks.Level2.activity_.pos1.x) && (y == Tasks.Level2.activity_.pos1.y)){
+        Tasks.Level2.activity_.pos1 = 0;
         return true;
+    }
     
     return false;
 };

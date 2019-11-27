@@ -378,6 +378,15 @@ Parallel.levelHelp = function(opt_event) {
       ok.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
       Parallel.FirstLevel.ONE = false;
     }
+    // else{
+      // if (Serial.result == Serial.ResultType.UNSET) {
+      //   // Show run help dialog.
+      //   content = document.getElementById('dialogHelpTime');
+      //   style = {'width': '220px', 'top': '525px'};
+      //   style[rtl ? 'right' : 'left'] = '410px';
+      //   origin = document.getElementById('runButton');
+      // }
+    // }
   }else if(BlocklyGames.LEVEL == 2){
 
     if(Parallel.FirstLevel.TWO){
