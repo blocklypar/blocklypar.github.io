@@ -460,7 +460,6 @@ BlocklyDialogs.congratulations = function() {
     }
   }
   
-
   var cancel = document.getElementById('doneCancel');
   cancel.addEventListener('click', BlocklyDialogs.hideDialog, true);
   cancel.addEventListener('touchend', BlocklyDialogs.hideDialog, true);

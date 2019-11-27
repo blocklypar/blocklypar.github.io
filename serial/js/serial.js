@@ -50,7 +50,7 @@ Serial.VIEW = {
  * @suppress {duplicate}
  */
 BlocklyInterface.nextLevel = function() {
-  if (BlocklyGames.LEVEL < BlocklyGames.MAX_LEVEL) {
+  if (BlocklyGames.LEVEL < 4) {
     window.location = window.location.protocol + '//' +
         window.location.host + window.location.pathname +
         '?lang=' + BlocklyGames.LANG + '&level=' + (BlocklyGames.LEVEL + 1) +
