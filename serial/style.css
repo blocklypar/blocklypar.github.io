@@ -201,7 +201,7 @@ html[dir="RTL"] #pegmanButton>span {
 .header {
   overflow: hidden;
   background-color: #ffffff;
-  padding: 1px 1px;
+  padding: 2px 0px;
   border-collapse: separate;
   border-spacing: 2px;
   border-color: grey;
