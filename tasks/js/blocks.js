@@ -217,8 +217,6 @@ Blockly.JavaScript['maze_forever'] = function(block) {
   return 'while (notDone()) {\n' + branch + '}\n';
 };
 
-
-
 Blockly.Blocks['maze_forever_4activities'] = {
   /**
    * Block for repeat loop.
@@ -330,39 +328,6 @@ Blockly.Blocks['maze_2students'] = {
 };
 
 Blockly.JavaScript['maze_2students'] = function(block) {
-  // Generate JavaScript for 'if' conditional if there is a path.
-  var argument = block.getFieldValue('STD') +
-      '(\'block_id_' + block.id + '\')';
-  var branch = Blockly.JavaScript.statementToCode(block, 'DO');
-  var code = 'if (' + argument + ') {\n' + branch + '}\n';
-  return code;
-};
-
-/*
- * Set three students
- */
-Blockly.Blocks['maze_student'] = {
-  /**
-   * Block for 'if' conditional if there is a path.
-   * @this Blockly.Block
-   */
-  init: function() {
-    var STUDENTS =
-        [[BlocklyGames.getMsg('Maze_student0'), 'isStudent0'],
-         [BlocklyGames.getMsg('Maze_student1'), 'isStudent1'],
-         [BlocklyGames.getMsg('Maze_student2'), 'isStudent2']];
-    this.setColour(Tasks.Blocks.STUDENT_HUE);
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown(STUDENTS), 'STD');
-    this.appendStatementInput('DO')
-        .appendField(BlocklyGames.getMsg('Maze_doCode'));
-    this.setTooltip(BlocklyGames.getMsg('Maze_ifStdTooltip'));
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-  }
-};
-
-Blockly.JavaScript['maze_student'] = function(block) {
   // Generate JavaScript for 'if' conditional if there is a path.
   var argument = block.getFieldValue('STD') +
       '(\'block_id_' + block.id + '\')';

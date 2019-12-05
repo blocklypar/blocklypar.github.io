@@ -37,7 +37,7 @@ goog.require('BlocklyInterface');
 goog.require('Serial.Blocks');
 goog.require('Serial.soy');
 
-goog.require('Serial.Level1');
+goog.require('Serial.Level');
 
 BlocklyGames.NAME = 'serial';
 
@@ -217,8 +217,8 @@ Serial.drawMap = function() {
   svg.appendChild(square);
   
  
-  Serial.Level1.DrawMap(svg);
-  Serial.Level1.AddSprites(svg, document);
+  Serial.Level.DrawMap(svg);
+  Serial.Level.AddSprites(svg, document);
 
 };
 
@@ -419,7 +419,7 @@ Serial.saveToStorage = function() {
  * @param {boolean} first True if an opening animation is to be played.
  */
 Serial.reset = function(first) {
-  Serial.Level1.Reset(first);
+  Serial.Level.Reset(first);
   
 };
 
@@ -515,7 +515,7 @@ Serial.resetButtonClick = function(e) {
  * Execute the user's code.  Heaven help us...
  */
 Serial.execute = function() {
-  Serial.Level1.Execute();
+  Serial.Level.Execute();
 };
 
 /**

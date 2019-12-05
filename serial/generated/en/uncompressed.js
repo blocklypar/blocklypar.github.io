@@ -231,7 +231,7 @@
       "third-party/soyutils_usegoog.js",
       "generated/en/soy.js",
       "serial/generated/en/soy.js",
-      "serial/js/level1.js",
+      "serial/js/level.js",
       "serial/js/serial.js"
   ];
   function loadScript() {

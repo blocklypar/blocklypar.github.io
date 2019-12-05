@@ -2,7 +2,6 @@
 
 goog.provide('Serial.Avatar');
 
-
 Serial.Avatar = function(id, startDirection, startLocX, startLocY, sprite){
     this.id = id;
     //If the avatar can't move because the task is over
@@ -20,7 +19,6 @@ Serial.Avatar = function(id, startDirection, startLocX, startLocY, sprite){
 };
 
 Serial.Avatar.prototype.reset = function(startDirection, startLocX, startLocY) {
-
     this.locked = false;
     this.startLoc = {x: startLocX, y: startLocY};
     this.startDirection = startDirection;
