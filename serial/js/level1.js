@@ -22,9 +22,9 @@ var log = [];
  */
 Serial.Level1.VIEW = {
     background: '',
-    tiles: 'serial/img/tiles_ufsm2.png',
-    finishMarker: 'serial/img/marker.png',
-    skin: 'serial/img/pegman.png',
+    tiles: 'static/img/games/serial/tiles_ufsm2.png',
+    finishMarker: 'static/img/games/serial/marker.png',
+    skin: 'static/img/games/serial/pegman.png',
     graph:false
 };
 

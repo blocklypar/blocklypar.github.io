@@ -23,14 +23,14 @@
 <body>
 
     <div class="header">
-        <a id="back" href="/" class="logo"><img id="banner" src="index/blocklypar.png" width="100" alt="Blockly Games"></a>
+        <a id="back" href="/" class="logo"><img id="banner" src="static/img/index/blocklypar.png" width="100" alt="Blockly Games"></a>
         <div class="nav-spacer"></div>
         <div class="header-right">
-          <a class="active" href="https://blocklypar.github.io/">BACK</a>
-
-          <!-- &nbsp
-          <a class="color-one" id="parlink">PARALLEL PROGRAMMING</a>
-          <a class="color-one" id="codelink">CODE</a> -->
+          <a href="index.html" class="color-one">HOME</a>
+          <a class="active" href="javascript:window.location.reload(true)">ABOUT</a>
+          &nbsp
+          <a class="color-one" href="documentation.html?lang={$ij.lang}">DOCUMENTATION</a>
+          <a class="color-one" href="code.html?lang={$ij.lang}">CODE</a>
         </div>
     </div>
 
@@ -45,7 +45,7 @@
       code.href = "code.html?lang=".concat(c);
     </script> -->
   
-    <div id="text">
+    <div id="text" >
         <h3 id="title">ABOUT</h3>
         <p>          
           Modern computers run code in parallel. Real-life tasks benefit from parallelism. But... so far, coding games had 
@@ -60,12 +60,9 @@
         <p><b>This project was developed during a Bachelor thesis in Computer Science at the Federal University
           of Santa Maria, in Brazil.</b></p>
         <div align="left">
-          <p>Author: Ana Solórzano<br/>Advisor: Andrea Charão</p>
+          <p>Author: Ana Solórzano (alsolorzano@inf.ufsm.br)<br/>Advisor: Andrea Charão</p>
         </div>
-      
     </div>
-
-
 
     <p style="text-align: center; font-size: small">
       <a href="https://policies.google.com/privacy">Google Privacy Policy</a> &mdash;

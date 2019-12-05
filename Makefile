@@ -15,8 +15,7 @@ REQUIRED_BINS = svn unzip wget java python sed
 ##############################
 # Rules
 # tg: maze-en index-en maze index parallel-en
-#parallel-en maze-en tasks-en
-
+# parallel-en maze-en tasks-en
 ##############################
 
 all: deps languages

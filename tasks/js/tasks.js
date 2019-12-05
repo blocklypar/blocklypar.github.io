@@ -21,6 +21,12 @@
  * @fileoverview JavaScript for Tasks game.
  * @author fraser@google.com (Neil Fraser)
  */
+
+/**
+* Modified by: Ana Solórzano (alsolorzano@inf.ufsm.br)
+* Year: 2019
+*/
+
 'use strict';
 
 goog.provide('Tasks');
