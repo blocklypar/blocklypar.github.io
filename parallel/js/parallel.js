@@ -312,10 +312,25 @@ Parallel.init = function() {
   else{
     var defaultXml =
     '<xml>' +
-      '<block movable="' + (BlocklyGames.LEVEL != 1) + '" ' +
+      '<block movable="' + false + '" ' +
       'type="maze_forever_booksPar" x="70" y="70"></block>' +
     '</xml>';
   }
+
+  // if(BlocklyGames.LEVEL == 1){
+  //   var defaultXml =
+  //   '<xml>' +
+  //     '<block movable="' + (BlocklyGames.LEVEL != 1) + '" ' +
+  //     'type="maze_forever_books" x="70" y="70"></block>' +
+  //   '</xml>';
+  // }
+  // else{
+  //   var defaultXml =
+  //   '<xml>' +
+  //     '<block movable="' + (BlocklyGames.LEVEL != 1) + '" ' +
+  //     'type="maze_forever_booksPar" x="70" y="70"></block>' +
+  //   '</xml>';
+  // }
 
   BlocklyInterface.loadBlocks(defaultXml, false);
   
