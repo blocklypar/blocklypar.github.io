@@ -199,7 +199,7 @@ Blockly.Blocks['maze_forever'] = {
     this.setColour(Tasks.Blocks.LOOPS_HUE);
     this.appendDummyInput()
         .appendField(BlocklyGames.getMsg('Maze_repeatUntil'))
-        .appendField(new Blockly.FieldImage(Tasks.Level6.VIEW.finishMarker, 12, 16));
+        .appendField(new Blockly.FieldImage(Tasks.Level.VIEW.finishMarker, 12, 16));
     this.appendStatementInput('DO')
         .appendField(BlocklyGames.getMsg('Maze_doCode'));
     this.setPreviousStatement(true);
@@ -226,7 +226,7 @@ Blockly.Blocks['maze_forever_4activities'] = {
     this.setColour(Tasks.Blocks.TASK_HUE);
     this.appendDummyInput()
         .appendField(BlocklyGames.getMsg('Maze_repeatTaskUntil'))
-        .appendField(new Blockly.FieldImage(Tasks.Level2.VIEW.activity, 20, 17))
+        .appendField(new Blockly.FieldImage(Tasks.Level.VIEW.activity, 20, 17))
         .appendField(BlocklyGames.getMsg('Maze_4activitiesComplete'));
     this.appendStatementInput('DO')
         .appendField(BlocklyGames.getMsg('Maze_doCode'));
@@ -254,7 +254,7 @@ Blockly.Blocks['maze_forever_2activities'] = {
     this.setColour(Tasks.Blocks.TASK_HUE);
     this.appendDummyInput()
         .appendField(BlocklyGames.getMsg('Maze_repeatTaskUntil'))
-        .appendField(new Blockly.FieldImage(Tasks.Level2.VIEW.activity, 20, 17))
+        .appendField(new Blockly.FieldImage(Tasks.Level.VIEW.activity, 20, 17))
         .appendField(BlocklyGames.getMsg('Maze_2activitiesComplete'));
     this.appendStatementInput('DO')
         .appendField(BlocklyGames.getMsg('Maze_doCode'));

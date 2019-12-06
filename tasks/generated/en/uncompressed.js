@@ -214,6 +214,7 @@
       "js/lib-games.js",
       "js/lib-interface.js",
       "js/lib-dialogs.js",
+      "tasks/js/activity.js",
       "third-party/blockly/generators/javascript.js",
       "tasks/js/blocks.js",
       "tasks/js/avatar.js",
@@ -231,10 +232,8 @@
       "third-party/soyutils_usegoog.js",
       "generated/en/soy.js",
       "tasks/generated/en/soy.js",
-      "tasks/js/level1.js",
-      "tasks/js/level4.js",
-      "tasks/js/level2.js",
-      "tasks/js/level3.js",
+      "tasks/js/level.js",
+      "tasks/js/levelstd.js",
       "tasks/js/tasks.js"
   ];
   function loadScript() {

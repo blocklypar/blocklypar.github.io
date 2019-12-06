@@ -38,10 +38,8 @@ goog.require('BlocklyInterface');
 goog.require('Tasks.Blocks');
 goog.require('Tasks.soy');
 
-goog.require('Tasks.Level1');
-goog.require('Tasks.Level2');
-goog.require('Tasks.Level3');
-goog.require('Tasks.Level4');
+goog.require('Tasks.Level');
+goog.require('Tasks.LevelStd');
 
 BlocklyGames.NAME = 'tasks';
 
@@ -89,6 +87,7 @@ Tasks.FirstLevel = {
  */
 Tasks.executionTime = document.getElementById("number");
 Tasks.finalTime = 0;
+Tasks.levels = 4;
 /**
  * The types of squares in the maze, which is represented
  * as a 2D array of SquareType values.
@@ -225,34 +224,11 @@ Tasks.drawMap = function() {
   square.setAttribute('stroke-width', 1);
   square.setAttribute('stroke', '#CCB');
   svg.appendChild(square);
-  
-  switch(BlocklyGames.LEVEL){
 
-    case 1: 
-      Tasks.Level1.DrawMap(svg);
-      Tasks.Level1.AddSprites(svg, document);
-      Tasks.Level1.AddActivitySprites();
-    break;
 
-    case 2: 
-      Tasks.Level2.DrawMap(svg);
-      Tasks.Level2.AddSprites(svg, document);
-      Tasks.Level2.AddActivitySprites();
-    break;
-
-    case 3: 
-      Tasks.Level3.DrawMap(svg);
-      Tasks.Level3.AddSprites(svg, document);
-      Tasks.Level3.AddActivitySprites();
-    break;
-
-    case 4: 
-    Tasks.Level4.DrawMap(svg);
-    Tasks.Level4.AddSprites(svg, document);
-    Tasks.Level4.AddActivitySprites();
-    break;
-
-  }
+  Tasks.Level.DrawMap(svg);
+  Tasks.Level.AddSprites(svg, document);
+  Tasks.Level.AddActivitySprites();
 };
 
 /**
@@ -263,7 +239,7 @@ Tasks.init = function() {
   document.body.innerHTML = Tasks.soy.start({}, null,
       {lang: BlocklyGames.LANG,
        level: BlocklyGames.LEVEL,
-       maxLevel: 4,
+       maxLevel: Tasks.levels,
        skin: 0,
        html: BlocklyGames.IS_HTML});
 
@@ -496,21 +472,12 @@ Tasks.saveToStorage = function() {
  * @param {boolean} first True if an opening animation is to be played.
  */
 Tasks.reset = function(first) {
-
-  switch(BlocklyGames.LEVEL){
-    case 1:
-      Tasks.Level1.Reset(first);
-      break;
-    case 2:
-      Tasks.Level2.Reset(first);
-      break;
-    case 3:
-      Tasks.Level3.Reset(first);
-      break;
-    case 4:
-      Tasks.Level4.Reset(first);
-      break;
+  if(BlocklyGames.LEVEL != Tasks.levels){
+    Tasks.Level.Reset(first);
+  }else{
+    Tasks.LevelStd.Reset(first);
   }
+
 };
 
 /**
@@ -587,30 +554,15 @@ Tasks.updateCapacity = function() {
  * @param {!Event} e Mouse or touch event.
  */
 Tasks.resetButtonClick = function(e) {
+
   // Prevent double-clicks or double-taps.
   if (BlocklyInterface.eventSpam(e)) {
     return;
   }
 
-  switch(BlocklyGames.LEVEL){
-    case 1:
-      Tasks.Level1.RemoveActivities();
-      Tasks.Level1.AddActivitySprites();
-    break;
-    case 2:
-      Tasks.Level2.RemoveActivities();
-      Tasks.Level2.AddActivitySprites();
-    break;
-    case 3:
-      Tasks.Level3.RemoveActivities();
-      Tasks.Level3.AddActivitySprites();
-    break;
-    case 4:
-      Tasks.Level4.RemoveActivities();
-      Tasks.Level4.AddActivitySprites();
-    break;
-  }
-    
+  Tasks.Level.RemoveActivities();
+  Tasks.Level.AddActivitySprites();
+
   var runButton = document.getElementById('runButton');
   runButton.style.display = 'inline';
   document.getElementById('resetButton').style.display = 'none';
@@ -625,21 +577,12 @@ Tasks.resetButtonClick = function(e) {
  */
 Tasks.execute = function() {
 
-  switch(BlocklyGames.LEVEL){
-    case 1:
-      Tasks.Level1.Execute();
-      break;
-    case 2:
-      Tasks.Level2.Execute();
-      break;
-    case 3:
-      Tasks.Level3.Execute();
-    break;
-    case 4:
-      Tasks.Level4.ExecuteFirst();
-    break;
-
+  if(BlocklyGames.LEVEL != Tasks.levels){
+    Tasks.Level.Execute();
+  }else{
+    Tasks.LevelStd.ExecuteFirst();
   }
+  
 };
 
 /**

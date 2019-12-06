@@ -1,6 +1,6 @@
 'use strict';
 
-goog.provide('Tasks.Level2');
+goog.provide('Tasks.Level');
 goog.require('Blockly.FieldDropdown');
 goog.require('BlocklyDialogs');
 goog.require('BlocklyGames');
@@ -9,43 +9,38 @@ goog.require('Tasks.Blocks');
 goog.require('Tasks.soy');
 
 goog.require('Tasks.Avatar');
+goog.require('Tasks.Activity');
 
 var start_;
 var finish_;
 var student;
-var activity_pos = [];
 var pidList = [];
 var log = [];
-
-Tasks.Level2.activity_ = {
-    num:0,
-    pos: 0,
-    pos0: 0,
-    pos1: 0
-};
-
+var activities = [];
+var num = 0;
+var list_pos = 0;
 
 /**
  * Background and other elements
  */
-Tasks.Level2.VIEW = {
-    background: 'maze/img/bg/level123.png',
-    tiles: 'maze/tiles_ufsm2.png',
-    finishMarker: 'maze/classroom.png',
-    activity: 'maze/activity.png',
-    skin: 'maze/pegman.png',
+Tasks.Level.VIEW = {
+    background: 'static/img/games/tasks/level123.png',
+    tiles: 'static/img/games/tasks/tiles_ufsm2.png',
+    finishMarker: 'static/img/games/tasks/classroom.png',
+    activity: 'static/img/games/tasks/activity.png',
+    skin: 'static/img/games/tasks/pegman.png',
     graph:false
 };
 
 /**
  * First function to be called
  */
-Tasks.Level2.DrawMap = function(svg){
+Tasks.Level.DrawMap = function(svg){
 
     //Create cenario:
-    if (Tasks.Level2.VIEW.background) {
+    if (Tasks.Level.VIEW.background) {
         var tile = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-        tile.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Tasks.Level2.VIEW.background);
+        tile.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Tasks.Level.VIEW.background);
         tile.setAttribute('height', Tasks.MAZE_HEIGHT);
         tile.setAttribute('width', Tasks.MAZE_WIDTH);
         tile.setAttribute('x', 0);
@@ -53,7 +48,7 @@ Tasks.Level2.DrawMap = function(svg){
         svg.appendChild(tile);
     }
 
-    if (Tasks.Level2.VIEW.graph) {
+    if (Tasks.Level.VIEW.graph) {
         // Draw the grid lines.
         // The grid lines are offset so that the lines pass through the centre of
         // each square.  A half-pixel offset is also added to as standard SVG
@@ -64,7 +59,7 @@ Tasks.Level2.DrawMap = function(svg){
           h_line.setAttribute('y1', k * Tasks.SQUARE_SIZE + offset);
           h_line.setAttribute('x2', Tasks.MAZE_WIDTH);
           h_line.setAttribute('y2', k * Tasks.SQUARE_SIZE + offset);
-          h_line.setAttribute('stroke', Tasks.Level2.VIEW.graph);
+          h_line.setAttribute('stroke', Tasks.Level.VIEW.graph);
           h_line.setAttribute('stroke-width', 1);
           svg.appendChild(h_line);
         }
@@ -73,7 +68,7 @@ Tasks.Level2.DrawMap = function(svg){
           v_line.setAttribute('x1', k * Tasks.SQUARE_SIZE + offset);
           v_line.setAttribute('x2', k * Tasks.SQUARE_SIZE + offset);
           v_line.setAttribute('y2', Tasks.MAZE_HEIGHT);
-          v_line.setAttribute('stroke', Tasks.Level2.VIEW.graph);
+          v_line.setAttribute('stroke', Tasks.Level.VIEW.graph);
           v_line.setAttribute('stroke-width', 1);
           svg.appendChild(v_line);
         }
@@ -126,7 +121,7 @@ Tasks.Level2.DrawMap = function(svg){
 
             // Tile sprite.
             var tile = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-            tile.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Tasks.Level2.VIEW.tiles);
+            tile.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Tasks.Level.VIEW.tiles);
             // Position the tile sprite relative to the clipRect.
             tile.setAttribute('height', Tasks.SQUARE_SIZE * 4);
             tile.setAttribute('width', Tasks.SQUARE_SIZE * 5);
@@ -138,48 +133,51 @@ Tasks.Level2.DrawMap = function(svg){
         }
     }
 
-    // Locate the start and finish squares.
+    var cont = 0;
+    // Locate the start, finish and activities squares.
     for (var y = 0; y < Tasks.ROWS; y++) {
         for (var x = 0; x < Tasks.COLS; x++) {
             if (Tasks.map[y][x] == Tasks.SquareType.START) {
                 start_ = {x: x, y: y};
-                student = new Tasks.Avatar(0, Tasks.startDirection, x, y, Tasks.Level2.VIEW.skin);
+                student = new Tasks.Avatar(0, Tasks.startDirection, x, y, Tasks.Level.VIEW.skin);
             } else if (Tasks.map[y][x] == Tasks.SquareType.FINISH) {
                 finish_ = {x: x, y: y};
+            } else if(Tasks.map[y][x] == Tasks.SquareType.ITEM) {
+                activities[cont++] = new Tasks.Activity(cont, x, y, true);
             }
         }
     }
 };
 
 /**
- * Add sprites to the svg of the game
+ * Add main sprites to the svg of the game
  */
-Tasks.Level2.AddSprites = function(svg, document){
+Tasks.Level.AddSprites = function(svg, document){
 
-    // Create finish markers.
-    var finishMarkers = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-    finishMarkers.id = 'finish';
-    finishMarkers.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Tasks.Level2.VIEW.finishMarker);
-    finishMarkers.setAttribute('height', 85);
-    finishMarkers.setAttribute('width', 60);
-    svg.appendChild(finishMarkers);
+    // Create finish marker
+    var finishMarker = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
+    finishMarker.id = 'finish';
+    finishMarker.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Tasks.Level.VIEW.finishMarker);
+    finishMarker.setAttribute('height', 85);
+    finishMarker.setAttribute('width', 60);
+    svg.appendChild(finishMarker);
 
-    //student
-    var pegmanClip = document.createElementNS(Blockly.utils.dom.SVG_NS, 'clipPath');
-    pegmanClip.id = 'pegmanClipPath';
+    // Create the student
+    var student = document.createElementNS(Blockly.utils.dom.SVG_NS, 'clipPath');
+    student.id = 'studentClipPath';
     var clipRect = document.createElementNS(Blockly.utils.dom.SVG_NS, 'rect');
     clipRect.id = 'clipRect';
     clipRect.setAttribute('width', Tasks.PEGMAN_WIDTH);
     clipRect.setAttribute('height', Tasks.PEGMAN_HEIGHT);
-    pegmanClip.appendChild(clipRect);
-    svg.appendChild(pegmanClip);
+    student.appendChild(clipRect);
+    svg.appendChild(student);
   
     var pegmanIcon = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
     pegmanIcon.id = 'student';
-    pegmanIcon.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Tasks.Level2.VIEW.skin);
+    pegmanIcon.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Tasks.Level.VIEW.skin);
     pegmanIcon.setAttribute('height', Tasks.PEGMAN_HEIGHT);
     pegmanIcon.setAttribute('width', Tasks.PEGMAN_WIDTH * 21); // 49 * 21 = 1029
-    pegmanIcon.setAttribute('clip-path', 'url(#pegmanClipPath)');
+    pegmanIcon.setAttribute('clip-path', 'url(#studentClipPath)');
     svg.appendChild(pegmanIcon);
 };
 
@@ -187,85 +185,27 @@ Tasks.Level2.AddSprites = function(svg, document){
  * Create the activities to be display in the maze
  * and move them to they initial positions
  */
-Tasks.Level2.AddActivitySprites = function(){
+Tasks.Level.AddActivitySprites = function(){
 
     var svg = document.getElementById('svgMaze');
+    var name = 'activity';
 
-    for (var y = 0; y < Tasks.ROWS; y++) {
-        for (var x = 0; x < Tasks.COLS; x++) {
-            if(Tasks.map[y][x] == Tasks.SquareType.ITEM) {
-                if(Tasks.Level2.activity_.pos0 == 0)
-                    Tasks.Level2.activity_.pos0 = {x: x, y:y};
-                else
-                    Tasks.Level2.activity_.pos1 = {x: x, y:y};
-            }
-        }
+    for(var i=0; i<activities.length; i++){
+        var activity = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
+        activity.id = name.concat(i.toString());
+        activity.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Tasks.Level.VIEW.activity);
+        activity.setAttribute('height', 45);
+        activity.setAttribute('width', 35);
+        svg.appendChild(activity);
+        activities[i].active = true;
+        activity.setAttribute('x', Tasks.SQUARE_SIZE * (activities[i].pos.x + 0.5) -
+        activity.getAttribute('width') / 2);
+        activity.setAttribute('y', Tasks.SQUARE_SIZE * (activities[i].pos.y + 0.6) - activity.getAttribute('height'));
     }
 
-    var activity1 = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-    activity1.id = 'activity0';
-    activity1.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Tasks.Level2.VIEW.activity);
-    activity1.setAttribute('height', 45);
-    activity1.setAttribute('width', 35);
-
-    svg.appendChild(activity1);
-    activity1.setAttribute('x', Tasks.SQUARE_SIZE * (Tasks.Level2.activity_.pos0.x + 0.5) -
-    activity1.getAttribute('width') / 2);
-    activity1.setAttribute('y', Tasks.SQUARE_SIZE * (Tasks.Level2.activity_.pos0.y + 0.6) - activity1.getAttribute('height'));
-
-
-    var activity2 = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-    activity2.id = 'activity1';
-    activity2.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Tasks.Level2.VIEW.activity);
-    activity2.setAttribute('height', 45);
-    activity2.setAttribute('width', 35);
-    svg.appendChild(activity2);
-    activity2.setAttribute('x', Tasks.SQUARE_SIZE * (Tasks.Level2.activity_.pos1.x + 0.5) -
-    activity2.getAttribute('width') / 2);
-    activity2.setAttribute('y', Tasks.SQUARE_SIZE * (Tasks.Level2.activity_.pos1.y + 0.6) - activity2.getAttribute('height'));
-
 };
 
-/**
- * Add activity to the list of activities completed
- * Remove the respective activity of the maze
- */
-Tasks.Level2.ActivityDone = function(){
-
-    var svg = document.getElementById('svgMaze');
-
-    var activity = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-
-    activity.id = 'activity';
-    activity.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Tasks.Level2.VIEW.activity);
-    activity.setAttribute('height', 45);
-    activity.setAttribute('width', 35);
-    svg.appendChild(activity);
-
-    //Move the activity into the list
-    activity.setAttribute('x', Tasks.SQUARE_SIZE * (0.3 + 0.8) - activity.getAttribute('width') / 2);
-    Tasks.Level2.activity_.pos = Tasks.Level2.activity_.pos + 1;
-    activity.setAttribute('y', Tasks.SQUARE_SIZE * (Tasks.Level2.activity_.pos + 2.5) - activity.getAttribute('height'));
-
-    //Remove activity from the maze
-    var name = 'activity';
-    var svg = document.getElementById('svgMaze');
-    if(Tasks.Level2.activity_.num == 2)
-        activity = document.getElementById(name.concat('0'));
-    else if(Tasks.Level2.activity_.num == 3)
-        activity = document.getElementById(name.concat('1'));
-    else
-        activity = document.getElementById(name.concat(Tasks.Level2.activity_.num.toString()));
-
-    svg.removeChild(activity);
-
-};
-
-
-/**
- * Second function to be called
- */
-Tasks.Level2.Reset = function(first){
+Tasks.Level.Reset = function(first){
 
     // Kill all activities.
     for(var i = 0; i < pidList.length; i++) {
@@ -273,18 +213,19 @@ Tasks.Level2.Reset = function(first){
     }
     pidList = [];
 
+    // Move the student into initial position
     student.reset(Tasks.startDirection, start_.x, start_.y);
 
-    // Move the student into initial position
     if (first) {
         student.startDirection++;
         pidList.push(setTimeout(function() {
-            Tasks.Level2.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
+            Tasks.Level.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
                         [student.startLoc.x, student.startLoc.y, student.startDirection * 4 - 4]);
                         student.startDirection++;
-        }, Tasks.stepSpeed * 4));
+        }, Tasks.stepSpeed * 5));
+
     } else {
-        Tasks.Level2.DisplayStudent(student.startLoc.x, student.startLoc.y, Tasks.startDirection * 4);
+        Tasks.Level.DisplayStudent(student.startLoc.x, student.startLoc.y, Tasks.startDirection * 4);
     }
 
     // Move the finish icon into position
@@ -292,14 +233,16 @@ Tasks.Level2.Reset = function(first){
     finishIcon.setAttribute('x', Tasks.SQUARE_SIZE * (finish_.x + 0.5) -
         finishIcon.getAttribute('width') / 2);
     finishIcon.setAttribute('y', Tasks.SQUARE_SIZE * (finish_.y + 0.6) -
-        finishIcon.getAttribute('height') / 2);
-
+        finishIcon.getAttribute('height')/2);
+    
 };
 
-Tasks.Level2.Execute = function(){
+/**
+ * Read the input blocks and run the program
+ */
+Tasks.Level.Execute = function(){
 
     if (!('Interpreter' in window)) {
-        // Interpreter lazy loads and hasn't arrived yet. Try again later.
         setTimeout(Tasks.execute, 250);
         return;
     }
@@ -309,7 +252,7 @@ Tasks.Level2.Execute = function(){
     Tasks.result = Tasks.ResultType.UNSET;
 
     var code = Blockly.JavaScript.workspaceToCode(BlocklyGames.workspace);
-    var interpreter = new Interpreter(code, Tasks.Level2.InitInterpreter);
+    var interpreter = new Interpreter(code, Tasks.Level.InitInterpreter);
 
     // Try running the user's code.  There are four possible outcomes:
     // 1. If pegman reaches the finish [SUCCESS], true is thrown.
@@ -317,14 +260,14 @@ Tasks.Level2.Execute = function(){
     // 3. If another error occurs [ERROR], that error is thrown.
     // 4. If the program ended normally but without solving the maze [FAILURE]
     try {
-        var ticks = 100000;  // 10k ticks runs Pegman for about 8 minutes.
+        var ticks = 100000;  
         while (interpreter.step()) {
             if (ticks-- == 0) {
                 throw Infinity;
             }
         }
         // Verify if the user finish the Maze
-        Tasks.result = Tasks.Level2.NotDone() ?
+        Tasks.result = Tasks.Level.NotDone() ?
            Tasks.ResultType.FAILURE : Tasks.ResultType.SUCCESS;
     } catch (e) {
         // A boolean is thrown for normal termination.
@@ -339,84 +282,159 @@ Tasks.Level2.Execute = function(){
         }
     }
 
-    // Fast animation if execution is successful. Slow otherwise.
+    // Fast animation if execution is successful.  Slow otherwise.
     if (Tasks.result == Tasks.ResultType.SUCCESS){
         BlocklyGames.workspace.getAudioManager().play('win', 0.5);
         log.push(['finish', null]);
     }
         
-    Tasks.Level2.Reset(false);
-    pidList.push(setTimeout(Tasks.Level2.Animate, 150));
+
+    Tasks.Level.Reset(false);
+    pidList.push(setTimeout(Tasks.Level.Animate, 100));
 };
 
+/**
+ * Inject the Maze API into a JavaScript interpreter.
+ * @param {!Interpreter} interpreter The JS Interpreter.
+ * @param {!Interpreter.Object} scope Global scope.
+ */
+Tasks.Level.InitInterpreter = function(interpreter, scope){
 
-Tasks.Level2.Animate = function(){
+    var wrapper;
+
+    wrapper = function(id) {
+        Tasks.Level.move(0, id);
+    };
+    interpreter.setProperty(scope, 'moveForward',
+        interpreter.createNativeFunction(wrapper));
+
+    wrapper = function(id) {
+        Tasks.Level.move(2, id);
+    };
+    interpreter.setProperty(scope, 'moveBackward',
+        interpreter.createNativeFunction(wrapper));
+        
+    wrapper = function(id) {
+        Tasks.Level.turn(0, id);
+    };
+    interpreter.setProperty(scope, 'turnLeft',
+        interpreter.createNativeFunction(wrapper));
+
+    wrapper = function(id) {
+        Tasks.Level.turn(1, id);
+    };
+    interpreter.setProperty(scope, 'turnRight',
+        interpreter.createNativeFunction(wrapper));
+
+    wrapper = function(id) {
+    return Tasks.Level.isPath(0, id);
+    };
+    interpreter.setProperty(scope, 'isPathForward',
+    interpreter.createNativeFunction(wrapper));
+   
+    wrapper = function(id) {
+        return Tasks.Level.isPath(1, id);
+    };
+    interpreter.setProperty(scope, 'isPathRight',
+        interpreter.createNativeFunction(wrapper));
+
+    wrapper = function(id) {
+        return Tasks.Level.isPath(2, id);
+    };
+    interpreter.setProperty(scope, 'isPathBackward',
+        interpreter.createNativeFunction(wrapper));
+
+    wrapper = function(id) {
+        return Tasks.Level.isPath(3, id);
+    };
+    interpreter.setProperty(scope, 'isPathLeft',
+        interpreter.createNativeFunction(wrapper));
+
+    wrapper = function() {
+        return Tasks.Level.NotDone();
+    };
+    interpreter.setProperty(scope, 'notDone',
+        interpreter.createNativeFunction(wrapper));
+    
+    wrapper = function() {
+        // return Tasks.Level.GetActivity(student.startLoc.x, student.startLoc.y);
+    };
+    interpreter.setProperty(scope, '2activitiesComplete',
+        interpreter.createNativeFunction(wrapper));
+};
+
+/**
+ * Animate the execution, call the function to move the student
+ */
+Tasks.Level.Animate = function(){
 
     var action = log.shift();
+
     if (!action) {
       BlocklyInterface.highlight(null);
       Tasks.levelHelp();
       return;
     }
+    
     BlocklyInterface.highlight(action[1]);
 
     switch (action[0]) {
         case 'north':
-        Tasks.Level2.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
+        Tasks.Level.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
             [student.startLoc.x, student.startLoc.y - 1, student.startDirection * 4]);
         student.startLoc.y--;
         break;
 
         case 'east':
-        Tasks.Level2.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
+        Tasks.Level.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
             [student.startLoc.x + 1, student.startLoc.y, student.startDirection * 4]);
         student.startLoc.x++;
         break;
 
         case 'south':
-        Tasks.Level2.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
+        Tasks.Level.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
             [student.startLoc.x, student.startLoc.y + 1, student.startDirection * 4]);
         student.startLoc.y++;
         break;
 
         case 'west':
-        Tasks.Level2.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
+        Tasks.Level.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
             [student.startLoc.x - 1, student.startLoc.y, student.startDirection * 4]);
         student.startLoc.x--;
         break;
 
         case 'look_north':
-        Tasks.Level2.ScheduleLook(Tasks.DirectionType.NORTH, student.startLoc.x, student.startLoc.y);
+        Tasks.Level.ScheduleLook(Tasks.DirectionType.NORTH, student.startLoc.x, student.startLoc.y);
         break;
 
         case 'look_east':
-        Tasks.Level2.ScheduleLook(Tasks.DirectionType.EAST, student.startLoc.x, student.startLoc.y);
+        Tasks.Level.ScheduleLook(Tasks.DirectionType.EAST, student.startLoc.x, student.startLoc.y);
         break;
         
         case 'look_south':
-        Tasks.Level2.ScheduleLook(Tasks.DirectionType.SOUTH, student.startLoc.x, student.startLoc.y);
+        Tasks.Level.ScheduleLook(Tasks.DirectionType.SOUTH, student.startLoc.x, student.startLoc.y);
         break;
         
         case 'look_west':
-        Tasks.Level2.ScheduleLook(Tasks.DirectionType.WEST, student.startLoc.x, student.startLoc.y);
+        Tasks.Level.ScheduleLook(Tasks.DirectionType.WEST, student.startLoc.x, student.startLoc.y);
         break;
         
         case 'fail_forward':
-        Tasks.Level2.ScheduleFail(true);
+        Tasks.Level.ScheduleFail(true);
         break;
         
         case 'fail_backward':
-        Tasks.Level2.ScheduleFail(false);
+        Tasks.Level.ScheduleFail(false);
         break;
         
         case 'left':
-        Tasks.Level2.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
+        Tasks.Level.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
             [student.startLoc.x, student.startLoc.y, student.startDirection * 4 - 4], student.id);
         student.startDirection = Tasks.constrainDirection4(student.startDirection - 1);
         break;
         
         case 'right':
-        Tasks.Level2.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
+        Tasks.Level.Schedule([student.startLoc.x, student.startLoc.y, student.startDirection * 4],
             [student.startLoc.x, student.startLoc.y, student.startDirection * 4 + 4], student.id);
         student.startDirection = Tasks.constrainDirection4(student.startDirection + 1);
         break; 
@@ -426,81 +444,9 @@ Tasks.Level2.Animate = function(){
         setTimeout(BlocklyDialogs.congratulations, 1000);  
         
     }
-    pidList.push(setTimeout(Tasks.Level2.Animate, Tasks.stepSpeed * 4));
+
+    pidList.push(setTimeout(Tasks.Level.Animate, Tasks.stepSpeed * 5));
 }
-
-/**
- * Inject the Maze API into a JavaScript interpreter.
- * @param {!Interpreter} interpreter The JS Interpreter.
- * @param {!Interpreter.Object} scope Global scope.
- */
-Tasks.Level2.InitInterpreter = function(interpreter, scope){
-
-    // API
-    var wrapper;
-
-    wrapper = function(id) {
-        Tasks.Level2.move(0, id);
-    };
-    interpreter.setProperty(scope, 'moveForward',
-        interpreter.createNativeFunction(wrapper));
-
-    wrapper = function(id) {
-        Tasks.Level2.move(2, id);
-    };
-    interpreter.setProperty(scope, 'moveBackward',
-        interpreter.createNativeFunction(wrapper));
-        
-    wrapper = function(id) {
-        Tasks.Level2.turn(0, id);
-    };
-    interpreter.setProperty(scope, 'turnLeft',
-        interpreter.createNativeFunction(wrapper));
-
-    wrapper = function(id) {
-        Tasks.Level2.turn(1, id);
-    };
-    interpreter.setProperty(scope, 'turnRight',
-        interpreter.createNativeFunction(wrapper));
-
-    wrapper = function(id) {
-    return Tasks.Level2.isPath(0, id);
-    };
-    interpreter.setProperty(scope, 'isPathForward',
-    interpreter.createNativeFunction(wrapper));
-   
-    wrapper = function(id) {
-        return Tasks.Level2.isPath(1, id);
-    };
-    interpreter.setProperty(scope, 'isPathRight',
-        interpreter.createNativeFunction(wrapper));
-
-    wrapper = function(id) {
-        return Tasks.Level2.isPath(2, id);
-    };
-    interpreter.setProperty(scope, 'isPathBackward',
-        interpreter.createNativeFunction(wrapper));
-
-    wrapper = function(id) {
-        return Tasks.Level2.isPath(3, id);
-    };
-    interpreter.setProperty(scope, 'isPathLeft',
-        interpreter.createNativeFunction(wrapper));
-
-    wrapper = function() {
-        return Tasks.Level2.NotDone();
-    };
-    interpreter.setProperty(scope, 'notDone',
-        interpreter.createNativeFunction(wrapper));
-
-    wrapper = function() {
-        // Tasks.Level7.activityActivate = true;
-        // return Tasks.Level2.GetActivity(student.startLoc.x, student.startLoc.y);
-    };
-    interpreter.setProperty(scope, '2activitiesComplete',
-        interpreter.createNativeFunction(wrapper));
-};
-
 
 /**
  * Attempt to move pegman forward or backward.
@@ -509,35 +455,34 @@ Tasks.Level2.InitInterpreter = function(interpreter, scope){
  * @throws {true} If the end of the maze is reached.
  * @throws {false} If Pegman collides with a wall.
  */
-Tasks.Level2.move = function(direction, id) {
+Tasks.Level.move = function(direction, id) {
 
-    if (!Tasks.Level2.isPath(direction, null)) {
+    if (!Tasks.Level.isPath(direction, null)) {
       log.push(['fail_' + (direction ? 'backward' : 'forward'), id]);
-      //throw false;
+      throw false;
     }
-    else{
-        var effectiveDirection = student.startDirection + direction;
-        var command;
-        switch (Tasks.constrainDirection4(effectiveDirection)) {
-        case Tasks.DirectionType.NORTH:
-            student.startLoc.y--;
-            command = 'north';
-            break;
-        case Tasks.DirectionType.EAST:
-            student.startLoc.x++;
-            command = 'east';
-            break;
-        case Tasks.DirectionType.SOUTH:
-            student.startLoc.y++;
-            command = 'south';
-            break;
-        case Tasks.DirectionType.WEST:
-            student.startLoc.x--;
-            command = 'west';
-            break;
-        }
-        log.push([command, id]);
+    
+    var effectiveDirection = student.startDirection + direction;
+    var command;
+    switch (Tasks.constrainDirection4(effectiveDirection)) {
+    case Tasks.DirectionType.NORTH:
+        student.startLoc.y--;
+        command = 'north';
+        break;
+    case Tasks.DirectionType.EAST:
+        student.startLoc.x++;
+        command = 'east';
+        break;
+    case Tasks.DirectionType.SOUTH:
+        student.startLoc.y++;
+        command = 'south';
+        break;
+    case Tasks.DirectionType.WEST:
+        student.startLoc.x--;
+        command = 'west';
+        break;
     }
+    log.push([command, id]);
 };
 
 /**
@@ -545,7 +490,7 @@ Tasks.Level2.move = function(direction, id) {
  * @param {number} direction Direction to turn (0 = left, 1 = right).
  * @param {string} id ID of block that triggered this action.
  */
-Tasks.Level2.turn = function(direction, id) {
+Tasks.Level.turn = function(direction, id) {
 
     if (direction) {
       // Right turn (clockwise).
@@ -568,7 +513,7 @@ Tasks.Level2.turn = function(direction, id) {
  *     Null if called as a helper function in Tasks.move().
  * @return {boolean} True if there is a path.
  */
-Tasks.Level2.isPath = function(direction, id) {
+Tasks.Level.isPath = function(direction, id) {
 
     var effectiveDirection = student.startDirection + direction;
     var square;
@@ -607,39 +552,64 @@ Tasks.Level2.isPath = function(direction, id) {
  * @param {!Array.<number>} startPos X, Y and direction starting points.
  * @param {!Array.<number>} endPos X, Y and direction ending points.
  */
-Tasks.Level2.Schedule = function(startPos, endPos) {
+Tasks.Level.Schedule = function(startPos, endPos) {
 
     var deltas = [(endPos[0] - startPos[0])/4, (endPos[1] - startPos[1])/4, (endPos[2] - startPos[2])/4];
 
     pidList.push(setTimeout(function() {
-    Tasks.Level2.DisplayStudent(startPos[0] + deltas[0],
+    Tasks.Level.DisplayStudent(startPos[0] + deltas[0],
         startPos[1] + deltas[1],
         Tasks.constrainDirection16(startPos[2] + deltas[2]));
     }, Tasks.stepSpeed));
 
     pidList.push(setTimeout(function() {
-        Tasks.Level2.DisplayStudent(startPos[0] + deltas[0] * 2,
+        Tasks.Level.DisplayStudent(startPos[0] + deltas[0] * 2,
             startPos[1] + deltas[1] * 2,
             Tasks.constrainDirection16(startPos[2] + deltas[2] * 2));
     }, Tasks.stepSpeed));
 
     pidList.push(setTimeout(function() {
-    Tasks.Level2.DisplayStudent(startPos[0] + deltas[0] * 3,
+    Tasks.Level.DisplayStudent(startPos[0] + deltas[0] * 3,
         startPos[1] + deltas[1] * 3,
         Tasks.constrainDirection16(startPos[2] + deltas[2] * 3));
     }, Tasks.stepSpeed * 2));
 
     pidList.push(setTimeout(function() {
-        Tasks.Level2.DisplayStudent(endPos[0], endPos[1],
+        Tasks.Level.DisplayStudent(endPos[0], endPos[1],
             Tasks.constrainDirection16(endPos[2]));
         }, Tasks.stepSpeed * 3));
+};
+
+/**
+ * Display the look icon at Pegman's current location,
+ * in the specified direction.
+ * @param {!Tasks.DirectionType} d Direction (0 - 3).
+ */
+Tasks.Level.ScheduleLook = function(d, x, y) {
+
+    switch (d) {
+        case Tasks.DirectionType.NORTH:
+        x += 0.5;
+        break;
+        case Tasks.DirectionType.EAST:
+        x += 1;
+        y += 0.5;
+        break;
+        case Tasks.DirectionType.SOUTH:
+        x += 0.5;
+        y += 1;
+        break;
+        case Tasks.DirectionType.WEST:
+        y += 0.5;
+        break;
+    }
 };
 
 /**
  * Schedule the animations and sounds for a failed move.
  * @param {boolean} forward True if forward, false if backward.
  */
-Tasks.Level2.ScheduleFail = function(forward) {
+Tasks.Level.ScheduleFail = function(forward) {
 
     var deltaX = 0;
     var deltaY = 0;
@@ -667,17 +637,17 @@ Tasks.Level2.ScheduleFail = function(forward) {
     deltaY /= 4;
     var direction16 = Tasks.constrainDirection16(student.startDirection * 4);
 
-    Tasks.Level2.DisplayStudent(student.startLoc.x, student.startLoc.y + deltaY,
+    Tasks.Level.DisplayStudent(student.startLoc.x, student.startLoc.y + deltaY,
                         direction16);
 
     BlocklyGames.workspace.getAudioManager().play('fail', 0.5);
     pidList.push(setTimeout(function() {
-        Tasks.Level2.DisplayStudent(student.startLoc.x, student.startLoc.y,
+        Tasks.Level.DisplayStudent(student.startLoc.x, student.startLoc.y,
                             direction16);
     }, Tasks.stepSpeed));
 
     pidList.push(setTimeout(function() {
-        Tasks.Level2.DisplayStudent(student.startLoc.x + deltaX,
+        Tasks.Level.DisplayStudent(student.startLoc.x + deltaX,
                             student.startLoc.y + deltaY,
                             direction16);
 
@@ -685,7 +655,7 @@ Tasks.Level2.ScheduleFail = function(forward) {
     }, Tasks.stepSpeed * 2));
 
     pidList.push(setTimeout(function() {
-        Tasks.Level2.DisplayStudent(student.startLoc.x, student.startLoc.y, direction16);
+        Tasks.Level.DisplayStudent(student.startLoc.x, student.startLoc.y, direction16);
     }, Tasks.stepSpeed * 3));
 };
 
@@ -696,7 +666,7 @@ Tasks.Level2.ScheduleFail = function(forward) {
  * @param {number} d Direction (0 - 15) or dance (16 - 17).
  * @param {number=} opt_angle Optional angle (in degrees) to rotate Pegman.
  */
-Tasks.Level2.DisplayStudent = function(x, y, d, opt_angle) {
+Tasks.Level.DisplayStudent = function(x, y, d, opt_angle) {
     
     var student = document.getElementById('student');
     student.setAttribute('x', x * Tasks.SQUARE_SIZE - d * Tasks.PEGMAN_WIDTH + 1);
@@ -714,81 +684,86 @@ Tasks.Level2.DisplayStudent = function(x, y, d, opt_angle) {
     clipRect.setAttribute('x', x * Tasks.SQUARE_SIZE + 1);
     clipRect.setAttribute('y', student.getAttribute('y'));
 
-    if(Tasks.Level2.isActivity(x, y)){
-        Tasks.Level2.ActivityDone();
-        Tasks.Level2.activity_.num++;
-    }
+    /**
+     * Verify if the student got an activity
+     * Add one activity to a list of activities done
+     * Remove activity of the maze
+     */
+    if(Tasks.Level.isActivity(x, y))
+        num++;
 
-    //Verify if student is at classroom and if the activities over
-    if((x == finish_.x) && (y == finish_.y)){
-        Tasks.Level2.Reset(false);
-        Tasks.Level2.Execute();
-    }
+    if((x == finish_.x) && (y == finish_.y))
+        Tasks.Level.Execute();
+    
 };
 
 /**
- * Display the look icon at Pegman's current location,
- * in the specified direction.
- * @param {!Tasks.DirectionType} d Direction (0 - 3).
+ * Add activity to the list of activities completed
+ * Remove the respective activity of the maze
  */
-Tasks.Level2.ScheduleLook = function(d, x, y) {
+Tasks.Level.ActivityDone = function(id){
 
-    switch (d) {
-        case Tasks.DirectionType.NORTH:
-        x += 0.5;
-        break;
-        case Tasks.DirectionType.EAST:
-        x += 1;
-        y += 0.5;
-        break;
-        case Tasks.DirectionType.SOUTH:
-        x += 0.5;
-        y += 1;
-        break;
-        case Tasks.DirectionType.WEST:
-        y += 0.5;
-        break;
-    }
+    var svg = document.getElementById('svgMaze');
+
+    var activity = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
+
+    //Put an activity into the list
+    activity.id = 'activity';
+    activity.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Tasks.Level.VIEW.activity);
+    activity.setAttribute('height', 45);
+    activity.setAttribute('width', 35);
+    svg.appendChild(activity);
+
+    //Move the activity into the list
+    activity.setAttribute('x', Tasks.SQUARE_SIZE * (0.3 + 0.8) -
+    activity.getAttribute('width') / 2);
+    list_pos = list_pos + 1;
+    activity.setAttribute('y', Tasks.SQUARE_SIZE * (list_pos + 2.5) -
+    activity.getAttribute('height'));
+
+    //Remove activity from the maze
+    activities[id].active = false;
+    var name = 'activity';
+    var svg = document.getElementById('svgMaze');
+    activity = document.getElementById(name.concat(id.toString()));
+    svg.removeChild(activity);
+
 };
 
-Tasks.Level2.NotDone = function(){
-    return Tasks.Level2.activity_.num != 2;
+Tasks.Level.NotDone = function(){
+    return num != 2;
 };
 
-Tasks.Level2.isActivity = function(x, y){
+Tasks.Level.isActivity = function(x, y){
 
-    if((x == Tasks.Level2.activity_.pos0.x) && (y == Tasks.Level2.activity_.pos0.y)){
-        Tasks.Level2.activity_.pos0 = 0;
-        return true;
-    }
-       
-    
-    if((x == Tasks.Level2.activity_.pos1.x) && (y == Tasks.Level2.activity_.pos1.y)){
-        Tasks.Level2.activity_.pos1 = 0;
-        return true;
+    for(var i=0; i<activities.length; i++){
+        if(activities[i].active && (x == activities[i].pos.x) && (y == activities[i].pos.y)){
+            Tasks.Level.ActivityDone(i);
+            return true;
+        }    
     }
     
     return false;
 };
 
-Tasks.Level2.RemoveActivities = function(){
+/**
+ * Remove all the activities of the list
+ */
+Tasks.Level.RemoveActivities = function(){
 
     var svg = document.getElementById('svgMaze');
-    var actremove;
+    var name = 'activity';
 
-    for(var i=0 ; i<Tasks.Level2.activity_.num; i++){
-        actremove = document.getElementById('activity');
-        svg.removeChild(actremove);
+    //Remove all activities from the path and from the list
+    for(var i=0 ; i < activities.length; i++){
+        var activity = document.getElementById(name.concat(i.toString()));
+        if(activity)
+            svg.removeChild(activity);
+
+        var activity_list = document.getElementById('activity');
+        if(activity_list)
+            svg.removeChild(activity_list);
     }
 
-    actremove = document.getElementById('activity0');
-    if(actremove)
-        svg.removeChild(actremove);
-
-    actremove = document.getElementById('activity1');
-    if(actremove)
-        svg.removeChild(actremove);
-
-    Tasks.Level2.activity_.num = 0;
-    Tasks.Level2.activity_.pos = 0;
+    num = list_pos = 0;
 };
