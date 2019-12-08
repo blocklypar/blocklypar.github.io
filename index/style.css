@@ -250,6 +250,15 @@ li a:hover.color-three {
   color:#ffffff;
 }
 
+#games {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 20px;
+  padding: 50px 50px;;
+  background-color: #ffffff;
+  text-align: left;
+  color:#000000;
+}
+
 #parallel {
   font-family: "Source Sans Pro", sans-serif;
   font-size: 20px;
