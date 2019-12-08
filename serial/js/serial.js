@@ -356,7 +356,7 @@ Serial.levelHelp = function(opt_event) {
       levelValue = false;
     }
     else {
-      if(BlocklyGames.workspace.getAllBlocks().length < 2) {
+      if(BlocklyGames.workspace.getAllBlocks().length < 3) {
         content = document.getElementById('dialogHelpStack');
         style = {'width': '190px', 'top': '150px'};
         style[rtl ? 'right' : 'left'] = '215px';
@@ -377,7 +377,7 @@ Serial.levelHelp = function(opt_event) {
     if (Serial.result != Serial.ResultType.UNSET &&
       document.getElementById('runButton').style.display == 'none') {
       content = document.getElementById('dialogHelpReset');
-      style = {'width': '260px', 'top': '505px'};
+      style = {'width': '200px', 'top': '505px'};
       style[rtl ? 'right' : 'left'] = '410px';
       origin = document.getElementById('resetButton');
     }

@@ -227,7 +227,6 @@ Serial.Level.Execute = function(){
 
     // Fast animation if execution is successful.  Slow otherwise.
     if (Serial.result == Serial.ResultType.SUCCESS){
-        // BlocklyGames.workspace.getAudioManager().play('win', 0.5);
         log.push(['finish', null]);
     }
         
@@ -380,7 +379,7 @@ Serial.Level.Animate = function(){
         case 'finish':
         BlocklyInterface.saveToLocalStorage();
         setTimeout(BlocklyDialogs.congratulations, 1000);  
-        
+        BlocklyGames.workspace.getAudioManager().play('win', 0.5);
     }
 
     pidList.push(setTimeout(Serial.Level.Animate, Serial.stepSpeed * 5));

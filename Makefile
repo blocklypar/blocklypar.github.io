@@ -20,7 +20,7 @@ REQUIRED_BINS = svn unzip wget java python sed
 
 all: deps languages
 
-tg: tasks-en 
+tg: serial-en 
 
 index-en:
 	mkdir -p generated/en/
