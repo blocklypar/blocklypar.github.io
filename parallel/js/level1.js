@@ -896,6 +896,26 @@ Parallel.Level1.RemoveBooks = function(){
     svg.removeChild(bookcontremove);
 }
 
+Parallel.Level1.RemoveAllBooks = function(){
+    
+    var svg = document.getElementById('svgMaze');
+    var bookname = 'book';
+    var countername = 'booksCounter';
+
+    for(var i=numbooks-1; i >= 0; i--){
+
+        const bookremove = document.getElementById(bookname.concat(i.toString()));
+        svg.removeChild(bookremove);
+
+        var id = i + 1;
+        const bookcontremove = document.getElementById(countername.concat(id.toString()));
+        svg.removeChild(bookcontremove);
+    }
+
+    const bookcontremove = document.getElementById(countername.concat('0'));
+    svg.removeChild(bookcontremove);
+}
+
 Parallel.Level1.NotDone = function(){
     return numbooks != 0;
 };

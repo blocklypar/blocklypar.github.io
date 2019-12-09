@@ -16,7 +16,7 @@ var student = [];
 var pidList = [];
 var log = [];
 
-var booksCounterNum;
+var numbooks;
 
 //****** STUDENTS */
 var studentsActive = [];
@@ -44,48 +44,55 @@ Parallel.Level4.VIEW = {
 /**
  * Add sprites of the books to the svg of the game
  */
-Parallel.Level4.AddBooks = function(){
+Parallel.Level4.AddBooks = function(books){
 
-    booksCounterNum = 8;
+    numbooks = books;
     var svg = document.getElementById('svgMaze');
+    var bookname = 'book';
+    var countername = 'booksCounter';
+    var i;
 
-    // Edit books list
-    var books = [];
-    var book = 'book';
+    for(i=0; i < numbooks; i++){
 
-    for(var i=0; i < booksCounterNum; i++){
-        books[i] = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-        books[i].id = book.concat(i.toString());
-        books[i].setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Parallel.Level4.VIEW.book);
-        books[i].setAttribute('height', 50);
-        books[i].setAttribute('width', 45);
-        svg.appendChild(books[i]);
+        var book = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
+        book.id = bookname.concat(i.toString());
+        book.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Parallel.Level2.VIEW.book);
+        book.setAttribute('height', 50);
+        book.setAttribute('width', 45);
+        svg.appendChild(book);
         
         //Move the initial list of books into position
-        books[i].setAttribute('x', Parallel.SQUARE_SIZE * (0.6 + 0.5) -
-            books[i].getAttribute('width') / 2);
-        books[i].setAttribute('y', Parallel.SQUARE_SIZE * ((i/1.3) + 1.3) -
-            books[i].getAttribute('height'));
+        book.setAttribute('x', Parallel.SQUARE_SIZE * (0.6 + 0.5) -
+            book.getAttribute('width') / 2);
+        book.setAttribute('y', Parallel.SQUARE_SIZE * ((i/1.3) + 1.3) -
+            book.getAttribute('height'));
 
+        // Edit books counter
+        var counter = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
+        counter.id = countername.concat(i.toString());
+        counter.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', 
+        'static/img/games/parallel/books/'.concat(i.toString()).concat('.png'));
+        counter.setAttribute('height', 60);
+        counter.setAttribute('width', 80);
+        counter.setAttribute('x', Parallel.SQUARE_SIZE * (0.1) -
+        counter.getAttribute('width') / 2  + 35);
+        counter.setAttribute('y', Parallel.SQUARE_SIZE * (8) -
+        counter.getAttribute('height') + 10);
+        svg.appendChild(counter);
     }
 
     // Edit books counter
-    var bookscount = [];
-    var name = 'booksCounter';
-    
-    for(var i=0; i<=booksCounterNum; i++){
-
-        bookscount[i] = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-        bookscount[i].id = name.concat(i.toString());
-        bookscount[i].setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', 'static/img/games/parallel/books/'.concat(i.toString()).concat('.png'));
-        bookscount[i].setAttribute('height', 60);
-        bookscount[i].setAttribute('width', 80);
-        bookscount[i].setAttribute('x', Parallel.SQUARE_SIZE * (0.1) -
-        bookscount[i].getAttribute('width') / 2  + 35);
-        bookscount[i].setAttribute('y', Parallel.SQUARE_SIZE * (8) -
-        bookscount[i].getAttribute('height') + 10);
-        svg.appendChild(bookscount[i]);
-    }
+    var counter = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
+    counter.id = countername.concat(i.toString());
+    counter.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', 
+    'static/img/games/parallel/books/'.concat(i.toString()).concat('.png'));
+    counter.setAttribute('height', 60);
+    counter.setAttribute('width', 80);
+    counter.setAttribute('x', Parallel.SQUARE_SIZE * (0.1) -
+    counter.getAttribute('width') / 2  + 35);
+    counter.setAttribute('y', Parallel.SQUARE_SIZE * (8) -
+    counter.getAttribute('height') + 10);
+    svg.appendChild(counter);
 
     student[0].active = 0;
     student[1].active = 0;
@@ -820,7 +827,7 @@ Parallel.Level4.DisplayStudent = function(est, x, y, d, opt_angle) {
         //Move the student to the initial position and run the code again
         Parallel.Level4.ResetOneStd(est);
         //Remove one book from the list and decrement the counter
-        booksCounterNum--;
+        numbooks--;
         Parallel.Level4.RemoveBooks(svg, document);
         Parallel.Level4.Execute();
     }
@@ -891,15 +898,15 @@ Parallel.Level4.ReturnBook = function(x, y){
  */
 Parallel.Level4.RemoveBooks = function(svg, document){
     var book = 'book';
-    const bookremove = document.getElementById(book.concat(booksCounterNum.toString()));
+    const bookremove = document.getElementById(book.concat(numbooks.toString()));
     svg.removeChild(bookremove);
 
     var bookcont = 'booksCounter';
-    var id = booksCounterNum + 1;
+    var id = numbooks + 1;
     const bookcontremove = document.getElementById(bookcont.concat(id.toString()));
     svg.removeChild(bookcontremove);
 }
 
 Parallel.Level4.NotDone = function(){
-    return booksCounterNum != 0;
+    return numbooks != 0;
 };

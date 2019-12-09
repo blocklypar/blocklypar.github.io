@@ -246,12 +246,12 @@ Parallel.drawMap = function() {
     break;
     
     case 3:
-      Parallel.Level3.AddBooks();
+      Parallel.Level3.AddBooks(8);
       Parallel.Level3.AddSprites(svg, document);
     break;
     
     case 4:
-      Parallel.Level4.AddBooks();
+      Parallel.Level4.AddBooks(8);
       Parallel.Level4.AddSprites(svg, document);
     break;
   }
@@ -594,6 +594,7 @@ Parallel.resetButtonClick = function(e) {
   }
 
   Parallel.updateTime(0);
+  Parallel.Level1.RemoveAllBooks();
 
   switch(BlocklyGames.LEVEL){
     case 1:
@@ -603,10 +604,10 @@ Parallel.resetButtonClick = function(e) {
       Parallel.Level2.AddBooks(4);
     break;
     case 3:
-      Parallel.Level3.AddBooks();
+      Parallel.Level3.AddBooks(8);
     break;
     case 4:
-      Parallel.Level4.AddBooks();
+      Parallel.Level4.AddBooks(8);
     break;
   }
     
