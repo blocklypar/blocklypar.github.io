@@ -10,14 +10,13 @@ goog.require('Parallel.soy');
 
 goog.require('Parallel.Avatar');
 
-var bookslist_ = [];
 var start_ = [];
 var finish;
 var student = [];
 var pidList = [];
 var log = [];
 
-var booksCounterNum;
+var numbooks;
 
 //****** STUDENTS */
 var studentsActive = [];
@@ -26,10 +25,6 @@ var action_std2 = [];
 var std1, std2, action;
 var action_ = [];
 
-/**
- * The student currently executing the code
- */
-Parallel.Level2.currentStudent = null;
 // Parallel.Level2.taskActivate = false;
 /**
  * Background and other elements
@@ -44,178 +39,57 @@ Parallel.Level2.VIEW = {
 };
 
 /**
- * First function to be called
- */
-Parallel.Level2.DrawMap = function(svg){
-
-    //Create cenario:
-    if (Parallel.Level2.VIEW.background) {
-        var tile = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-        tile.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Parallel.Level2.VIEW.background);
-        tile.setAttribute('height', Parallel.MAZE_HEIGHT);
-        tile.setAttribute('width', Parallel.MAZE_WIDTH);
-        tile.setAttribute('x', 0);
-        tile.setAttribute('y', 0);
-        svg.appendChild(tile);
-    }
-
-    if (Parallel.Level2.VIEW.graph) {
-        // Draw the grid lines.
-        // The grid lines are offset so that the lines pass through the centre of
-        // each square.  A half-pixel offset is also added to as standard SVG
-        // practice to avoid blurriness.
-        var offset = Parallel.SQUARE_SIZE / 2 + 0.5;
-        for (var k = 0; k < Parallel.ROWS; k++) {
-          var h_line = document.createElementNS(Blockly.utils.dom.SVG_NS, 'line');
-          h_line.setAttribute('y1', k * Parallel.SQUARE_SIZE + offset);
-          h_line.setAttribute('x2', Parallel.MAZE_WIDTH);
-          h_line.setAttribute('y2', k * Parallel.SQUARE_SIZE + offset);
-          h_line.setAttribute('stroke', Parallel.Level2.VIEW.graph);
-          h_line.setAttribute('stroke-width', 1);
-          svg.appendChild(h_line);
-        }
-        for (var k = 0; k < Parallel.COLS; k++) {
-          var v_line = document.createElementNS(Blockly.utils.dom.SVG_NS, 'line');
-          v_line.setAttribute('x1', k * Parallel.SQUARE_SIZE + offset);
-          v_line.setAttribute('x2', k * Parallel.SQUARE_SIZE + offset);
-          v_line.setAttribute('y2', Parallel.MAZE_HEIGHT);
-          v_line.setAttribute('stroke', Parallel.Level2.VIEW.graph);
-          v_line.setAttribute('stroke-width', 1);
-          svg.appendChild(v_line);
-        }
-    }
-
-    // Return a value of '0' if the specified square is wall or out of bounds,
-    // '1' otherwise (empty, start, finish).
-    var normalize = function(x, y) {
-        if (x < 0 || x >= Parallel.COLS || y < 0 || y >= Parallel.ROWS) {
-            return '0';
-        }
-        return (Parallel.map[y][x] == Parallel.SquareType.WALL) ? '0' : '1';
-    };
-
-    // Compute and draw the tile for each square.
-    var tileId = 0;
-    for (var y = 0; y < Parallel.ROWS; y++) {
-        for (var x = 0; x < Parallel.COLS; x++) {
-            // Compute the tile shape.
-            var tileShape = normalize(x, y) +
-                normalize(x, y - 1) +  // North.
-                normalize(x + 1, y) +  // West.
-                normalize(x, y + 1) +  // South.
-                normalize(x - 1, y);   // East.
-
-            // Draw the tile.
-            if (!Parallel.tile_SHAPES[tileShape]) {
-            if (tileShape == '00000' && Math.random() > 0.3) {
-                tileShape = 'null0';
-            } else {
-                tileShape = 'null' + Math.floor(1 + Math.random() * 4);
-            }
-            }
-            var left = Parallel.tile_SHAPES[tileShape][0];
-            var top = Parallel.tile_SHAPES[tileShape][1];
-            
-            // Tile's clipPath element.
-            var tileClip = document.createElementNS(Blockly.utils.dom.SVG_NS, 'clipPath');
-            tileClip.id = 'tileClipPath' + tileId;
-
-            var clipRect = document.createElementNS(Blockly.utils.dom.SVG_NS, 'rect');
-            clipRect.setAttribute('width', Parallel.SQUARE_SIZE);
-            clipRect.setAttribute('height', Parallel.SQUARE_SIZE);
-
-            clipRect.setAttribute('x', x * Parallel.SQUARE_SIZE);
-            clipRect.setAttribute('y', y * Parallel.SQUARE_SIZE);
-
-            tileClip.appendChild(clipRect);
-            svg.appendChild(tileClip);
-
-            // Tile sprite.
-            var tile = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-            tile.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Parallel.Level2.VIEW.tiles);
-            // Position the tile sprite relative to the clipRect.
-            tile.setAttribute('height', Parallel.SQUARE_SIZE * 4);
-            tile.setAttribute('width', Parallel.SQUARE_SIZE * 5);
-            tile.setAttribute('clip-path', 'url(#tileClipPath' + tileId + ')');
-            tile.setAttribute('x', (x - left) * Parallel.SQUARE_SIZE);
-            tile.setAttribute('y', (y - top) * Parallel.SQUARE_SIZE);
-            svg.appendChild(tile);
-            tileId++;
-        }
-    }
-
-    var cont_start = 0;
-    // Locate the start and finish squares.
-    for (var y = 0; y < Parallel.ROWS; y++) {
-        for (var x = 0; x < Parallel.COLS; x++) {
-            if (Parallel.map[y][x] == Parallel.SquareType.START) {
-                start_[cont_start] = {x: x, y: y};
-                var std = new Parallel.Avatar(cont_start, Parallel.startDirection, x, y, Parallel.Level2.VIEW.skin);
-                student.push(std);
-                cont_start++;
-            } else if (Parallel.map[y][x] == Parallel.SquareType.FINISH) {
-                finish = {x: x, y: y};
-            }
-        }
-    }
-
-    //Initialize the list of books full
-    var cont_book = 0;
-    for(var i=1.1; i<5.1; i++){
-        bookslist_[cont_book++] = {x: 0.6, y: i};
-    }
-    booksCounterNum = 4;
-
-    //Set the current student as the first student
-    Parallel.Level2.currentStudent = student[0];
-    Parallel.executionTime = document.getElementById("number");
-};
-
-/**
  * Add sprites of the books to the svg of the game
  */
-Parallel.Level2.AddBooks = function(){
+Parallel.Level2.AddBooks = function(books){
 
-    booksCounterNum = 4;
+    numbooks = books;
     var svg = document.getElementById('svgMaze');
+    var bookname = 'book';
+    var countername = 'booksCounter';
+    var i;
 
-    // Edit books list
-    var books = [];
-    var book = 'book';
+    for(i=0; i < numbooks; i++){
 
-    for(var i=0; i < booksCounterNum; i++){
-        books[i] = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-        books[i].id = book.concat(i.toString());
-        books[i].setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Parallel.Level2.VIEW.book);
-        books[i].setAttribute('height', 50);
-        books[i].setAttribute('width', 45);
-        svg.appendChild(books[i]);
+        var book = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
+        book.id = bookname.concat(i.toString());
+        book.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Parallel.Level2.VIEW.book);
+        book.setAttribute('height', 50);
+        book.setAttribute('width', 45);
+        svg.appendChild(book);
         
         //Move the initial list of books into position
-        books[i].setAttribute('x', Parallel.SQUARE_SIZE * (bookslist_[i].x + 0.5) -
-            books[i].getAttribute('width') / 2);
-        books[i].setAttribute('y', Parallel.SQUARE_SIZE * (bookslist_[i].y + 0.6) -
-            books[i].getAttribute('height'));
+        book.setAttribute('x', Parallel.SQUARE_SIZE * (0.6 + 0.5) -
+            book.getAttribute('width') / 2);
+        book.setAttribute('y', Parallel.SQUARE_SIZE * ((i/1.3) + 1.3) -
+            book.getAttribute('height'));
 
+        // Edit books counter
+        var counter = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
+        counter.id = countername.concat(i.toString());
+        counter.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', 
+        'static/img/games/parallel/books/'.concat(i.toString()).concat('.png'));
+        counter.setAttribute('height', 60);
+        counter.setAttribute('width', 80);
+        counter.setAttribute('x', Parallel.SQUARE_SIZE * (0.1) -
+        counter.getAttribute('width') / 2  + 35);
+        counter.setAttribute('y', Parallel.SQUARE_SIZE * (8) -
+        counter.getAttribute('height') + 10);
+        svg.appendChild(counter);
     }
 
     // Edit books counter
-    var bookscount = [];
-    var name = 'booksCounter';
-    
-    for(var i=0; i<=booksCounterNum; i++){
-
-        bookscount[i] = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-        bookscount[i].id = name.concat(i.toString());
-        bookscount[i].setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', 'maze/books/'.concat(i.toString()).concat('.png'));
-        bookscount[i].setAttribute('height', 60);
-        bookscount[i].setAttribute('width', 80);
-        bookscount[i].setAttribute('x', Parallel.SQUARE_SIZE * (0.1) -
-        bookscount[i].getAttribute('width') / 2  + 35);
-        bookscount[i].setAttribute('y', Parallel.SQUARE_SIZE * (8) -
-        bookscount[i].getAttribute('height') + 10);
-        svg.appendChild(bookscount[i]);
-    }
+    var counter = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
+    counter.id = countername.concat(i.toString());
+    counter.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', 
+    'static/img/games/parallel/books/'.concat(i.toString()).concat('.png'));
+    counter.setAttribute('height', 60);
+    counter.setAttribute('width', 80);
+    counter.setAttribute('x', Parallel.SQUARE_SIZE * (0.1) -
+    counter.getAttribute('width') / 2  + 35);
+    counter.setAttribute('y', Parallel.SQUARE_SIZE * (8) -
+    counter.getAttribute('height') + 10);
+    svg.appendChild(counter);
 
     student[0].time = 0;
     student[1].time = 0;
@@ -447,12 +321,12 @@ Parallel.Level2.Animate = function(){
     }
 
     if(action1){
-        Parallel.Level2.currentStudent = student[0];
+        Parallel.currentStudent = student[0];
         Parallel.Level2.AnimateMove(student[0], action1);
     }   
 
     if(action2){
-        Parallel.Level2.currentStudent = student[1];
+        Parallel.currentStudent = student[1];
         Parallel.Level2.AnimateMove(student[1], action2);
     }    
     
@@ -558,31 +432,31 @@ Parallel.Level2.InitInterpreter = function(interpreter, scope){
     var wrapper;
 
     wrapper = function(id) {
-        Parallel.Level2.move(0, id, Parallel.Level2.currentStudent);
+        Parallel.Level2.move(0, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'moveForward',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-        Parallel.Level2.move(2, id, Parallel.Level2.currentStudent);
+        Parallel.Level2.move(2, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'moveBackward',
         interpreter.createNativeFunction(wrapper));
         
     wrapper = function(id) {
-        Parallel.Level2.turn(0, id, Parallel.Level2.currentStudent);
+        Parallel.Level2.turn(0, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'turnLeft',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-        Parallel.Level2.turn(1, id, Parallel.Level2.currentStudent);
+        Parallel.Level2.turn(1, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'turnRight',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-    return Parallel.Level2.isPath(0, id, Parallel.Level2.currentStudent);
+    return Parallel.Level2.isPath(0, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'isPathForward',
     interpreter.createNativeFunction(wrapper));
@@ -607,19 +481,19 @@ Parallel.Level2.InitInterpreter = function(interpreter, scope){
     interpreter.createNativeFunction(wrapper));
    
     wrapper = function(id) {
-        return Parallel.Level2.isPath(1, id, Parallel.Level2.currentStudent);
+        return Parallel.Level2.isPath(1, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'isPathRight',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-        return Parallel.Level2.isPath(2, id, Parallel.Level2.currentStudent);
+        return Parallel.Level2.isPath(2, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'isPathBackward',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-        return Parallel.Level2.isPath(3, id, Parallel.Level2.currentStudent);
+        return Parallel.Level2.isPath(3, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'isPathLeft',
         interpreter.createNativeFunction(wrapper));
@@ -632,7 +506,7 @@ Parallel.Level2.InitInterpreter = function(interpreter, scope){
 
     //Books == 0
     wrapper = function() {
-        return Parallel.Level2.ReturnBook(Parallel.Level2.currentStudent.startLoc.x, Parallel.Level2.currentStudent.startLoc.y);
+        return Parallel.Level2.ReturnBook(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y);
     };
     interpreter.setProperty(scope, 'booksZero',
         interpreter.createNativeFunction(wrapper));
@@ -748,11 +622,11 @@ Parallel.Level2.isStudent = function(student_id, id) {
     switch(student_id) {
       case 0:
         command = 'student0';
-        Parallel.Level2.currentStudent = student[0];
+        Parallel.currentStudent = student[0];
         break;
       case 1:
         command = 'student1';
-        Parallel.Level2.currentStudent = student[1];
+        Parallel.currentStudent = student[1];
         break;
       default:
         break;
@@ -860,20 +734,19 @@ Parallel.Level2.ScheduleFail = function(forward, avatar) {
 };
 
 Parallel.Level2.ScheduleFinish = function(sound) {
-    var direction16 = Parallel.constrainDirection16(Parallel.Level2.currentStudent.direction * 4);
-    Parallel.Level2.DisplayStudent(Parallel.Level2.currentStudent.startLoc.x, Parallel.Level2.currentStudent.startLoc.y, 16);
+    var direction16 = Parallel.constrainDirection16(Parallel.currentStudent.direction * 4);
+    Parallel.Level2.DisplayStudent(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y, 16);
     if (sound) {
       BlocklyGames.workspace.getAudioManager().play('win', 0.5);
     }
-    Parallel.stepSpeed = speed;  // Slow down victory animation a bit.
     pidList.push(setTimeout(function() {
-        Parallel.Level2.DisplayStudent(Parallel.Level2.currentStudent.startLoc.x, Parallel.Level2.currentStudent.startLoc.y, 18);
+        Parallel.Level2.DisplayStudent(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y, 18);
       }, Parallel.stepSpeed));
     pidList.push(setTimeout(function() {
-        Parallel.Level2.DisplayStudent(Parallel.Level2.currentStudent.startLoc.x, Parallel.Level2.currentStudent.startLoc.y, 16);
+        Parallel.Level2.DisplayStudent(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y, 16);
       }, Parallel.stepSpeed * 2));
     pidList.push(setTimeout(function() {
-        Parallel.Level2.DisplayStudent(Parallel.Level2.currentStudent.startLoc.x, Parallel.Level2.currentStudent.startLoc.y, direction16);
+        Parallel.Level2.DisplayStudent(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y, direction16);
       }, Parallel.stepSpeed * 3));
   };
 
@@ -909,7 +782,7 @@ Parallel.Level2.DisplayStudent = function(est, x, y, d, opt_angle) {
 
     if(Parallel.Level2.ReturnBook(x, y)){
         //Remove one book from the list and decrement the counter
-        booksCounterNum--;
+        numbooks--;
         //Move the student to the initial position and run the code again
         Parallel.Level2.ResetOneStd(est);
         Parallel.Level2.RemoveBooks(svg, document);
@@ -988,16 +861,19 @@ Parallel.Level2.ReturnBook = function(x, y){
  * Remove the books one by one
  */
 Parallel.Level2.RemoveBooks = function(svg, document){
+
     var book = 'book';
-    const bookremove = document.getElementById(book.concat(booksCounterNum.toString()));
+    var svg = (document.getElementById('svgMaze'));
+
+    const bookremove = document.getElementById(book.concat(numbooks.toString()));
     svg.removeChild(bookremove);
 
     var bookcont = 'booksCounter';
-    var id = booksCounterNum + 1;
+    var id = numbooks + 1;
     const bookcontremove = document.getElementById(bookcont.concat(id.toString()));
     svg.removeChild(bookcontremove);
 }
 
 Parallel.Level2.NotDone = function(){
-    return booksCounterNum != 0;
+    return numbooks != 0;
 };

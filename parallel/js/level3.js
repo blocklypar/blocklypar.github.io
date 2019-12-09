@@ -10,7 +10,6 @@ goog.require('Parallel.soy');
 
 goog.require('Parallel.Avatar');
 
-var bookslist_ = [];
 var start_ = [];
 var finish;
 var student = [];
@@ -28,10 +27,6 @@ var executionTime = 0;
 var std_names = ['estudante0', 'estudante1'];
 var clip_names = ['clipRect0', 'clipRect1'];
 
-/**
- * The student currently executing the code
- */
-Parallel.Level3.currentStudent = null;
 // Parallel.Level3.taskActivate = false;
 /**
  * Background and other elements
@@ -43,133 +38,6 @@ Parallel.Level3.VIEW = {
     book: 'maze/book.png',
     skin: 'maze/pegman.png',
     graph:false
-};
-
-/**
- * First function to be called
- */
-Parallel.Level3.DrawMap = function(svg){
-
-    //Create cenario:
-    if (Parallel.Level3.VIEW.background) {
-        var tile = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-        tile.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Parallel.Level3.VIEW.background);
-        tile.setAttribute('height', Parallel.MAZE_HEIGHT);
-        tile.setAttribute('width', Parallel.MAZE_WIDTH);
-        tile.setAttribute('x', 0);
-        tile.setAttribute('y', 0);
-        svg.appendChild(tile);
-    }
-
-    if (Parallel.Level3.VIEW.graph) {
-        // Draw the grid lines.
-        // The grid lines are offset so that the lines pass through the centre of
-        // each square.  A half-pixel offset is also added to as standard SVG
-        // practice to avoid blurriness.
-        var offset = Parallel.SQUARE_SIZE / 2 + 0.5;
-        for (var k = 0; k < Parallel.ROWS; k++) {
-          var h_line = document.createElementNS(Blockly.utils.dom.SVG_NS, 'line');
-          h_line.setAttribute('y1', k * Parallel.SQUARE_SIZE + offset);
-          h_line.setAttribute('x2', Parallel.MAZE_WIDTH);
-          h_line.setAttribute('y2', k * Parallel.SQUARE_SIZE + offset);
-          h_line.setAttribute('stroke', Parallel.Level3.VIEW.graph);
-          h_line.setAttribute('stroke-width', 1);
-          svg.appendChild(h_line);
-        }
-        for (var k = 0; k < Parallel.COLS; k++) {
-          var v_line = document.createElementNS(Blockly.utils.dom.SVG_NS, 'line');
-          v_line.setAttribute('x1', k * Parallel.SQUARE_SIZE + offset);
-          v_line.setAttribute('x2', k * Parallel.SQUARE_SIZE + offset);
-          v_line.setAttribute('y2', Parallel.MAZE_HEIGHT);
-          v_line.setAttribute('stroke', Parallel.Level3.VIEW.graph);
-          v_line.setAttribute('stroke-width', 1);
-          svg.appendChild(v_line);
-        }
-    }
-
-    // Return a value of '0' if the specified square is wall or out of bounds,
-    // '1' otherwise (empty, start, finish).
-    var normalize = function(x, y) {
-        if (x < 0 || x >= Parallel.COLS || y < 0 || y >= Parallel.ROWS) {
-            return '0';
-        }
-        return (Parallel.map[y][x] == Parallel.SquareType.WALL) ? '0' : '1';
-    };
-
-    // Compute and draw the tile for each square.
-    var tileId = 0;
-    for (var y = 0; y < Parallel.ROWS; y++) {
-        for (var x = 0; x < Parallel.COLS; x++) {
-            // Compute the tile shape.
-            var tileShape = normalize(x, y) +
-                normalize(x, y - 1) +  // North.
-                normalize(x + 1, y) +  // West.
-                normalize(x, y + 1) +  // South.
-                normalize(x - 1, y);   // East.
-
-            // Draw the tile.
-            if (!Parallel.tile_SHAPES[tileShape]) {
-            if (tileShape == '00000' && Math.random() > 0.3) {
-                tileShape = 'null0';
-            } else {
-                tileShape = 'null' + Math.floor(1 + Math.random() * 4);
-            }
-            }
-            var left = Parallel.tile_SHAPES[tileShape][0];
-            var top = Parallel.tile_SHAPES[tileShape][1];
-        
-            // Tile's clipPath element.
-            var tileClip = document.createElementNS(Blockly.utils.dom.SVG_NS, 'clipPath');
-            tileClip.id = 'tileClipPath' + tileId;
-
-            var clipRect = document.createElementNS(Blockly.utils.dom.SVG_NS, 'rect');
-            clipRect.setAttribute('width', Parallel.SQUARE_SIZE);
-            clipRect.setAttribute('height', Parallel.SQUARE_SIZE);
-
-            clipRect.setAttribute('x', x * Parallel.SQUARE_SIZE);
-            clipRect.setAttribute('y', y * Parallel.SQUARE_SIZE);
-
-            tileClip.appendChild(clipRect);
-            svg.appendChild(tileClip);
-
-            // Tile sprite.
-            var tile = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-            tile.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Parallel.Level3.VIEW.tiles);
-            // Position the tile sprite relative to the clipRect.
-            tile.setAttribute('height', Parallel.SQUARE_SIZE * 4);
-            tile.setAttribute('width', Parallel.SQUARE_SIZE * 5);
-            tile.setAttribute('clip-path', 'url(#tileClipPath' + tileId + ')');
-            tile.setAttribute('x', (x - left) * Parallel.SQUARE_SIZE);
-            tile.setAttribute('y', (y - top) * Parallel.SQUARE_SIZE);
-            svg.appendChild(tile);
-            tileId++;
-        }
-    }
-
-    var cont_start = 0;
-    // Locate the start and finish squares.
-    for (var y = 0; y < Parallel.ROWS; y++) {
-        for (var x = 0; x < Parallel.COLS; x++) {
-            if (Parallel.map[y][x] == Parallel.SquareType.START) {
-                start_[cont_start] = {x: x, y: y};
-                var std = new Parallel.Avatar(cont_start, Parallel.startDirection, x, y, Parallel.Level3.VIEW.skin);
-                student.push(std);
-                cont_start++;
-            } else if (Parallel.map[y][x] == Parallel.SquareType.FINISH) {
-                finish = {x: x, y: y};
-            }
-        }
-    }
-
-    //Initialize the list of books full
-    var cont_book = 0;
-    for(var i=0.9; i<10.9; i++){
-        bookslist_[cont_book++] = {x: 0.6, y: i/1.3};
-    }
-
-    //Set the current student as the first student
-    Parallel.Level3.currentStudent = student[0];
-    Parallel.executionTime = document.getElementById("number");
 };
 
 /**
@@ -193,9 +61,9 @@ Parallel.Level3.AddBooks = function(){
         svg.appendChild(books[i]);
     
         //Move the initial list of books into position
-        books[i].setAttribute('x', Parallel.SQUARE_SIZE * (bookslist_[i].x + 0.5) -
+        books[i].setAttribute('x', Parallel.SQUARE_SIZE * (0.6 + 0.5) -
             books[i].getAttribute('width') / 2);
-        books[i].setAttribute('y', Parallel.SQUARE_SIZE * (bookslist_[i].y + 0.6) -
+        books[i].setAttribute('y', Parallel.SQUARE_SIZE * ((i/1.3) + 1.3) -
             books[i].getAttribute('height'));
 
     }
@@ -208,7 +76,7 @@ Parallel.Level3.AddBooks = function(){
 
         bookscount[i] = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
         bookscount[i].id = name.concat(i.toString());
-        bookscount[i].setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', 'maze/books/'.concat(i.toString()).concat('.png'));
+        bookscount[i].setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', 'static/img/games/parallel/books/'.concat(i.toString()).concat('.png'));
         bookscount[i].setAttribute('height', 60);
         bookscount[i].setAttribute('width', 80);
         bookscount[i].setAttribute('x', Parallel.SQUARE_SIZE * (0.1) -
@@ -548,31 +416,31 @@ Parallel.Level3.InitInterpreter = function(interpreter, scope){
     var wrapper;
 
     wrapper = function(id) {
-        Parallel.Level3.move(0, id, Parallel.Level3.currentStudent);
+        Parallel.Level3.move(0, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'moveForward',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-        Parallel.Level3.move(2, id, Parallel.Level3.currentStudent);
+        Parallel.Level3.move(2, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'moveBackward',
         interpreter.createNativeFunction(wrapper));
     
     wrapper = function(id) {
-        Parallel.Level3.turn(0, id, Parallel.Level3.currentStudent);
+        Parallel.Level3.turn(0, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'turnLeft',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-        Parallel.Level3.turn(1, id, Parallel.Level3.currentStudent);
+        Parallel.Level3.turn(1, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'turnRight',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-    return Parallel.Level3.isPath(0, id, Parallel.Level3.currentStudent);
+    return Parallel.Level3.isPath(0, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'isPathForward',
     interpreter.createNativeFunction(wrapper));
@@ -591,19 +459,19 @@ Parallel.Level3.InitInterpreter = function(interpreter, scope){
     interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-        return Parallel.Level3.isPath(1, id, Parallel.Level3.currentStudent);
+        return Parallel.Level3.isPath(1, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'isPathRight',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-        return Parallel.Level3.isPath(2, id, Parallel.Level3.currentStudent);
+        return Parallel.Level3.isPath(2, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'isPathBackward',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-        return Parallel.Level3.isPath(3, id, Parallel.Level3.currentStudent);
+        return Parallel.Level3.isPath(3, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'isPathLeft',
         interpreter.createNativeFunction(wrapper));
@@ -616,7 +484,7 @@ Parallel.Level3.InitInterpreter = function(interpreter, scope){
 
     //Books == 0
     wrapper = function() {
-        return Parallel.Level3.ReturnBook(Parallel.Level3.currentStudent.startLoc.x, Parallel.Level3.currentStudent.startLoc.y);
+        return Parallel.Level3.ReturnBook(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y);
     };
     interpreter.setProperty(scope, 'booksZero',
         interpreter.createNativeFunction(wrapper));
@@ -732,11 +600,11 @@ Parallel.Level3.isStudent = function(student_id, id) {
     switch(student_id) {
       case 0:
         command = 'student0';
-        Parallel.Level3.currentStudent = student[0];
+        Parallel.currentStudent = student[0];
         break;
       case 1:
         command = 'student1';
-        Parallel.Level3.currentStudent = student[1];
+        Parallel.currentStudent = student[1];
         break;
       default:
         break;
@@ -844,19 +712,19 @@ Parallel.Level3.ScheduleFail = function(forward, avatar) {
 };
 
 Parallel.Level3.ScheduleFinish = function(sound) {
-    var direction16 = Parallel.constrainDirection16(Parallel.Level3.currentStudent.direction * 4);
-    Parallel.Level3.DisplayStudent(Parallel.Level3.currentStudent.startLoc.x, Parallel.Level3.currentStudent.startLoc.y, 16);
+    var direction16 = Parallel.constrainDirection16(Parallel.currentStudent.direction * 4);
+    Parallel.Level3.DisplayStudent(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y, 16);
     if (sound) {
       BlocklyGames.workspace.getAudioManager().play('win', 0.5);
     }
     pidList.push(setTimeout(function() {
-        Parallel.Level3.DisplayStudent(Parallel.Level3.currentStudent.startLoc.x, Parallel.Level3.currentStudent.startLoc.y, 18);
+        Parallel.Level3.DisplayStudent(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y, 18);
       }, Parallel.stepSpeed));
     pidList.push(setTimeout(function() {
-        Parallel.Level3.DisplayStudent(Parallel.Level3.currentStudent.startLoc.x, Parallel.Level3.currentStudent.startLoc.y, 16);
+        Parallel.Level3.DisplayStudent(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y, 16);
       }, Parallel.stepSpeed * 2));
     pidList.push(setTimeout(function() {
-        Parallel.Level3.DisplayStudent(Parallel.Level3.currentStudent.startLoc.x, Parallel.Level3.currentStudent.startLoc.y, direction16);
+        Parallel.Level3.DisplayStudent(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y, direction16);
       }, Parallel.stepSpeed * 3));
   };
 

@@ -46,6 +46,11 @@ goog.require('Parallel.Level4');
 BlocklyGames.NAME = 'parallel';
 
 /**
+ * The student currently executing the code
+ */
+Parallel.currentStudent = null;
+
+/**
  * Background and other elements
  */
 Parallel.VIEW = {
@@ -70,7 +75,7 @@ BlocklyInterface.nextLevel = function() {
 };
 
 Parallel.MAX_BLOCKS = [undefined, // Level 0.
-  5, 11, 10, 12, Infinity][BlocklyGames.LEVEL];
+  8, 11, 10, 12, Infinity][BlocklyGames.LEVEL];
 
 /**
  * Milliseconds between each animation frame.
@@ -226,28 +231,26 @@ Parallel.drawMap = function() {
   square.setAttribute('stroke', '#CCB');
   svg.appendChild(square);
   
+  Parallel.Level1.DrawMap(svg);
+
   switch(BlocklyGames.LEVEL){
 
     case 1:
-      Parallel.Level1.DrawMap(svg);
-      Parallel.Level1.AddBooks();
+      Parallel.Level1.AddBooks(4);
       Parallel.Level1.AddSprites(svg, document);
     break;
     
     case 2:
-      Parallel.Level2.DrawMap(svg);
-      Parallel.Level2.AddBooks();
+      Parallel.Level2.AddBooks(4);
       Parallel.Level2.AddSprites(svg, document);
     break;
     
     case 3:
-      Parallel.Level3.DrawMap(svg);
       Parallel.Level3.AddBooks();
       Parallel.Level3.AddSprites(svg, document);
     break;
     
     case 4:
-      Parallel.Level4.DrawMap(svg);
       Parallel.Level4.AddBooks();
       Parallel.Level4.AddSprites(svg, document);
     break;
@@ -594,10 +597,10 @@ Parallel.resetButtonClick = function(e) {
 
   switch(BlocklyGames.LEVEL){
     case 1:
-      Parallel.Level1.AddBooks();
+      Parallel.Level1.AddBooks(4);
     break;
     case 2:
-      Parallel.Level2.AddBooks();
+      Parallel.Level2.AddBooks(4);
     break;
     case 3:
       Parallel.Level3.AddBooks();

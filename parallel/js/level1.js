@@ -10,37 +10,28 @@ goog.require('Parallel.soy');
 
 goog.require('Parallel.Avatar');
 
-var bookslist_ = [];
+/** Total of books */
+var numbooks = 0;
+
+/** STUDENTS */
+var action_std1 = [];
+var std1, action;
 var start_ = [];
 var finish;
 var student = [];
 var pidList = [];
 var log = [];
 
-var speed = 100;
-var repeatBlock;
-var booksCounterNum;
-
-//****** STUDENTS */
-var action_std1 = [];
-var std1, action;
-var std_name = 'estudante0';
-var clip_name = 'clipRect0';
-
-/**
- * The student currently executing the code
- */
-Parallel.Level1.currentStudent = null;
 // Parallel.Level1.taskActivate = false;
 /**
  * Background and other elements
  */
 Parallel.Level1.VIEW = {
-    background: 'maze/library.png',
-    tiles: 'maze/tiles_ufsm.png',
-    finishMarker: 'maze/marker.png',
-    book: 'maze/book.png',
-    skin: 'maze/pegman.png',
+    background: 'static/img/games/parallel/library.png',
+    tiles: 'static/img/games/parallel/tiles_ufsm2.png',
+    finishMarker: 'static/img/games/parallel/marker.png',
+    book: 'static/img/games/parallel/book.png',
+    skin: 'static/img/games/parallel/pegman.png',
     graph:false
 };
 
@@ -160,62 +151,64 @@ Parallel.Level1.DrawMap = function(svg){
         }
     }
 
-    //Initialize the list of books full
-    var cont_book = 0;
-    for(var i=1.1; i<5.1; i++){
-        bookslist_[cont_book++] = {x: 0.6, y: i};
-    }
-
     //Set the current student as the first student
-    Parallel.Level1.currentStudent = student[0];
+    Parallel.currentStudent = student[0];
     Parallel.executionTime = document.getElementById("number");
 };
 
 /**
  * Add sprites of the books to the svg of the game
  */
-Parallel.Level1.AddBooks = function(){
+Parallel.Level1.AddBooks = function(books){
 
-    booksCounterNum = 4;
+    numbooks = books;
     var svg = document.getElementById('svgMaze');
+    var bookname = 'book';
+    var countername = 'booksCounter';
+    var i;
 
-    // Edit books list
-    var books = [];
-    var book = 'book';
+    for(i=0; i < numbooks; i++){
 
-    for(var i=0; i < booksCounterNum; i++){
-        books[i] = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-        books[i].id = book.concat(i.toString());
-        books[i].setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Parallel.Level1.VIEW.book);
-        books[i].setAttribute('height', 50);
-        books[i].setAttribute('width', 45);
-        svg.appendChild(books[i]);
+        var book = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
+        book.id = bookname.concat(i.toString());
+        book.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', Parallel.Level1.VIEW.book);
+        book.setAttribute('height', 50);
+        book.setAttribute('width', 45);
+        svg.appendChild(book);
         
         //Move the initial list of books into position
-        books[i].setAttribute('x', Parallel.SQUARE_SIZE * (bookslist_[i].x + 0.5) -
-            books[i].getAttribute('width') / 2);
-        books[i].setAttribute('y', Parallel.SQUARE_SIZE * (bookslist_[i].y + 0.6) -
-            books[i].getAttribute('height'));
+        book.setAttribute('x', Parallel.SQUARE_SIZE * (0.6 + 0.5) -
+            book.getAttribute('width') / 2);
+        book.setAttribute('y', Parallel.SQUARE_SIZE * ((i/1.3) + 1.3) -
+            book.getAttribute('height'));
 
+        // Edit books counter
+        var counter = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
+        counter.id = countername.concat(i.toString());
+        counter.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', 
+        'static/img/games/parallel/books/'.concat(i.toString()).concat('.png'));
+        counter.setAttribute('height', 60);
+        counter.setAttribute('width', 80);
+        counter.setAttribute('x', Parallel.SQUARE_SIZE * (0.1) -
+        counter.getAttribute('width') / 2  + 35);
+        counter.setAttribute('y', Parallel.SQUARE_SIZE * (8) -
+        counter.getAttribute('height') + 10);
+        svg.appendChild(counter);
     }
 
     // Edit books counter
-    var bookscount = [];
-    var name = 'booksCounter';
-    
-    for(var i=0; i<=booksCounterNum; i++){
+    var counter = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
+    counter.id = countername.concat(i.toString());
+    counter.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', 
+    'static/img/games/parallel/books/'.concat(i.toString()).concat('.png'));
+    counter.setAttribute('height', 60);
+    counter.setAttribute('width', 80);
+    counter.setAttribute('x', Parallel.SQUARE_SIZE * (0.1) -
+    counter.getAttribute('width') / 2  + 35);
+    counter.setAttribute('y', Parallel.SQUARE_SIZE * (8) -
+    counter.getAttribute('height') + 10);
+    svg.appendChild(counter);
 
-        bookscount[i] = document.createElementNS(Blockly.utils.dom.SVG_NS, 'image');
-        bookscount[i].id = name.concat(i.toString());
-        bookscount[i].setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href', 'maze/books/'.concat(i.toString()).concat('.png'));
-        bookscount[i].setAttribute('height', 60);
-        bookscount[i].setAttribute('width', 80);
-        bookscount[i].setAttribute('x', Parallel.SQUARE_SIZE * (0.1) -
-        bookscount[i].getAttribute('width') / 2  + 35);
-        bookscount[i].setAttribute('y', Parallel.SQUARE_SIZE * (8) -
-        bookscount[i].getAttribute('height') + 10);
-        svg.appendChild(bookscount[i]);
-    }
 };
 
 /**
@@ -274,7 +267,6 @@ Parallel.Level1.Reset = function(first){
 
         student[0].startDirection++;
         pidList.push(setTimeout(function() {
-            Parallel.stepSpeed = speed;
             Parallel.Level1.Schedule([student[0].startLoc.x, student[0].startLoc.y, student[0].startDirection * 4],
                         [student[0].startLoc.x, student[0].startLoc.y, student[0].startDirection * 4 - 4], student[0].id);
                         student[0].startDirection++;
@@ -343,7 +335,7 @@ Parallel.Level1.ExecuteFirst = function(){
     //Animate the transcript
     Parallel.Level1.Reset(false);
     Parallel.Level1.PreAnimate(0);
-    pidList.push(setTimeout(Parallel.Level1.Animate, speed));
+    pidList.push(setTimeout(Parallel.Level1.Animate, Parallel.stepSpeed));
 };
 
 Parallel.Level1.PreAnimate = function(id){
@@ -395,7 +387,7 @@ Parallel.Level1.Execute = function(){
         return;
     }
 
-    pidList.push(setTimeout(Parallel.Level1.Animate, speed));
+    pidList.push(setTimeout(Parallel.Level1.Animate, Parallel.stepSpeed));
 };
 
 Parallel.Level1.Animate = function(){
@@ -505,31 +497,31 @@ Parallel.Level1.InitInterpreter = function(interpreter, scope){
     var wrapper;
 
     wrapper = function(id) {
-        Parallel.Level1.move(0, id, Parallel.Level1.currentStudent);
+        Parallel.Level1.move(0, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'moveForward',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-        Parallel.Level1.move(2, id, Parallel.Level1.currentStudent);
+        Parallel.Level1.move(2, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'moveBackward',
         interpreter.createNativeFunction(wrapper));
         
     wrapper = function(id) {
-        Parallel.Level1.turn(0, id, Parallel.Level1.currentStudent);
+        Parallel.Level1.turn(0, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'turnLeft',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-        Parallel.Level1.turn(1, id, Parallel.Level1.currentStudent);
+        Parallel.Level1.turn(1, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'turnRight',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-    return Parallel.Level1.isPath(0, id, Parallel.Level1.currentStudent);
+    return Parallel.Level1.isPath(0, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'isPathForward',
     interpreter.createNativeFunction(wrapper));
@@ -542,19 +534,19 @@ Parallel.Level1.InitInterpreter = function(interpreter, scope){
     interpreter.createNativeFunction(wrapper));
    
     wrapper = function(id) {
-        return Parallel.Level1.isPath(1, id, Parallel.Level1.currentStudent);
+        return Parallel.Level1.isPath(1, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'isPathRight',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-        return Parallel.Level1.isPath(2, id, Parallel.Level1.currentStudent);
+        return Parallel.Level1.isPath(2, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'isPathBackward',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(id) {
-        return Parallel.Level1.isPath(3, id, Parallel.Level1.currentStudent);
+        return Parallel.Level1.isPath(3, id, Parallel.currentStudent);
     };
     interpreter.setProperty(scope, 'isPathLeft',
         interpreter.createNativeFunction(wrapper));
@@ -566,7 +558,7 @@ Parallel.Level1.InitInterpreter = function(interpreter, scope){
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function() {
-        return Parallel.Level1.ReturnBook(Parallel.Level1.currentStudent.startLoc.x, Parallel.Level1.currentStudent.startLoc.y);
+        return Parallel.Level1.ReturnBook(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y);
     };
     interpreter.setProperty(scope, 'booksZero',
         interpreter.createNativeFunction(wrapper));
@@ -682,7 +674,7 @@ Parallel.Level1.isStudent = function(student_id, id) {
     var command = 'student0';
     
     if(id) {
-        Parallel.Level1.currentStudent = student[0];
+        Parallel.currentStudent = student[0];
         log.push([command, id]);
     }
 
@@ -783,19 +775,19 @@ Parallel.Level1.ScheduleFail = function(forward, avatar) {
 };
 
 Parallel.Level1.ScheduleFinish = function(sound) {
-    var direction16 = Parallel.constrainDirection16(Parallel.Level1.currentStudent.direction * 4);
-    Parallel.Level1.DisplayStudent(Parallel.Level1.currentStudent.startLoc.x, Parallel.Level1.currentStudent.startLoc.y, 16);
+    var direction16 = Parallel.constrainDirection16(Parallel.currentStudent.direction * 4);
+    Parallel.Level1.DisplayStudent(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y, 16);
     if (sound) {
       BlocklyGames.workspace.getAudioManager().play('win', 0.5);
     }
     pidList.push(setTimeout(function() {
-        Parallel.Level1.DisplayStudent(Parallel.Level1.currentStudent.startLoc.x, Parallel.Level1.currentStudent.startLoc.y, 18);
+        Parallel.Level1.DisplayStudent(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y, 18);
       }, Parallel.stepSpeed));
     pidList.push(setTimeout(function() {
-        Parallel.Level1.DisplayStudent(Parallel.Level1.currentStudent.startLoc.x, Parallel.Level1.currentStudent.startLoc.y, 16);
+        Parallel.Level1.DisplayStudent(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y, 16);
       }, Parallel.stepSpeed * 2));
     pidList.push(setTimeout(function() {
-        Parallel.Level1.DisplayStudent(Parallel.Level1.currentStudent.startLoc.x, Parallel.Level1.currentStudent.startLoc.y, direction16);
+        Parallel.Level1.DisplayStudent(Parallel.currentStudent.startLoc.x, Parallel.currentStudent.startLoc.y, direction16);
       }, Parallel.stepSpeed * 3));
   };
 
@@ -808,7 +800,10 @@ Parallel.Level1.ScheduleFinish = function(sound) {
  */
 Parallel.Level1.DisplayStudent = function(est, x, y, d, opt_angle) {
 
-    var estudante = document.getElementById(std_name);
+    var std = 'estudante';
+    var clip = 'clipRect';
+
+    var estudante = document.getElementById(std.concat(est.toString()));
     estudante.setAttribute('x', x * Parallel.SQUARE_SIZE - d * Parallel.PEGMAN_WIDTH + 1);
     estudante.setAttribute('y', Parallel.SQUARE_SIZE * (y + 0.5) - Parallel.PEGMAN_HEIGHT / 2 - 8);
 
@@ -820,15 +815,12 @@ Parallel.Level1.DisplayStudent = function(est, x, y, d, opt_angle) {
         estudante.setAttribute('transform', 'rotate(0, 0, 0)');
     }
 
-    var clipRect = document.getElementById(clip_name);
+    var clipRect = document.getElementById(clip.concat(est.toString()));
     clipRect.setAttribute('x', x * Parallel.SQUARE_SIZE + 1);
     clipRect.setAttribute('y', estudante.getAttribute('y'));
 
     if(Parallel.Level1.ReturnBook(x, y)){
         //Remove one book from the list and decrement the counter
-        booksCounterNum--;
-        var svg = (document.getElementById('svgMaze'));
-        Parallel.Level1.RemoveBooks(svg, document);
         Parallel.Level1.ResetOneStd(est);
         Parallel.Level1.Execute();
     }
@@ -876,26 +868,34 @@ Parallel.Level1.ScheduleLook = function(d, x, y) {
  * Verify if the student arrive on the library
  */
 Parallel.Level1.ReturnBook = function(x, y){
-    if( (x == finish.x ) && (finish.y == y) )
+    if( (x == finish.x ) && (finish.y == y) ){
+        numbooks--;
+        Parallel.Level1.RemoveBooks();
         return true;
-    else
+    }      
+    else{
         return false;
+    }
+        
 }
 
 /**
  * Remove the books one by one
  */
-Parallel.Level1.RemoveBooks = function(svg, document){
+Parallel.Level1.RemoveBooks = function(){
+
     var book = 'book';
-    const bookremove = document.getElementById(book.concat(booksCounterNum.toString()));
+    var svg = (document.getElementById('svgMaze'));
+
+    const bookremove = document.getElementById(book.concat(numbooks.toString()));
     svg.removeChild(bookremove);
 
     var bookcont = 'booksCounter';
-    var id = booksCounterNum + 1;
+    var id = numbooks + 1;
     const bookcontremove = document.getElementById(bookcont.concat(id.toString()));
     svg.removeChild(bookcontremove);
 }
 
 Parallel.Level1.NotDone = function(){
-    return booksCounterNum != 0;
+    return numbooks != 0;
 };
